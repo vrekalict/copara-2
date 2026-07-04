@@ -4,15 +4,25 @@ import { useActionState, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { sendMessage, markThreadRead, searchThreadMessages } from "@/actions/messages";
+import {
+  attachmentStoragePath,
+  isAllowedAttachment,
+  MESSAGE_ATTACHMENT_BUCKET,
+  parseAttachments,
+  type MessageAttachment,
+} from "@/lib/attachments";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, X } from "lucide-react";
+import { MessageAttachments } from "@/components/messages/message-attachments";
+import { ToneReviewBar } from "@/components/messages/tone-review-bar";
+import { Paperclip, Search, X } from "lucide-react";
 
 type Message = {
   id: string;
   body: string | null;
   sender_id: string;
   created_at: string;
+  attachments?: unknown;
 };
 
 type SendState = { error?: string; success?: boolean } | null;
@@ -20,17 +30,27 @@ type SearchState = { error?: string; results: Message[] } | null;
 
 export function ThreadView({
   threadId,
+  circleId,
+  locale,
   currentUserId,
   initialMessages,
 }: {
   threadId: string;
+  circleId: string;
+  locale: string;
   currentUserId: string;
   initialMessages: Message[];
 }) {
   const t = useTranslations("messages");
   const [messages, setMessages] = useState(initialMessages);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [draft, setDraft] = useState("");
+  const [pendingAttachments, setPendingAttachments] = useState<MessageAttachment[]>([]);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+  const bodyInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     markThreadRead(threadId);
@@ -57,7 +77,12 @@ export function ThreadView({
   const [sendState, sendAction, sendPending] = useActionState<SendState, FormData>(
     async (_prev, formData) => {
       const result = await sendMessage(formData);
-      if (result?.success) formRef.current?.reset();
+      if (result?.success) {
+        formRef.current?.reset();
+        setDraft("");
+        setPendingAttachments([]);
+        setUploadError(null);
+      }
       return result ?? null;
     },
     null,
@@ -67,6 +92,56 @@ export function ThreadView({
     async (_prev, formData) => (await searchThreadMessages(formData)) ?? { results: [] },
     { results: [] },
   );
+
+  async function handleFileSelect(files: FileList | null) {
+    if (!files || files.length === 0) return;
+    setUploadError(null);
+    setUploading(true);
+
+    const supabase = createClient();
+    const uploaded: MessageAttachment[] = [];
+
+    try {
+      for (const file of Array.from(files)) {
+        const allowed = isAllowedAttachment(file);
+        if (!allowed.ok) {
+          setUploadError(
+            allowed.reason === "too_large" ? t("attachmentTooLarge") : t("attachmentType"),
+          );
+          continue;
+        }
+
+        const { id, path } = attachmentStoragePath(circleId, threadId, file);
+        const { error } = await supabase.storage
+          .from(MESSAGE_ATTACHMENT_BUCKET)
+          .upload(path, file, { contentType: file.type, upsert: false });
+
+        if (error) {
+          setUploadError(error.message);
+          continue;
+        }
+
+        uploaded.push({
+          id,
+          name: file.name,
+          mime: file.type,
+          path,
+          size: file.size,
+        });
+      }
+
+      if (uploaded.length > 0) {
+        setPendingAttachments((prev) => [...prev, ...uploaded]);
+      }
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  }
+
+  function removePendingAttachment(id: string) {
+    setPendingAttachments((prev) => prev.filter((a) => a.id !== id));
+  }
 
   return (
     <div className="flex flex-1 flex-col">
@@ -98,6 +173,7 @@ export function ThreadView({
       <ul className="flex flex-1 flex-col gap-2 overflow-y-auto p-4">
         {messages.map((m) => {
           const mine = m.sender_id === currentUserId;
+          const attachments = parseAttachments(m.attachments);
           return (
             <li key={m.id} className={mine ? "self-end" : "self-start"}>
               <div
@@ -107,19 +183,88 @@ export function ThreadView({
                 }
               >
                 {m.body}
+                <MessageAttachments attachments={attachments} />
               </div>
             </li>
           );
         })}
       </ul>
 
-      <form ref={formRef} action={sendAction} className="flex gap-2 border-t border-border p-4">
+      <ToneReviewBar
+        draft={draft}
+        threadId={threadId}
+        locale={locale}
+        onApplyRewrite={(rewrite) => {
+          setDraft(rewrite);
+          bodyInputRef.current?.focus();
+        }}
+      />
+
+      {pendingAttachments.length > 0 && (
+        <ul className="flex flex-wrap gap-2 border-t border-border px-4 py-2 text-xs">
+          {pendingAttachments.map((attachment) => (
+            <li
+              key={attachment.id}
+              className="flex items-center gap-1 rounded-md bg-muted px-2 py-1"
+            >
+              <span className="max-w-[10rem] truncate">{attachment.name}</span>
+              <button
+                type="button"
+                className="text-muted-foreground hover:text-foreground"
+                onClick={() => removePendingAttachment(attachment.id)}
+                aria-label={t("removeAttachment")}
+              >
+                <X className="size-3" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <form ref={formRef} action={sendAction} className="flex flex-col gap-2 border-t border-border p-4">
         <input type="hidden" name="threadId" value={threadId} />
-        <Input name="body" placeholder={t("typePlaceholder")} required autoComplete="off" />
+        <input
+          type="hidden"
+          name="attachments"
+          value={JSON.stringify(pendingAttachments)}
+          readOnly
+        />
+        <div className="flex gap-2">
+          <input
+            ref={fileInputRef}
+            type="file"
+            className="hidden"
+            accept="image/*,.pdf,.doc,.docx"
+            multiple
+            onChange={(e) => void handleFileSelect(e.target.files)}
+          />
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            disabled={uploading}
+            onClick={() => fileInputRef.current?.click()}
+            aria-label={t("attach")}
+          >
+            <Paperclip className="size-4" />
+          </Button>
+          <Input
+            ref={bodyInputRef}
+            name="body"
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            placeholder={t("typePlaceholder")}
+            autoComplete="off"
+          />
+          <Button
+            type="submit"
+            disabled={sendPending || uploading || (!draft.trim() && pendingAttachments.length === 0)}
+          >
+            {t("send")}
+          </Button>
+        </div>
+        {uploadError && <p className="text-sm text-destructive">{uploadError}</p>}
         {sendState?.error && <p className="text-sm text-destructive">{sendState.error}</p>}
-        <Button type="submit" disabled={sendPending}>
-          {t("send")}
-        </Button>
       </form>
     </div>
   );

@@ -68,6 +68,77 @@
     "typePlaceholder": "Écrivez un message…",
     "send": "Envoyer",
     "search": "Rechercher",
-    "searchPlaceholder": "Rechercher des messages…"
+    "searchPlaceholder": "Rechercher des messages…",
+    "attach": "Joindre un fichier",
+    "attachment": "Pièce jointe",
+    "removeAttachment": "Retirer la pièce jointe",
+    "attachmentTooLarge": "Chaque fichier doit faire 25 Mo ou moins.",
+    "attachmentType": "Seules les images, les PDF et les documents Word sont acceptés.",
+    "toneReview": {
+      "analyzing": "Analyse du ton…",
+      "error": "L'analyse du ton n'est pas disponible pour l'instant.",
+      "toneLabel": "Ton :",
+      "suggestions": "Suggestions de reformulation :",
+      "tone": {
+        "hostile": "hostile",
+        "tense": "tendu",
+        "neutral": "neutre",
+        "constructive": "constructif"
+      }
+    }
+  },
+  "calendar": {
+    "title": "Calendrier",
+    "upcoming": "À venir",
+    "empty": "Aucun événement à venir.",
+    "addEvent": "Ajouter un événement",
+    "eventTitle": "Titre",
+    "eventType": "Type",
+    "startsAt": "Début",
+    "endsAt": "Fin (optionnel)",
+    "location": "Lieu",
+    "checkIn": "Enregistrer l'arrivée",
+    "changeRequests": "Demandes de changement",
+    "newRequest": "Demander un changement",
+    "generalRequest": "Demande générale",
+    "requestNote": "Détails",
+    "submitRequest": "Soumettre la demande",
+    "approve": "Approuver",
+    "decline": "Refuser",
+    "type": {
+      "event": "Événement",
+      "parenting_time": "Temps parental",
+      "exchange": "Échange"
+    },
+    "requestType": {
+      "swap_day": "Échange de jour",
+      "time_change": "Changement d'heure",
+      "location_change": "Changement de lieu",
+      "other": "Autre"
+    }
+  },
+  "expenses": {
+    "title": "Dépenses",
+    "balanceLabel": "Solde courant",
+    "owedToYou": "{amount} vous est dû",
+    "youOwe": "Vous devez {amount}",
+    "recent": "Dépenses récentes",
+    "empty": "Aucune dépense enregistrée.",
+    "addExpense": "Enregistrer une dépense",
+    "amount": "Montant",
+    "categoryLabel": "Catégorie",
+    "description": "Description (optionnel)",
+    "noDescription": "Sans description",
+    "reimbursement": "Remboursement",
+    "requestReimbursement": "Demander un remboursement",
+    "approve": "Approuver",
+    "decline": "Refuser",
+    "category": {
+      "medical": "Médical",
+      "school": "École",
+      "activities": "Activités",
+      "clothing": "Vêtements",
+      "other": "Autre"
+    }
   }
 }

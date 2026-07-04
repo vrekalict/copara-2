@@ -2,7 +2,7 @@
 
 **Version:** 1.0
 **Owner:** Tom
-**Target:** Hand-off document for AI-assisted build (Cursor / Claude Code)
+**Target:** Hand-off document for AI-assisted build (Cursor)
 **Status:** Ready for build
 
 ---
@@ -58,7 +58,7 @@ We are NOT building feature-parity. The wedge is:
 - Export any thread to PDF (see 3.7).
 
 ### 3.3 AI Tone Review & Neutral Rewrite ("Steady Send")
-- Before send, message body is optionally analyzed by Claude (Anthropic API, model `claude-sonnet-4-6`).
+- Before send, message body is optionally analyzed by OpenAI (`gpt-5.4-mini` by default).
 - Returns: tone assessment (hostile / neutral / constructive), specific flagged phrases, and **1–3 full rewrite suggestions** the user can tap to replace their draft.
 - UX: subtle inline indicator while typing stops (debounced 1.5s after pause, or on send tap). Never blocks sending — user always retains control. One-tap "Send as-is."
 - Every AI suggestion + whether it was accepted is logged to `ai_events` (audit trail; also future training signal).
@@ -137,7 +137,7 @@ Implement a smart install prompt component (`<InstallPrompt />`):
 | Framework | Next.js 14+ (App Router) + TypeScript | Same patterns as prior projects |
 | Styling | Tailwind CSS + shadcn/ui | Brand: define tokens in `globals.css`; clean, calm, trust-signaling palette (blues/neutrals — deliberately NOT aggressive reds) |
 | DB/Auth/Storage/Realtime | Supabase | Postgres + RLS is the security backbone; Realtime channels for live messaging |
-| AI | Anthropic API, `claude-sonnet-4-6` | Tone review, rewrites, summarization. All calls server-side (API routes) — never expose key client-side |
+| AI | OpenAI API (`gpt-5.4-mini` fast, `gpt-5.4` summary fallback) | Tone review, rewrites, summarization. All calls server-side (API routes) — never expose key client-side |
 | Email | Resend | Transactional + non-user request relay |
 | Push | Web Push (VAPID) via service worker | `web-push` npm package server-side |
 | PDF export | `@react-pdf/renderer` or server-side Playwright/Chromium render | Must embed hash digest + export UUID |
@@ -227,8 +227,8 @@ push_subscriptions(id, user_id, endpoint text, keys jsonb, created_at)
 | `/api/circles` | GET/POST | List/create circles |
 | `/api/circles/[id]/invite` | POST | Invite member (email link; works for non-users) |
 | `/api/threads` `/api/threads/[id]/messages` | GET/POST | Messaging; POST computes hash server-side via trigger |
-| `/api/ai/tone-review` | POST | body → Claude → tone + rewrites (server-side key) |
-| `/api/ai/summarize` | POST | thread ids + range → structured summary |
+| `/api/ai/tone-review` | POST | body → OpenAI → tone + rewrites (server-side key) |
+| `/api/ai/summarize` | POST | thread ids + range → structured summary (OpenAI; `gpt-5.4-mini` default, `gpt-5.4` fallback) |
 | `/api/events` `/api/change-requests` | GET/POST/PATCH | Calendar + requests |
 | `/api/checkins` | POST | GPS verify server-side, store boolean only |
 | `/api/expenses` `/api/reimbursements` | GET/POST/PATCH | Money tracking |
@@ -303,7 +303,7 @@ Key components: `<InstallPrompt />` (per §4.2), `<ToneReviewBar />` (composer a
 ---
 
 ## 10. Security & Compliance Requirements
-- Anthropic API key, Supabase service key, VAPID private key: server-side env only. Never in client bundles.
+- OpenAI API key, Supabase service key, VAPID private key: server-side env only. Never in client bundles.
 - All AI processing server-side; store `input_hash` not raw drafts in `ai_events` unless user consents (privacy).
 - RLS is the primary authorization layer; API routes additionally validate membership (defense in depth).
 - Rate limiting on AI + auth routes (Upstash Redis or Vercel middleware).

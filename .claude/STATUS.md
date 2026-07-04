@@ -1,7 +1,7 @@
 # Accord — Build Status
 
 **Last updated:** 2026-07-04
-**Handoff context:** Switching from Claude Code to Cursor to continue. This file is the handoff note — see "Known issues" below for the one thing actively blocking the app.
+**Handoff context:** Switching from prior AI tooling to Cursor to continue. This file is the handoff note — see "Known issues" below for resolved blockers.
 
 ---
 
@@ -24,8 +24,8 @@
 
 ### Infrastructure or Supabase project
 - Real Supabase project is linked: ref `eyihuybzmqplzdicehix`. Both migrations are **pushed and applied** (confirmed via `supabase migration list --linked`).
-- `.env.local` has real credentials (Supabase URL/anon/service-role, Anthropic, Resend, VAPID, cron secret) — **do not commit** (already covered by `.gitignore`'s `.env*` rule). The Supabase DB password was shared in this chat session in plaintext; consider rotating it if that's a concern (Project Settings → Database).
-- Supabase MCP server is registered in `.mcp.json` but has **not** successfully authenticated in any Claude Code session yet, despite the user reporting they authenticated it — possibly a different session/window than the one working on this repo picked up the auth. Untested whether it works from Cursor.
+- `.env.local` has real credentials (Supabase URL/anon/service-role, OpenAI, Resend, VAPID, cron secret) — **do not commit** (already covered by `.gitignore`'s `.env*` rule). The Supabase DB password was shared in this chat session in plaintext; consider rotating it if that's a concern (Project Settings → Database).
+- Supabase MCP server is registered in `.mcp.json` — authentication varies by session/window.
 - End-to-end verified against the **live** project (not just local Postgres): signup → `handle_new_user` trigger → `profiles`/`user_settings` rows created correctly. Test users created via `service.auth.admin.createUser` were cleaned up (`auth.admin.deleteUser`) afterward.
 
 ---
@@ -82,14 +82,16 @@ create policy "circles_insert" on public.circles for insert
 ## 3. What remains (per PRD build plan)
 
 ### Phase 1 (in progress — this session)
-- [ ] Message attachments via Supabase Storage (25MB max, images/PDF/docs)
-- [ ] AI tone review + rewrite suggestions (`/api/ai/tone-review`, Anthropic API, debounced composer integration — `ANTHROPIC_API_KEY` is already in `.env.local`)
-- [ ] `ai_events` audit logging + rate limiting (30 calls/user/hour per PRD)
+- [x] Message attachments via Supabase Storage (25MB max, images/PDF/docs)
+- [x] AI tone review + rewrite suggestions (`/api/ai/tone-review`, OpenAI API, debounced composer integration — `OPENAI_API_KEY` in `.env.local`)
+- [x] `ai_events` audit logging + rate limiting (30 calls/user/hour per PRD)
 
-### Phase 2 — Coordination (not started)
-- Calendar: schedule templates (2-2-3, week-on/off, alternating weekends), events, change requests + approvals
-- Check-ins (GPS-verified boolean only, never raw coordinates) + violation detection cron + weekly digest
-- Expenses + reimbursement requests + running balance
+### Phase 2 — Coordination (in progress)
+- [x] Calendar: events list, add event, change requests + approve/decline
+- [x] Check-ins: `POST /api/checkins` (GPS verified server-side, boolean only stored)
+- [x] Expenses + reimbursement requests + running balance
+- [ ] Schedule templates (2-2-3, week-on/off, alternating weekends)
+- [ ] Violation detection cron + weekly digest
 
 ### Phase 3 — Records & Pro (not started)
 - PDF exports + hash-chain verification digest + public `/verify/[exportId]` page

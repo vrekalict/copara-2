@@ -16,7 +16,7 @@ export default async function ThreadPage({
 
   const { data: thread } = await supabase
     .from("threads")
-    .select("id")
+    .select("id, circle_id")
     .eq("id", threadId)
     .maybeSingle();
 
@@ -24,13 +24,21 @@ export default async function ThreadPage({
 
   const { data: messages } = await supabase
     .from("messages")
-    .select("id, body, sender_id, created_at")
+    .select("id, body, sender_id, created_at, attachments")
     .eq("thread_id", threadId)
     .order("created_at", { ascending: true });
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("locale")
+    .eq("id", user.id)
+    .maybeSingle();
 
   return (
     <ThreadView
       threadId={threadId}
+      circleId={thread.circle_id}
+      locale={profile?.locale ?? "en"}
       currentUserId={user.id}
       initialMessages={messages ?? []}
     />

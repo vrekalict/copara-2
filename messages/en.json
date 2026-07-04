@@ -68,6 +68,77 @@
     "typePlaceholder": "Type a message…",
     "send": "Send",
     "search": "Search",
-    "searchPlaceholder": "Search messages…"
+    "searchPlaceholder": "Search messages…",
+    "attach": "Attach file",
+    "attachment": "Attachment",
+    "removeAttachment": "Remove attachment",
+    "attachmentTooLarge": "Each file must be 25 MB or smaller.",
+    "attachmentType": "Only images, PDFs, and Word documents are allowed.",
+    "toneReview": {
+      "analyzing": "Checking tone…",
+      "error": "Tone review unavailable right now.",
+      "toneLabel": "Tone:",
+      "suggestions": "Suggested rewrites:",
+      "tone": {
+        "hostile": "hostile",
+        "tense": "tense",
+        "neutral": "neutral",
+        "constructive": "constructive"
+      }
+    }
+  },
+  "calendar": {
+    "title": "Calendar",
+    "upcoming": "Upcoming",
+    "empty": "No upcoming events.",
+    "addEvent": "Add event",
+    "eventTitle": "Title",
+    "eventType": "Type",
+    "startsAt": "Starts",
+    "endsAt": "Ends (optional)",
+    "location": "Location",
+    "checkIn": "Check in",
+    "changeRequests": "Change requests",
+    "newRequest": "Request a change",
+    "generalRequest": "General request",
+    "requestNote": "Details",
+    "submitRequest": "Submit request",
+    "approve": "Approve",
+    "decline": "Decline",
+    "type": {
+      "event": "Event",
+      "parenting_time": "Parenting time",
+      "exchange": "Exchange"
+    },
+    "requestType": {
+      "swap_day": "Swap day",
+      "time_change": "Time change",
+      "location_change": "Location change",
+      "other": "Other"
+    }
+  },
+  "expenses": {
+    "title": "Expenses",
+    "balanceLabel": "Running balance",
+    "owedToYou": "{amount} owed to you",
+    "youOwe": "You owe {amount}",
+    "recent": "Recent expenses",
+    "empty": "No expenses logged yet.",
+    "addExpense": "Log expense",
+    "amount": "Amount",
+    "categoryLabel": "Category",
+    "description": "Description (optional)",
+    "noDescription": "No description",
+    "reimbursement": "Reimbursement",
+    "requestReimbursement": "Request reimbursement",
+    "approve": "Approve",
+    "decline": "Decline",
+    "category": {
+      "medical": "Medical",
+      "school": "School",
+      "activities": "Activities",
+      "clothing": "Clothing",
+      "other": "Other"
+    }
   }
 }

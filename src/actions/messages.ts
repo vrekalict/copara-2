@@ -3,6 +3,42 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import {
+  MESSAGE_ATTACHMENT_BUCKET,
+  parseAttachments,
+  type MessageAttachment,
+} from "@/lib/attachments";
+
+function isValidAttachmentPath(
+  path: string,
+  circleId: string,
+  threadId: string,
+) {
+  return path.startsWith(`${circleId}/${threadId}/`);
+}
+
+async function verifyAttachments(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  attachments: MessageAttachment[],
+  circleId: string,
+  threadId: string,
+) {
+  for (const attachment of attachments) {
+    if (!isValidAttachmentPath(attachment.path, circleId, threadId)) {
+      return { error: "Invalid attachment path." };
+    }
+
+    const { data, error } = await supabase.storage
+      .from(MESSAGE_ATTACHMENT_BUCKET)
+      .createSignedUrl(attachment.path, 60);
+
+    if (error || !data?.signedUrl) {
+      return { error: "Attachment not found." };
+    }
+  }
+
+  return { ok: true as const };
+}
 
 export async function createThread(formData: FormData) {
   const circleId = String(formData.get("circleId") ?? "");
@@ -49,7 +85,18 @@ export async function createThread(formData: FormData) {
 export async function sendMessage(formData: FormData) {
   const threadId = String(formData.get("threadId") ?? "");
   const body = String(formData.get("body") ?? "").trim();
-  if (!threadId || !body) return { error: "Message can't be empty." };
+  const attachmentsRaw = String(formData.get("attachments") ?? "[]");
+  let attachments: MessageAttachment[] = [];
+
+  try {
+    attachments = parseAttachments(JSON.parse(attachmentsRaw));
+  } catch {
+    return { error: "Invalid attachments." };
+  }
+
+  if (!threadId || (!body && attachments.length === 0)) {
+    return { error: "Message can't be empty." };
+  }
 
   const supabase = await createClient();
   const {
@@ -57,9 +104,30 @@ export async function sendMessage(formData: FormData) {
   } = await supabase.auth.getUser();
   if (!user) redirect("/sign-in");
 
-  const { error } = await supabase
-    .from("messages")
-    .insert({ thread_id: threadId, sender_id: user.id, body });
+  const { data: thread } = await supabase
+    .from("threads")
+    .select("circle_id")
+    .eq("id", threadId)
+    .maybeSingle();
+
+  if (!thread) return { error: "Thread not found." };
+
+  if (attachments.length > 0) {
+    const check = await verifyAttachments(
+      supabase,
+      attachments,
+      thread.circle_id,
+      threadId,
+    );
+    if ("error" in check) return { error: check.error };
+  }
+
+  const { error } = await supabase.from("messages").insert({
+    thread_id: threadId,
+    sender_id: user.id,
+    body: body || null,
+    attachments,
+  });
 
   if (error) {
     return { error: error.message };
