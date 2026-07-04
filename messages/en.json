@@ -23,7 +23,8 @@
     "orDivider": "or",
     "signInWithPassword": "Sign in with password",
     "noAccount": "Don't have an account?",
-    "haveAccount": "Already have an account?"
+    "haveAccount": "Already have an account?",
+    "confirmEmailSent": "Check your email to confirm your account, then sign in."
   },
   "nav": {
     "messages": "Messages",
@@ -34,5 +35,39 @@
   },
   "app": {
     "comingSoon": "Coming in a later phase."
+  },
+  "onboarding": {
+    "circleTitle": "Name your circle",
+    "circleSubtitle": "A circle is the shared space you and your co-parent will use together.",
+    "circleNameLabel": "Circle name",
+    "circleNamePlaceholder": "e.g. The Smith Family",
+    "inviteTitle": "Invite your co-parent",
+    "inviteSubtitle": "They'll get an email with a link to join — no app install required to respond.",
+    "inviteSend": "Send invite",
+    "skip": "Skip for now",
+    "childrenTitle": "Add your children",
+    "childrenSubtitle": "Medical notes, school info, and more can be added later from the Vault.",
+    "firstName": "First name",
+    "dob": "Date of birth",
+    "addChild": "Add child",
+    "finish": "Finish setup"
+  },
+  "join": {
+    "title": "You've been invited to {circleName}",
+    "subtitle": "Accord helps separated parents communicate neutrally, coordinate schedules, and keep court-ready records.",
+    "accept": "Accept invite",
+    "invalid": "This invite is no longer valid.",
+    "signUpFirst": "Create an account to accept this invite."
+  },
+  "messages": {
+    "title": "Messages",
+    "empty": "No conversations yet.",
+    "start": "Start a conversation",
+    "untitled": "Conversation",
+    "noMessagesYet": "No messages yet",
+    "typePlaceholder": "Type a message…",
+    "send": "Send",
+    "search": "Search",
+    "searchPlaceholder": "Search messages…"
   }
 }

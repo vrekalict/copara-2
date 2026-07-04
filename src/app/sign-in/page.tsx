@@ -2,7 +2,12 @@ import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SignInForm } from "@/components/auth/sign-in-form";
 
-export default function SignInPage() {
+export default async function SignInPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
+  const { next } = await searchParams;
   const t = useTranslations("auth");
 
   return (
@@ -12,7 +17,7 @@ export default function SignInPage() {
           <CardTitle>{t("signIn")}</CardTitle>
         </CardHeader>
         <CardContent>
-          <SignInForm />
+          <SignInForm next={next} />
         </CardContent>
       </Card>
     </main>

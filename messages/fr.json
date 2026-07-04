@@ -23,7 +23,8 @@
     "orDivider": "ou",
     "signInWithPassword": "Se connecter avec un mot de passe",
     "noAccount": "Vous n'avez pas de compte?",
-    "haveAccount": "Vous avez déjà un compte?"
+    "haveAccount": "Vous avez déjà un compte?",
+    "confirmEmailSent": "Consultez votre courriel pour confirmer votre compte, puis connectez-vous."
   },
   "nav": {
     "messages": "Messages",
@@ -34,5 +35,39 @@
   },
   "app": {
     "comingSoon": "Disponible dans une phase ultérieure."
+  },
+  "onboarding": {
+    "circleTitle": "Nommez votre cercle",
+    "circleSubtitle": "Un cercle est l'espace partagé que vous et votre coparent utiliserez ensemble.",
+    "circleNameLabel": "Nom du cercle",
+    "circleNamePlaceholder": "p. ex. La famille Tremblay",
+    "inviteTitle": "Invitez votre coparent",
+    "inviteSubtitle": "Il ou elle recevra un courriel avec un lien pour se joindre — aucune installation requise pour répondre.",
+    "inviteSend": "Envoyer l'invitation",
+    "skip": "Passer pour l'instant",
+    "childrenTitle": "Ajoutez vos enfants",
+    "childrenSubtitle": "Les notes médicales, l'école et plus peuvent être ajoutées plus tard depuis le Coffre.",
+    "firstName": "Prénom",
+    "dob": "Date de naissance",
+    "addChild": "Ajouter l'enfant",
+    "finish": "Terminer la configuration"
+  },
+  "join": {
+    "title": "Vous êtes invité·e à {circleName}",
+    "subtitle": "Accord aide les parents séparés à communiquer sereinement, à coordonner les horaires et à conserver des dossiers prêts pour le tribunal.",
+    "accept": "Accepter l'invitation",
+    "invalid": "Cette invitation n'est plus valide.",
+    "signUpFirst": "Créez un compte pour accepter cette invitation."
+  },
+  "messages": {
+    "title": "Messages",
+    "empty": "Aucune conversation pour l'instant.",
+    "start": "Démarrer une conversation",
+    "untitled": "Conversation",
+    "noMessagesYet": "Aucun message pour l'instant",
+    "typePlaceholder": "Écrivez un message…",
+    "send": "Envoyer",
+    "search": "Rechercher",
+    "searchPlaceholder": "Rechercher des messages…"
   }
 }

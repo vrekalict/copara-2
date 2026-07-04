@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-type ActionState = { error?: string } | null;
+type ActionState = { error?: string; confirmEmail?: boolean } | null;
 
-export function SignUpForm() {
+export function SignUpForm({ next }: { next?: string }) {
   const t = useTranslations("auth");
 
   const [state, formAction, pending] = useActionState<ActionState, FormData>(
@@ -18,9 +18,14 @@ export function SignUpForm() {
     null,
   );
 
+  if (state?.confirmEmail) {
+    return <p className="text-sm text-muted-foreground">{t("confirmEmailSent")}</p>;
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <form action={formAction} className="flex flex-col gap-4">
+        {next && <input type="hidden" name="next" value={next} />}
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="email">{t("email")}</Label>
           <Input id="email" name="email" type="email" required autoComplete="email" />
@@ -43,7 +48,10 @@ export function SignUpForm() {
       </form>
       <p className="text-center text-sm text-muted-foreground">
         {t("haveAccount")}{" "}
-        <Link href="/sign-in" className="font-medium text-foreground underline">
+        <Link
+          href={next ? `/sign-in?next=${encodeURIComponent(next)}` : "/sign-in"}
+          className="font-medium text-foreground underline"
+        >
           {t("signIn")}
         </Link>
       </p>

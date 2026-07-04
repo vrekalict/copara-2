@@ -4,28 +4,39 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 
+function nextPath(formData: FormData) {
+  const value = String(formData.get("next") ?? "");
+  return value.startsWith("/") ? value : "/app";
+}
+
 export async function signUpWithPassword(formData: FormData) {
   const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");
+  const next = nextPath(formData);
   const origin = (await headers()).get("origin");
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { emailRedirectTo: `${origin}/auth/callback` },
+    options: { emailRedirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}` },
   });
 
   if (error) {
     return { error: error.message };
   }
 
-  redirect("/app");
+  if (!data.session) {
+    return { confirmEmail: true };
+  }
+
+  redirect(next);
 }
 
 export async function signInWithPassword(formData: FormData) {
   const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");
+  const next = nextPath(formData);
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -34,17 +45,18 @@ export async function signInWithPassword(formData: FormData) {
     return { error: error.message };
   }
 
-  redirect("/app");
+  redirect(next);
 }
 
 export async function signInWithMagicLink(formData: FormData) {
   const email = String(formData.get("email") ?? "");
+  const next = nextPath(formData);
   const origin = (await headers()).get("origin");
 
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: `${origin}/auth/callback` },
+    options: { emailRedirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}` },
   });
 
   if (error) {

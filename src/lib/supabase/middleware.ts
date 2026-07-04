@@ -29,7 +29,11 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user && request.nextUrl.pathname.startsWith("/app")) {
+  const requiresAuth =
+    request.nextUrl.pathname.startsWith("/app") ||
+    request.nextUrl.pathname.startsWith("/onboarding");
+
+  if (!user && requiresAuth) {
     const signInUrl = new URL("/sign-in", request.url);
     signInUrl.searchParams.set("next", request.nextUrl.pathname);
     return NextResponse.redirect(signInUrl);

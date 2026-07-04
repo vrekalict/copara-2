@@ -473,7 +473,7 @@ create policy "profiles_update_self" on public.profiles for update
 
 -- circles
 create policy "circles_select" on public.circles for select
-  using (public.is_circle_member(id));
+  using (public.is_circle_member(id) or created_by = auth.uid());
 create policy "circles_insert" on public.circles for insert
   with check (created_by = auth.uid());
 create policy "circles_update" on public.circles for update
@@ -483,7 +483,18 @@ create policy "circles_update" on public.circles for update
 create policy "circle_members_select" on public.circle_members for select
   using (public.is_circle_member(circle_id));
 create policy "circle_members_insert" on public.circle_members for insert
-  with check (public.circle_role(circle_id) = 'parent');
+  with check (
+    public.circle_role(circle_id) = 'parent'
+    or (
+      user_id = auth.uid()
+      and role = 'parent'
+      and exists (
+        select 1 from public.circles
+        where id = circle_id
+          and created_by = auth.uid()
+      )
+    )
+  );
 create policy "circle_members_update" on public.circle_members for update
   using (public.circle_role(circle_id) = 'parent');
 
@@ -509,7 +520,13 @@ create policy "thread_participants_insert" on public.thread_participants for ins
     exists (
       select 1 from public.threads
       where threads.id = thread_id
-        and public.circle_role(threads.circle_id) = 'parent'
+        and (
+          public.circle_role(threads.circle_id) = 'parent'
+          or (
+            thread_participants.user_id = auth.uid()
+            and public.circle_role(threads.circle_id) in ('parent', 'third_party')
+          )
+        )
     )
   );
 

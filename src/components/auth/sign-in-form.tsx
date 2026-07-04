@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 
 type ActionState = { error?: string; sent?: boolean } | null;
 
-export function SignInForm() {
+export function SignInForm({ next }: { next?: string }) {
   const t = useTranslations("auth");
   const [mode, setMode] = useState<"password" | "magic-link">("password");
 
@@ -31,6 +31,7 @@ export function SignInForm() {
           <p className="text-sm text-muted-foreground">{t("magicLinkSent")}</p>
         ) : (
           <form action={magicLinkAction} className="flex flex-col gap-4">
+            {next && <input type="hidden" name="next" value={next} />}
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="email">{t("email")}</Label>
               <Input id="email" name="email" type="email" required autoComplete="email" />
@@ -53,6 +54,7 @@ export function SignInForm() {
   return (
     <div className="flex flex-col gap-4">
       <form action={passwordAction} className="flex flex-col gap-4">
+        {next && <input type="hidden" name="next" value={next} />}
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="email">{t("email")}</Label>
           <Input id="email" name="email" type="email" required autoComplete="email" />
@@ -79,7 +81,10 @@ export function SignInForm() {
       </Button>
       <p className="text-center text-sm text-muted-foreground">
         {t("noAccount")}{" "}
-        <Link href="/sign-up" className="font-medium text-foreground underline">
+        <Link
+          href={next ? `/sign-up?next=${encodeURIComponent(next)}` : "/sign-up"}
+          className="font-medium text-foreground underline"
+        >
           {t("signUp")}
         </Link>
       </p>
