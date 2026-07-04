@@ -1,0 +1,38 @@
+{
+  "common": {
+    "appName": "Accord",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "back": "Back"
+  },
+  "marketing": {
+    "tagline": "Co-parenting, without the conflict.",
+    "subtitle": "Accord helps separated parents communicate neutrally, coordinate custody schedules, and keep court-ready records — all in one place.",
+    "ctaParent": "Get started",
+    "ctaProfessional": "I'm a mediator or attorney"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "email": "Email address",
+    "password": "Password",
+    "magicLinkSend": "Email me a sign-in link",
+    "magicLinkSent": "Check your email for a sign-in link.",
+    "orDivider": "or",
+    "signInWithPassword": "Sign in with password",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?"
+  },
+  "nav": {
+    "messages": "Messages",
+    "calendar": "Calendar",
+    "expenses": "Expenses",
+    "vault": "Vault",
+    "more": "More"
+  },
+  "app": {
+    "comingSoon": "Coming in a later phase."
+  }
+}

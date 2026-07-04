@@ -1,0 +1,38 @@
+{
+  "common": {
+    "appName": "Accord",
+    "loading": "Chargement...",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "continue": "Continuer",
+    "back": "Retour"
+  },
+  "marketing": {
+    "tagline": "La coparentalité, sans le conflit.",
+    "subtitle": "Accord aide les parents séparés à communiquer sereinement, à coordonner la garde des enfants et à conserver des dossiers prêts pour le tribunal — le tout au même endroit.",
+    "ctaParent": "Commencer",
+    "ctaProfessional": "Je suis médiateur ou avocat"
+  },
+  "auth": {
+    "signIn": "Se connecter",
+    "signUp": "Créer un compte",
+    "email": "Adresse courriel",
+    "password": "Mot de passe",
+    "magicLinkSend": "M'envoyer un lien de connexion",
+    "magicLinkSent": "Consultez votre courriel pour le lien de connexion.",
+    "orDivider": "ou",
+    "signInWithPassword": "Se connecter avec un mot de passe",
+    "noAccount": "Vous n'avez pas de compte?",
+    "haveAccount": "Vous avez déjà un compte?"
+  },
+  "nav": {
+    "messages": "Messages",
+    "calendar": "Calendrier",
+    "expenses": "Dépenses",
+    "vault": "Coffre",
+    "more": "Plus"
+  },
+  "app": {
+    "comingSoon": "Disponible dans une phase ultérieure."
+  }
+}
