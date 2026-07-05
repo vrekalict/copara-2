@@ -1,9 +1,17 @@
-import { AdminNav } from "@/components/admin/admin-nav";
+import Link from "next/link";
 import { BlogPostsPanel } from "@/components/admin/blog-posts-panel";
+import {
+  AdminBanner,
+  AdminInfoBox,
+  AdminShell,
+  AdminStat,
+} from "@/components/admin/admin-shell";
 import { requireAdmin } from "@/lib/admin/require-admin";
 import { getStaffBlogPaths } from "@/lib/admin/staff-blog-paths";
 import { getAllPostsForAdmin } from "@/lib/blog";
 import { isServiceClientConfigured } from "@/lib/supabase/service";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default async function AdminBlogPage({
   searchParams,
@@ -15,28 +23,24 @@ export default async function AdminBlogPage({
 
   if (!auth.ok) {
     return (
-      <main className="mx-auto max-w-lg p-6">
-        <h1 className="text-xl font-semibold">Access denied</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Your account is not configured as a Copara admin. Set{" "}
-          <code className="text-xs">COPARA_ADMIN_EMAILS</code> in your environment to include your
-          email ({auth.user.email ?? "unknown"}).
-        </p>
-      </main>
+      <AdminShell title="Access denied" maxWidth="lg">
+        <AdminInfoBox title="Admin access required">
+          Your account is not configured as a Copara admin. Add your email to{" "}
+          <code className="text-xs">COPARA_ADMIN_EMAILS</code> in your environment (
+          {auth.user.email ?? "unknown"}).
+        </AdminInfoBox>
+      </AdminShell>
     );
   }
 
   if (!isServiceClientConfigured()) {
     return (
-      <main className="mx-auto max-w-lg p-6">
-        <AdminNav active="blog" />
-        <h1 className="text-xl font-semibold">Blog CMS unavailable</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          This deployment is missing{" "}
-          <code className="text-xs">SUPABASE_SERVICE_ROLE_KEY</code>. Add it in Vercel environment
-          variables, then redeploy.
-        </p>
-      </main>
+      <AdminShell active="blog" eyebrow="Content" title="Blog CMS unavailable" maxWidth="lg">
+        <AdminInfoBox title="Missing configuration">
+          This deployment needs <code className="text-xs">SUPABASE_SERVICE_ROLE_KEY</code> in Vercel
+          environment variables. Add it, redeploy, then return here to manage posts.
+        </AdminInfoBox>
+      </AdminShell>
     );
   }
 
@@ -48,24 +52,56 @@ export default async function AdminBlogPage({
     console.error("[admin/blog] failed to load posts:", error);
   }
 
+  const publishedCount = posts.filter((p) => p.status === "published").length;
+  const draftCount = posts.filter((p) => p.status !== "published").length;
+  const featuredCount = posts.filter((p) => p.featured).length;
+
+  const flashMessage = params.deleted
+    ? "Post deleted."
+    : params.created
+      ? "Post created."
+      : params.saved
+        ? "Post saved."
+        : null;
+
   return (
-    <main className="mx-auto max-w-4xl p-6">
-      <AdminNav active="blog" />
-      <h1 className="text-2xl font-semibold">Blog CMS</h1>
-      <p className="mt-2 text-sm text-muted-foreground">
-        Create and publish articles for copara.ca/blog. Sign in with an admin email (
-        {auth.user.email}).
-      </p>
+    <AdminShell
+      active="blog"
+      eyebrow="Content"
+      title="Blog CMS"
+      description={
+        <>
+          Write and publish articles for{" "}
+          <Link href="/blog" className="font-medium text-[var(--marketing-teal)] hover:underline">
+            copara.ca/blog
+          </Link>
+          . Signed in as <span className="font-medium text-foreground">{auth.user.email}</span>.
+        </>
+      }
+      actions={
+        <Link href={paths.new} className={cn(buttonVariants())}>
+          New post
+        </Link>
+      }
+      banner={flashMessage ? <AdminBanner>{flashMessage}</AdminBanner> : undefined}
+    >
+      <div className="space-y-6">
+        <div className="grid gap-3 sm:grid-cols-3">
+          <AdminStat label="Published" value={publishedCount} hint="Live on the public blog" />
+          <AdminStat label="Drafts" value={draftCount} hint="Hidden until you publish" />
+          <AdminStat label="Featured" value={featuredCount} hint="Shown on the blog index" />
+        </div>
 
-      {(params.saved || params.deleted || params.created) && (
-        <p className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
-          {params.deleted ? "Post deleted." : params.created ? "Post created." : "Post saved."}
-        </p>
-      )}
+        <AdminInfoBox title="How publishing works">
+          <ol className="list-decimal space-y-1.5 pl-4">
+            <li>Create a post and save it as a draft while you write.</li>
+            <li>Set status to <strong className="font-medium text-foreground">Published</strong> when ready — it appears on the site immediately.</li>
+            <li>Use <strong className="font-medium text-foreground">Featured</strong> to highlight one article on the blog homepage.</li>
+          </ol>
+        </AdminInfoBox>
 
-      <div className="mt-8">
         <BlogPostsPanel posts={posts} showImport={posts.length === 0} paths={paths} />
       </div>
-    </main>
+    </AdminShell>
   );
 }

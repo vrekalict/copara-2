@@ -518,6 +518,10 @@
   font-family: var(--font-marketing), var(--font-geist-sans), system-ui, sans-serif;
 }
 
+.admin-shell {
+  font-family: var(--font-marketing), var(--font-geist-sans), system-ui, sans-serif;
+}
+
 @media (max-width: 1023px) {
   .auth-shell__brand {
     min-height: auto;
