@@ -1,4 +1,4 @@
-import { createServiceClient } from "@/lib/supabase/service";
+import { createServiceClient, isServiceClientConfigured } from "@/lib/supabase/service";
 import type { BlogPost, BlogPostInput, BlogPostStatus } from "./types";
 
 type BlogPostRow = {
@@ -44,6 +44,10 @@ export function mapBlogPostRow(row: BlogPostRow): BlogPost {
 }
 
 export async function fetchPublishedPostsFromDb(): Promise<BlogPost[]> {
+  if (!isServiceClientConfigured()) {
+    console.error("[blog] fetch published skipped: service role not configured");
+    return [];
+  }
   const supabase = createServiceClient();
   const { data, error } = await supabase
     .from("blog_posts")
@@ -60,6 +64,10 @@ export async function fetchPublishedPostsFromDb(): Promise<BlogPost[]> {
 }
 
 export async function fetchAllPostsFromDb(): Promise<BlogPost[]> {
+  if (!isServiceClientConfigured()) {
+    console.error("[blog] fetch all skipped: service role not configured");
+    return [];
+  }
   const service = createServiceClient();
   const { data, error } = await service
     .from("blog_posts")

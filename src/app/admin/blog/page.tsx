@@ -2,6 +2,7 @@ import { AdminNav, getStaffBlogPaths } from "@/components/admin/admin-nav";
 import { BlogPostsPanel } from "@/components/admin/blog-posts-panel";
 import { requireAdmin } from "@/lib/admin/require-admin";
 import { getAllPostsForAdmin } from "@/lib/blog";
+import { isServiceClientConfigured } from "@/lib/supabase/service";
 
 export default async function AdminBlogPage({
   searchParams,
@@ -10,7 +11,6 @@ export default async function AdminBlogPage({
 }) {
   const auth = await requireAdmin("/blog");
   const params = await searchParams;
-  const paths = getStaffBlogPaths();
 
   if (!auth.ok) {
     return (
@@ -19,12 +19,27 @@ export default async function AdminBlogPage({
         <p className="mt-2 text-sm text-muted-foreground">
           Your account is not configured as a Copara admin. Set{" "}
           <code className="text-xs">COPARA_ADMIN_EMAILS</code> in your environment to include your
-          email.
+          email ({auth.user.email ?? "unknown"}).
         </p>
       </main>
     );
   }
 
+  if (!isServiceClientConfigured()) {
+    return (
+      <main className="mx-auto max-w-lg p-6">
+        <AdminNav active="blog" />
+        <h1 className="text-xl font-semibold">Blog CMS unavailable</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          This deployment is missing{" "}
+          <code className="text-xs">SUPABASE_SERVICE_ROLE_KEY</code>. Add it in Vercel environment
+          variables, then redeploy.
+        </p>
+      </main>
+    );
+  }
+
+  const paths = getStaffBlogPaths();
   const posts = await getAllPostsForAdmin();
 
   return (

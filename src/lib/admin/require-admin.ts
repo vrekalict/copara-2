@@ -1,11 +1,11 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { isAdminEmail } from "@/lib/pro/partner";
 import { getStaffBasePath, staffPath } from "@/lib/admin/staff-path";
 
 export async function requireAdmin(nextSuffix = "/blog") {
   if (!getStaffBasePath()) {
-    throw new Error("Staff tools are not configured. Set COPARA_STAFF_PATH in the environment.");
+    notFound();
   }
 
   const supabase = await createClient();
