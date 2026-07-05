@@ -15,15 +15,18 @@ import {
 import { pageMetadata } from "@/lib/marketing/metadata";
 import { blogPostingSchema } from "@/lib/marketing/schema";
 
+export const revalidate = 60;
+
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
-  return getAllPosts().map((post) => ({ slug: post.slug }));
+  const posts = await getAllPosts();
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
   if (!post) return {};
   return pageMetadata({
     title: post.title,
@@ -36,10 +39,10 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
   if (!post) notFound();
 
-  const related = getRelatedPosts(slug, 3);
+  const related = await getRelatedPosts(slug, 3);
   const minutes = readingTimeMinutes(post.body);
 
   return (
@@ -63,6 +66,13 @@ export default async function BlogPostPage({ params }: Props) {
           </div>
           <h1 className="display mt-6 text-[clamp(2rem,4vw,2.75rem)]">{post.title}</h1>
           <p className="lead mt-5">{post.excerpt}</p>
+          {post.coverImageUrl && (
+            <img
+              src={post.coverImageUrl}
+              alt=""
+              className="mt-8 w-full rounded-xl border border-[var(--marketing-border)] object-cover"
+            />
+          )}
           <div className="mt-10 border-t border-[var(--marketing-border)] pt-10">
             <BlogContent body={post.body} />
           </div>

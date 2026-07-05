@@ -75,7 +75,9 @@ export function PageHero({
             </div>
           )}
         </div>
-        {visual && <div className="flex justify-center lg:justify-end">{visual}</div>}
+        {visual && (
+          <div className="app-mockup-slot flex justify-center lg:justify-end">{visual}</div>
+        )}
       </div>
     </div>
   );
@@ -90,7 +92,7 @@ export function ProSegmentBanner() {
           Mediators, family lawyers, and parenting coordinators
         </p>
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/75">
-          Design partner access during early access. Read-only visibility where parents
+          Design partner access . Read-only visibility where parents
           permit, organized exports, and dual-parent invites.
         </p>
       </div>

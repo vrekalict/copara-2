@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 export function CtaBand({
   title,
   description,
-  primaryHref = "/early-access",
-  primaryLabel = "Join early access",
+  primaryHref = "/sign-up",
+  primaryLabel = "Start free trial",
   secondaryHref,
   secondaryLabel,
   dark = true,

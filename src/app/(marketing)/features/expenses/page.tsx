@@ -15,7 +15,7 @@ export default function ExpensesFeaturePage() {
     <>
       <ExpensesShowcaseSection />
       <Section className="pb-20">
-        <CtaBand title="Track expenses in early access" />
+        <CtaBand title="Track expenses with a free trial" />
       </Section>
     </>
   );

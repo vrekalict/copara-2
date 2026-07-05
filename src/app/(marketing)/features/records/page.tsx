@@ -59,14 +59,14 @@ export default function RecordsPage() {
           <LegalDisclaimer />
         </div>
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          No per-export fees during early access.{" "}
+          No per-export fees .{" "}
           <Link href="/pricing" className="font-medium text-primary hover:underline">
             See pricing
           </Link>
         </p>
       </Section>
       <Section variant="mist" className="pb-20">
-        <CtaBand title="Export with confidence in early access" />
+        <CtaBand title="Export with confidence with a free trial" />
       </Section>
     </>
   );

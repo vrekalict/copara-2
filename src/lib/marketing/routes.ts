@@ -15,7 +15,7 @@ export const MARKETING_ROUTES = [
   { path: "/faq", changefreq: "monthly" as const, priority: 0.7 },
   { path: "/blog", changefreq: "weekly" as const, priority: 0.8 },
   { path: "/coparenting-guide", changefreq: "monthly" as const, priority: 0.75 },
-  { path: "/early-access", changefreq: "monthly" as const, priority: 0.9 },
+  { path: "/sign-up", changefreq: "monthly" as const, priority: 0.9 },
   { path: "/contact", changefreq: "yearly" as const, priority: 0.5 },
   { path: "/privacy", changefreq: "yearly" as const, priority: 0.4 },
   { path: "/terms", changefreq: "yearly" as const, priority: 0.4 },

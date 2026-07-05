@@ -118,8 +118,8 @@ export const GUIDE_CLOSING = {
     "Children should feel that both parents are attentive to school, activities, health, and daily life — even when parents no longer live together.",
     "Copara offers shared calendars, messaging with optional tone review, expense tracking, document storage, and tamper-evident exports designed for Canadian families. English and French.",
   ],
-  primaryLabel: "Join early access",
-  primaryHref: "/early-access",
+  primaryLabel: "Start free trial",
+  primaryHref: "/sign-up",
   secondaryLabel: "See how Copara works",
   secondaryHref: "/features",
 };

@@ -209,7 +209,7 @@ export const TERMS_SECTIONS: LegalSection[] = [
   },
   {
     id: "early-access",
-    title: "Early access and beta features",
+    title: "Sign up and beta features",
     paragraphs: [
       "Copara may offer early-access, beta, preview, experimental, or limited-release features.",
       "Early-access and beta features may be incomplete, unstable, unavailable, changed, suspended, removed, or modified at any time.",

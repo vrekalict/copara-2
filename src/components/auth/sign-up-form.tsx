@@ -9,10 +9,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PROVINCES } from "@/lib/marketing/site";
+import { isPlanKey } from "@/lib/stripe/config";
 
 type ActionState = { error?: string; confirmEmail?: boolean } | null;
 
-export function SignUpForm({ next }: { next?: string }) {
+export function SignUpForm({
+  next,
+  plan,
+  ref,
+}: {
+  next?: string;
+  plan?: string;
+  ref?: string;
+}) {
   const t = useTranslations("auth");
   const [province, setProvince] = useState("");
 
@@ -29,9 +38,11 @@ export function SignUpForm({ next }: { next?: string }) {
     <div className="flex flex-col gap-4">
       <form action={formAction} className="flex flex-col gap-4">
         {next && <input type="hidden" name="next" value={next} />}
+        {plan && <input type="hidden" name="plan" value={plan} />}
+        {ref && <input type="hidden" name="ref" value={ref} />}
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="email">{t("email")}</Label>
-          <Input id="email" name="email" type="email" required autoComplete="email" />
+          <Input id="email" name="email" type="email" required autoComplete="email" className="min-h-11" />
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="password">{t("password")}</Label>
@@ -42,6 +53,7 @@ export function SignUpForm({ next }: { next?: string }) {
             required
             minLength={8}
             autoComplete="new-password"
+            className="min-h-11"
           />
         </div>
         <div className="flex flex-col gap-1.5">
@@ -52,7 +64,7 @@ export function SignUpForm({ next }: { next?: string }) {
             required
             value={province}
             onChange={(e) => setProvince(e.target.value)}
-            className="min-h-10 rounded-lg border border-input bg-background px-3 text-sm"
+            className="min-h-11 rounded-lg border border-input bg-background px-3 text-sm shadow-sm"
           >
             <option value="">Select…</option>
             {PROVINCES.map((p) => (
@@ -68,8 +80,12 @@ export function SignUpForm({ next }: { next?: string }) {
         )}
 
         {state?.error && <p className="text-sm text-destructive">{state.error}</p>}
-        <Button type="submit" disabled={pending || !province}>
-          {t("signUp")}
+        <Button type="submit" disabled={pending || !province} className="min-h-11 w-full">
+          {pending
+            ? "Creating account…"
+            : plan && isPlanKey(plan)
+              ? "Create account & continue"
+              : t("signUp")}
         </Button>
       </form>
       <p className="text-center text-sm text-muted-foreground">

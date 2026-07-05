@@ -60,7 +60,7 @@ export default function AlbumsFeaturePage() {
         </div>
       </Section>
       <Section className="pb-20">
-        <CtaBand title="Try albums in early access" primaryLabel="Get started" />
+        <CtaBand title="Try albums with a free trial" primaryLabel="Get started" />
       </Section>
     </>
   );

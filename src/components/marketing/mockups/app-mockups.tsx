@@ -8,6 +8,44 @@ import {
 } from "./app-shell-mock";
 import { DesktopAppFrame, PhoneFrame } from "./phone-frame";
 
+const JOURNAL_MOCKUP_PHOTOS = [
+  {
+    src: "/marketing/mockups/journal/journal-1.jpg",
+    alt: "Cat reaching for toast on the kitchen counter",
+  },
+  {
+    src: "/marketing/mockups/journal/journal-2.jpg",
+    alt: "Cat watching a half-eaten slice of toast",
+  },
+  {
+    src: "/marketing/mockups/journal/journal-3.jpg",
+    alt: "Cat staring at a child's toast at the breakfast table",
+  },
+] as const;
+
+const ALBUM_MOCKUP_PHOTOS = [
+  { src: "/marketing/mockups/albums/album-1.jpg", alt: "Child kicking a soccer ball" },
+  { src: "/marketing/mockups/albums/album-2.jpg", alt: "Kids soccer team huddle" },
+  { src: "/marketing/mockups/albums/album-3.jpg", alt: "Soccer goal celebration" },
+  { src: "/marketing/mockups/albums/album-4.jpg", alt: "Soccer ball on the field" },
+  { src: "/marketing/mockups/albums/album-5.jpg", alt: "Parent watching soccer practice" },
+  { src: "/marketing/mockups/albums/album-6.jpg", alt: "Youth soccer players running" },
+] as const;
+
+function MockupPhoto({ src, alt }: { src: string; alt: string }) {
+  return (
+    <div className="aspect-square overflow-hidden rounded-md bg-neutral-100">
+      <img
+        src={src}
+        alt={alt}
+        className="size-full object-cover"
+        loading="lazy"
+        draggable={false}
+      />
+    </div>
+  );
+}
+
 function MessagesScreenContent() {
   return (
     <div className="flex min-h-[400px] flex-col bg-white">
@@ -213,8 +251,8 @@ function JournalScreenContent() {
             &ldquo;Dad, the cat tried to steal my toast again.&rdquo; Thought you would want the report.
           </p>
           <div className="mt-3 grid grid-cols-3 gap-2">
-            {[1, 2, 3].map((n) => (
-              <div key={n} className="aspect-square rounded-md bg-neutral-100" />
+            {JOURNAL_MOCKUP_PHOTOS.map((photo) => (
+              <MockupPhoto key={photo.src} src={photo.src} alt={photo.alt} />
             ))}
           </div>
         </li>
@@ -237,8 +275,8 @@ function AlbumsScreenContent() {
         <p className="font-medium text-foreground">Spring soccer</p>
         <p className="text-sm text-muted-foreground">12 photos · Updated 2 days ago</p>
         <div className="mt-3 grid grid-cols-3 gap-2">
-          {[1, 2, 3, 4, 5, 6].map((n) => (
-            <div key={n} className="aspect-square rounded-md bg-neutral-200" />
+          {ALBUM_MOCKUP_PHOTOS.map((photo) => (
+            <MockupPhoto key={photo.src} src={photo.src} alt={photo.alt} />
           ))}
         </div>
         <div className="mt-3 flex gap-2">
@@ -258,7 +296,7 @@ function ExportsScreenContent() {
   return (
     <div className="flex flex-col gap-6 p-4">
       <div>
-        <h1 className="text-xl font-semibold">Exports & summaries</h1>
+        <h1 className="text-xl font-semibold text-foreground">Exports & summaries</h1>
         <p className="text-sm text-muted-foreground">
           Generate tamper-evident PDFs and AI dispute summaries.
         </p>
@@ -294,7 +332,7 @@ function VaultScreenContent() {
   return (
     <div className="flex flex-col gap-4 p-4">
       <div>
-        <h1 className="text-xl font-semibold">Vault</h1>
+        <h1 className="text-xl font-semibold text-foreground">Vault</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Medical, school, and emergency info per child
         </p>

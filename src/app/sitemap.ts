@@ -3,7 +3,7 @@ import { getAllPosts } from "@/lib/blog";
 import { MARKETING_ROUTES } from "@/lib/marketing/routes";
 import { SITE } from "@/lib/marketing/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = SITE.url;
   const now = new Date();
 
@@ -23,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const blogPosts: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
+  const blogPosts: MetadataRoute.Sitemap = (await getAllPosts()).map((post) => ({
     url: `${base}/blog/${post.slug}`,
     lastModified: new Date(post.updatedAt ?? post.publishedAt),
     changeFrequency: "monthly",

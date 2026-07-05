@@ -52,7 +52,7 @@ export default function CalendarFeaturePage() {
         </div>
       </Section>
       <Section className="pb-20">
-        <CtaBand title="Coordinate schedules in early access" />
+        <CtaBand title="Coordinate schedules with a free trial" />
       </Section>
     </>
   );

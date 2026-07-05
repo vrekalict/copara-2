@@ -5,9 +5,14 @@ import Link from "next/link";
 import { Check } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { PRICING } from "@/lib/marketing/site";
+import type { PlanKey } from "@/lib/stripe/config";
 import { cn } from "@/lib/utils";
 
 type Billing = "monthly" | "yearly";
+
+function planHref(planKey: PlanKey) {
+  return `/sign-up?plan=${planKey}`;
+}
 
 function PriceCard({
   name,
@@ -71,6 +76,8 @@ function PriceCard({
 
 export function PricingPlans({ compact = false }: { compact?: boolean }) {
   const [billing, setBilling] = useState<Billing>("monthly");
+  const parentPlan: PlanKey = billing === "monthly" ? "parent_monthly" : "parent_yearly";
+  const familyPlan: PlanKey = billing === "monthly" ? "family_monthly" : "family_yearly";
 
   return (
     <div>
@@ -122,14 +129,15 @@ export function PricingPlans({ compact = false }: { compact?: boolean }) {
               : `For one parent · works out to $${PRICING.parentYearly.monthlyEquivalent}/month`
           }
           features={[
+            "14-day free trial",
             "Messaging with Steady Send",
             "Shared calendar & check-ins",
             "Expenses & reimbursements",
             "Info Vault & exports included",
             "English + French",
           ]}
-          cta="Join early access"
-          ctaHref="/early-access"
+          cta="Start free trial"
+          ctaHref={planHref(parentPlan)}
         />
         <PriceCard
           name="Family Circle"
@@ -145,38 +153,40 @@ export function PricingPlans({ compact = false }: { compact?: boolean }) {
               : `Both parents · works out to $${PRICING.familyYearly.monthlyEquivalent}/month total`
           }
           features={[
+            "14-day free trial",
             "Covers both parents in one circle",
             "All parent features included",
             "One shared subscription",
-            "No per-export fees during early access",
+            "No per-export fees",
             "PWA on iOS, Android, and web",
           ]}
           highlight
-          cta="Join early access"
-          ctaHref="/early-access"
+          cta="Start free trial"
+          ctaHref={planHref(familyPlan)}
         />
         <PriceCard
-          name="Design Partner"
+          name="Professional"
           price={0}
-          period="early access"
+          period="partner program"
           description="For mediators, family lawyers, and parenting coordinators"
           features={[
             "Read-only circle access where permitted",
             "Dispute summaries with citations",
             "Organized record exports",
-            "Dual-parent invite links",
-            "Free during design partner program",
+            "Referral bonuses for client signups",
+            "Free partner dashboard",
           ]}
-          cta="Apply as a design partner"
-          ctaHref="/early-access?role=professional"
+          cta="Apply as a partner"
+          ctaHref="/professionals#apply"
         />
       </div>
 
       {!compact && (
         <ul className="mt-10 flex flex-col gap-2 text-center text-sm text-muted-foreground sm:flex-row sm:flex-wrap sm:justify-center sm:gap-x-6">
+          <li>14-day free trial on all paid plans</li>
           <li>Priced below many established co-parenting tools</li>
           <li>No app-store install required</li>
-          <li>No per-export fees during early access</li>
+          <li>No per-export fees</li>
         </ul>
       )}
     </div>

@@ -36,7 +36,7 @@ export default function FrenchLandingPage() {
             </ul>
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
-                href="/early-access"
+                href="/sign-up"
                 className={cn(buttonVariants({ size: "lg" }), "min-h-12 px-8 font-semibold")}
               >
                 Rejoindre l&apos;accès anticipé

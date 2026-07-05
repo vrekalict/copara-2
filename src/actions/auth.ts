@@ -3,11 +3,19 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { recordLegalAcceptance } from "@/actions/legal/acceptance";
+import { captureReferralLead } from "@/actions/pro/referrals";
+import { isPlanKey } from "@/lib/stripe/config";
 import { createClient } from "@/lib/supabase/server";
 
 function nextPath(formData: FormData) {
   const value = String(formData.get("next") ?? "");
-  return value.startsWith("/") ? value : "/app";
+  return value.startsWith("/") ? value : "/onboarding/circle";
+}
+
+function subscribePath(plan: string, ref: string) {
+  const params = new URLSearchParams({ plan });
+  if (ref) params.set("ref", ref);
+  return `/subscribe?${params.toString()}`;
 }
 
 function parseLegalFromForm(formData: FormData) {
@@ -21,7 +29,9 @@ function parseLegalFromForm(formData: FormData) {
 export async function signUpWithPassword(formData: FormData) {
   const email = String(formData.get("email") ?? "");
   const password = String(formData.get("password") ?? "");
-  const next = nextPath(formData);
+  const plan = String(formData.get("plan") ?? "").trim();
+  const ref = String(formData.get("ref") ?? "").trim();
+  const explicitNext = String(formData.get("next") ?? "").trim();
   const origin = (await headers()).get("origin");
   const legal = parseLegalFromForm(formData);
 
@@ -41,6 +51,15 @@ export async function signUpWithPassword(formData: FormData) {
       error:
         "Quebec users must confirm access to the French legal documents before continuing in English.",
     };
+  }
+
+  let next = nextPath(formData);
+  if (explicitNext.startsWith("/join/")) {
+    next = explicitNext;
+  } else if (plan && isPlanKey(plan)) {
+    next = subscribePath(plan, ref);
+  } else if (!explicitNext) {
+    next = "/pricing";
   }
 
   const supabase = await createClient();
@@ -66,6 +85,24 @@ export async function signUpWithPassword(formData: FormData) {
       console.error("[auth] legal acceptance failed after signup:", result.error);
     }
   });
+
+  if (ref) {
+    await captureReferralLead({
+      referralCode: ref,
+      email,
+      source: "signup",
+    }).then((result) => {
+      if (result.error) {
+        console.warn("[auth] referral capture failed:", result.error);
+      }
+    });
+  }
+
+  if (data.user?.id) {
+    const { linkReferralToUser } = await import("@/lib/pro/referral-bonus");
+    const { createServiceClient } = await import("@/lib/supabase/service");
+    await linkReferralToUser(createServiceClient(), email, data.user.id);
+  }
 
   if (!data.session) {
     return { confirmEmail: true };

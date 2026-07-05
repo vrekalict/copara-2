@@ -3,6 +3,7 @@ export type AnalyticsEvent =
   | "pwa_prompt_accepted"
   | "pwa_prompt_dismissed"
   | "pwa_installed"
+  | "pwa_badge_click"
   | "export_created"
   | "summary_generated";
 

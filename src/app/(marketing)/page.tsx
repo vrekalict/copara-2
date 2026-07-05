@@ -37,8 +37,8 @@ export const metadata = pageMetadata({
   path: "/",
 });
 
-export default function HomePage() {
-  const featuredPosts = getFeaturedPosts().slice(0, 3);
+export default async function HomePage() {
+  const featuredPosts = (await getFeaturedPosts()).slice(0, 3);
 
   return (
     <>
@@ -168,7 +168,7 @@ export default function HomePage() {
       <Section variant="cream">
         <SectionHeader
           title="Simple, affordable pricing in CAD"
-          description="Intentionally priced below many established co-parenting tools. No per-export fees during early access."
+          description="Intentionally priced below many established co-parenting tools. No per-export fees ."
         />
         <PricingPlans compact />
         <p className="mt-8 text-center">
@@ -211,7 +211,7 @@ export default function HomePage() {
       <Section variant="cream" className="pb-20">
         <CtaBand
           title="Keep the focus on your child, not the conflict."
-          description="Join early access and help shape a calmer co-parenting tool for Canadian families."
+          description="Start free trial and help shape a calmer co-parenting tool for Canadian families."
         />
       </Section>
     </>

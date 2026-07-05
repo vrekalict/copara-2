@@ -1,7 +1,23 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import {
+  getStaffBasePath,
+  isInternalStaffPath,
+  isStaffRequestPath,
+  staffPathToInternal,
+} from "@/lib/admin/staff-path";
 
 export async function updateSession(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
+
+  // Never expose internal /admin URLs — staff tools use COPARA_STAFF_PATH only.
+  if (isInternalStaffPath(pathname)) {
+    return new NextResponse(null, { status: 404 });
+  }
+
+  const staffRoute = isStaffRequestPath(pathname);
+  const internalPath = staffRoute ? staffPathToInternal(pathname) : pathname;
+
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -30,13 +46,26 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const requiresAuth =
-    request.nextUrl.pathname.startsWith("/app") ||
-    request.nextUrl.pathname.startsWith("/onboarding");
+    internalPath.startsWith("/app") ||
+    internalPath.startsWith("/onboarding") ||
+    internalPath.startsWith("/subscribe") ||
+    internalPath.startsWith("/account") ||
+    internalPath.startsWith("/admin");
 
   if (!user && requiresAuth) {
     const signInUrl = new URL("/sign-in", request.url);
-    signInUrl.searchParams.set("next", request.nextUrl.pathname);
+    signInUrl.searchParams.set("next", pathname);
     return NextResponse.redirect(signInUrl);
+  }
+
+  if (staffRoute && getStaffBasePath()) {
+    const rewriteUrl = request.nextUrl.clone();
+    rewriteUrl.pathname = internalPath;
+    const rewriteResponse = NextResponse.rewrite(rewriteUrl);
+    response.cookies.getAll().forEach((cookie) => {
+      rewriteResponse.cookies.set(cookie.name, cookie.value);
+    });
+    return rewriteResponse;
   }
 
   return response;

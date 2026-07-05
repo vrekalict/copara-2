@@ -10,7 +10,7 @@ import { faqSchema, pricingProductSchema } from "@/lib/marketing/schema";
 export const metadata = pageMetadata({
   title: "Pricing in CAD",
   description:
-    "Simple CAD pricing for Copara: parent monthly and yearly plans, family circle subscriptions, and free design partner access for professionals during early access.",
+    "Simple CAD pricing for Copara: parent monthly and yearly plans, family circle subscriptions, and free design partner access for professionals .",
   path: "/pricing",
 });
 
@@ -22,7 +22,7 @@ export default function PricingPage() {
         <PageHero
           eyebrow="Pricing"
           title="Simple plans in Canadian dollars"
-          description="Co-parenting tools should not cost hundreds per year. Copara is intentionally affordable, priced below many established co-parenting tools, with exports included during early access."
+          description="Co-parenting tools should not cost hundreds per year. Copara is intentionally affordable, priced below many established co-parenting tools, with exports included ."
         />
         <div className="mt-10">
           <PricingPlans />

@@ -81,6 +81,16 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  /* Marketing palette — shared with auth shell and marketing pages */
+  --marketing-navy: oklch(0.22 0.04 252);
+  --marketing-navy-soft: oklch(0.28 0.035 252);
+  --marketing-teal: oklch(0.58 0.09 195);
+  --marketing-teal-light: oklch(0.72 0.08 195);
+  --marketing-cream: oklch(0.985 0.008 95);
+  --marketing-mist: oklch(0.962 0.014 240);
+  --marketing-slate: oklch(0.24 0.03 252);
+  --marketing-slate-muted: oklch(0.46 0.025 250);
+  --marketing-border: oklch(0.88 0.014 240);
 }
 
 .dark {
@@ -147,15 +157,6 @@
 .marketing {
   --primary: oklch(0.52 0.14 245);
   --primary-foreground: oklch(0.985 0 0);
-  --marketing-navy: oklch(0.22 0.04 252);
-  --marketing-navy-soft: oklch(0.28 0.035 252);
-  --marketing-teal: oklch(0.58 0.09 195);
-  --marketing-teal-light: oklch(0.72 0.08 195);
-  --marketing-cream: oklch(0.985 0.008 95);
-  --marketing-mist: oklch(0.962 0.014 240);
-  --marketing-slate: oklch(0.24 0.03 252);
-  --marketing-slate-muted: oklch(0.46 0.025 250);
-  --marketing-border: oklch(0.88 0.014 240);
   font-family: var(--font-marketing), var(--font-geist-sans), system-ui, sans-serif;
 }
 
@@ -450,11 +451,19 @@
   --input: oklch(0.88 0 0);
   --background: oklch(1 0 0);
   --foreground: oklch(0.12 0 0);
+  /* Reset inherited marketing hero / dark panel text color */
+  color: var(--foreground);
 }
 
 .app-preview--readable {
   font-size: 0.9375rem;
   line-height: 1.5;
+}
+
+/* Isolate product mockups from dark marketing panel text color */
+.app-mockup-slot,
+.marketing-hero__visual {
+  color: var(--foreground);
 }
 
 .app-preview--readable .text-sm {
@@ -493,6 +502,30 @@
     radial-gradient(ellipse 70% 55% at 20% 0%, oklch(0.58 0.09 195 / 0.2), transparent 50%),
     radial-gradient(ellipse 80% 60% at 80% 20%, oklch(0.35 0.06 245 / 0.35), transparent 55%),
     linear-gradient(180deg, var(--marketing-navy) 0%, oklch(0.19 0.038 252) 100%);
+}
+
+.auth-shell__brand {
+  background-color: var(--marketing-navy);
+  background:
+    radial-gradient(ellipse 70% 55% at 20% 0%, oklch(0.58 0.09 195 / 0.2), transparent 50%),
+    radial-gradient(ellipse 80% 60% at 80% 20%, oklch(0.35 0.06 245 / 0.35), transparent 55%),
+    linear-gradient(180deg, var(--marketing-navy) 0%, oklch(0.19 0.038 252) 100%);
+  color: white;
+}
+
+.auth-shell {
+  min-height: 100svh;
+  font-family: var(--font-marketing), var(--font-geist-sans), system-ui, sans-serif;
+}
+
+@media (max-width: 1023px) {
+  .auth-shell__brand {
+    min-height: auto;
+  }
+
+  .auth-shell__brand h1 {
+    font-size: 1.75rem;
+  }
 }
 
 .marketing .blog-prose {

@@ -9,7 +9,7 @@ export const post: BlogPost = {
   publishedAt: "2026-07-03",
   author: "Copara Editorial",
   seoDescription:
-    "How mediators and family lawyers use organized co-parenting records, summaries, and tamper-evident exports during early access to Copara.",
+    "How mediators and family lawyers use organized co-parenting records, summaries, and tamper-evident exports  to Copara.",
   body: `When professionals enter a high-conflict co-parenting matter, the first bottleneck is often basic chronology. Who proposed the schedule change? When was it approved? Which messages relate to the expense dispute? Screenshots arrive out of order. Context is missing. Hours disappear before substantive work begins.
 
 ## Start with dated communication
@@ -28,7 +28,7 @@ AI dispute summaries can outline positions and unresolved items with citations b
 
 Tamper-evident PDFs with hash-chain verification let a recipient check integrity. That supports professional review. It does not certify legal outcomes.
 
-## Design partner access during early access
+## Design partner access 
 
 Copara offers free design partner access for mediators, family lawyers, and parenting coordinators while the professional dashboard matures. Read-only access applies only where parents grant permission.
 

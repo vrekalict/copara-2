@@ -19,7 +19,7 @@ export type AppNavKey = (typeof NAV_ITEMS)[number]["key"];
 
 export function AppTopBarMock() {
   return (
-    <header className="flex items-center justify-between border-b border-border px-4 py-3">
+    <header className="flex items-center justify-between border-b border-border bg-background px-4 py-3 text-foreground">
       <span className="text-base font-semibold">Copara</span>
       <div className="flex items-center gap-3">
         <span className="flex size-8 items-center justify-center rounded-full bg-muted text-xs font-medium">
@@ -57,7 +57,7 @@ export function AppBottomNavMock({ active = "messages" }: { active?: AppNavKey }
 }
 
 export function AppPageTitle({ children }: { children: React.ReactNode }) {
-  return <h1 className="text-lg font-semibold">{children}</h1>;
+  return <h1 className="text-lg font-semibold text-foreground">{children}</h1>;
 }
 
 export function AppSectionLabel({ children }: { children: React.ReactNode }) {

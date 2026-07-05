@@ -46,14 +46,14 @@ export function getMarketingPageDocs(): LlmsPageDoc[] {
     {
       path: "/pricing",
       title: "Pricing",
-      summary: "CAD pricing for parents and free design partner access during early access.",
-      body: "Parent Monthly CAD $8. Parent Yearly CAD $72. Family Circle CAD $12/month or CAD $108/year. No per-export fees during early access. Priced below many established co-parenting tools.",
+      summary: "CAD pricing for parents and free design partner access .",
+      body: "Parent Monthly CAD $8. Parent Yearly CAD $72. Family Circle CAD $12/month or CAD $108/year. No per-export fees . Priced below many established co-parenting tools.",
     },
     {
       path: "/professionals",
       title: "For Professionals",
       summary: "Design partner program for mediators, family lawyers, and parenting coordinators.",
-      body: "Read-only access where permitted. Dispute summaries with citations. Dual-parent invite links. Free during early access.",
+      body: "Read-only access where permitted. Dispute summaries with citations. Dual-parent invite links. Free .",
     },
     {
       path: "/security",
@@ -92,10 +92,10 @@ export function getMarketingPageDocs(): LlmsPageDoc[] {
       body: `General: ${SITE.contactEmail}\nSupport: ${SITE.supportEmail}\nPrivacy: privacy@copara.ca`,
     },
     {
-      path: "/early-access",
-      title: "Early Access",
-      summary: "Request early access to Copara.",
-      body: "Early access signup for Canadian parents and professional design partners.",
+      path: "/sign-up",
+      title: "Sign up",
+      summary: "Request Sign up to Copara.",
+      body: "Sign up signup for Canadian parents and professional design partners.",
     },
     {
       path: "/fr",
@@ -106,8 +106,8 @@ export function getMarketingPageDocs(): LlmsPageDoc[] {
   ];
 }
 
-export function buildLlmsTxt(): string {
-  const posts = getAllPosts();
+export async function buildLlmsTxt(): Promise<string> {
+  const posts = await getAllPosts();
   const lines = [
     `# ${SITE.name}`,
     "",
@@ -121,7 +121,7 @@ export function buildLlmsTxt(): string {
     `- ${SITE.url}/pricing`,
     `- ${SITE.url}/professionals`,
     `- ${SITE.url}/security`,
-    `- ${SITE.url}/early-access`,
+    `- ${SITE.url}/sign-up`,
     "",
     "## Resources",
     `- ${SITE.url}/blog`,
@@ -149,9 +149,9 @@ export function buildLlmsTxt(): string {
   return lines.join("\n");
 }
 
-export function buildLlmsFullTxt(): string {
+export async function buildLlmsFullTxt(): Promise<string> {
   const docs = getMarketingPageDocs();
-  const posts = getAllPosts();
+  const posts = await getAllPosts();
   const chunks: string[] = [
     `# ${SITE.name} full public index`,
     "",
@@ -188,8 +188,8 @@ export function buildLlmsFullTxt(): string {
   return chunks.join("\n");
 }
 
-export function getAllPublicPaths(): string[] {
-  const posts = getAllPosts();
+export async function getAllPublicPaths(): Promise<string[]> {
+  const posts = await getAllPosts();
   return [
     ...MARKETING_ROUTES.map((r) => r.path),
     ...posts.map((p) => `/blog/${p.slug}`),

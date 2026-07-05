@@ -17,7 +17,7 @@ export function MarketingHeader() {
     <header className="marketing-header">
       <div className="marketing-header__bar">
         <p className="mx-auto max-w-6xl px-5 text-center text-xs font-medium sm:px-6">
-          Canadian co-parenting platform · Early access open · Pricing in CAD
+          Canadian co-parenting platform · Live signup · Pricing in CAD
         </p>
       </div>
 
@@ -43,13 +43,13 @@ export function MarketingHeader() {
               </Link>
             ))}
             <Link
-              href="/early-access"
+              href="/sign-up"
               className={cn(
                 buttonVariants(),
                 "ml-3 min-h-10 border-0 bg-white px-5 text-sm font-semibold text-[var(--marketing-navy)] hover:bg-white/92",
               )}
             >
-              Early access
+              Start free trial
             </Link>
           </nav>
 
@@ -86,14 +86,14 @@ export function MarketingHeader() {
             ))}
             <li className="pt-2">
               <Link
-                href="/early-access"
+                href="/sign-up"
                 className={cn(
                   buttonVariants(),
                   "flex min-h-11 w-full justify-center border-0 bg-white text-[var(--marketing-navy)] hover:bg-white/92",
                 )}
                 onClick={() => setOpen(false)}
               >
-                Early access
+                Start free trial
               </Link>
             </li>
           </ul>

@@ -23,7 +23,7 @@ export default function VaultFeaturePage() {
       </Section>
       <VaultShowcaseSection />
       <Section className="pb-20">
-        <CtaBand title="Use the vault in early access" primaryLabel="Get started" />
+        <CtaBand title="Use the vault with a free trial" primaryLabel="Get started" />
       </Section>
     </>
   );

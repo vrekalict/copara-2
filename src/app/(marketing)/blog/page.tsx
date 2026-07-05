@@ -22,6 +22,8 @@ export const metadata = pageMetadata({
   path: "/blog",
 });
 
+export const revalidate = 60;
+
 function parseCategory(value: string | undefined): BlogCategory | typeof BLOG_CATEGORY_ALL {
   if (!value) return BLOG_CATEGORY_ALL;
   if (BLOG_CATEGORIES.includes(value as BlogCategory)) return value as BlogCategory;
@@ -35,8 +37,8 @@ export default async function BlogIndexPage({
 }) {
   const { category: raw } = await searchParams;
   const category = parseCategory(raw);
-  const featured = category === BLOG_CATEGORY_ALL ? getFeaturedPosts() : [];
-  const posts = getPostsByCategory(category).filter(
+  const featured = category === BLOG_CATEGORY_ALL ? await getFeaturedPosts() : [];
+  const posts = (await getPostsByCategory(category)).filter(
     (p) => !featured.some((f) => f.slug === p.slug),
   );
 
@@ -81,8 +83,8 @@ export default async function BlogIndexPage({
       <Section variant="mist" className="pb-20">
         <LegalDisclaimer />
         <p className="mt-6 text-sm">
-          <Link href="/early-access" className="font-semibold text-primary hover:underline">
-            Join early access
+          <Link href="/sign-up" className="font-semibold text-primary hover:underline">
+            Start free trial
           </Link>{" "}
           to use Copara with your co-parenting circle.
         </p>

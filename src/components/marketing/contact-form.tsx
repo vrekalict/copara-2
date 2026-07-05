@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { submitContact } from "@/actions/marketing/early-access";
+import { submitContact } from "@/actions/marketing/contact";
 import { SITE } from "@/lib/marketing/site";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

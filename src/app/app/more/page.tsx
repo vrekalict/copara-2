@@ -54,6 +54,12 @@ export default async function MorePage() {
           <LocaleSwitcher />
         </div>
         <Link
+          href="/account/billing"
+          className="block p-4 hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          Billing
+        </Link>
+        <Link
           href="/pro"
           className="block p-4 hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >

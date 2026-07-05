@@ -6,27 +6,12 @@ import { X, Share, Download } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 import { Button } from "@/components/ui/button";
 import { snoozeInstallPrompt } from "@/actions/settings";
-
-type BeforeInstallPromptEvent = Event & {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
-};
-
-function isStandalone() {
-  if (typeof window === "undefined") return false;
-  return (
-    window.matchMedia("(display-mode: standalone)").matches ||
-    ("standalone" in navigator && (navigator as Navigator & { standalone?: boolean }).standalone === true)
-  );
-}
-
-function isIosSafari() {
-  if (typeof navigator === "undefined") return false;
-  const ua = navigator.userAgent;
-  return /iPad|iPhone|iPod/.test(ua) && !(window as Window & { MSStream?: unknown }).MSStream;
-}
-
 import { subscribeToPushNotifications } from "@/lib/push/subscribe-client";
+import {
+  type BeforeInstallPromptEvent,
+  isIosSafari,
+  isStandalone,
+} from "@/lib/pwa/platform";
 
 export function InstallPrompt({
   engaged,

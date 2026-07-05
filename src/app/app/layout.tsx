@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { requirePaidAccess } from "@/lib/stripe/guard";
 import { TopBar } from "@/components/app-shell/top-bar";
 import { BottomNav } from "@/components/app-shell/bottom-nav";
 import { SkipLink } from "@/components/app-shell/skip-link";
@@ -52,6 +53,11 @@ export default async function AppLayout({
     redirect("/sign-in");
   }
 
+  const paid = await requirePaidAccess(supabase, user.id);
+  if (!paid.ok) {
+    redirect(paid.redirectTo);
+  }
+
   const { data: memberships } = await supabase
     .from("circle_members")
     .select("role")
@@ -64,7 +70,7 @@ export default async function AppLayout({
 
   const isProOnly = memberships.every((m) => m.role === "professional");
   if (isProOnly) {
-    redirect("/pro");
+    redirect("/pro/dashboard");
   }
 
   const { data: profile } = await supabase

@@ -34,12 +34,12 @@ export function SignInForm({ next }: { next?: string }) {
             {next && <input type="hidden" name="next" value={next} />}
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="email">{t("email")}</Label>
-              <Input id="email" name="email" type="email" required autoComplete="email" />
+              <Input id="email" name="email" type="email" required autoComplete="email" className="min-h-11" />
             </div>
             {magicLinkState?.error && (
               <p className="text-sm text-destructive">{magicLinkState.error}</p>
             )}
-            <Button type="submit" disabled={magicLinkPending}>
+            <Button type="submit" disabled={magicLinkPending} className="min-h-11 w-full">
               {t("magicLinkSend")}
             </Button>
           </form>
@@ -57,7 +57,7 @@ export function SignInForm({ next }: { next?: string }) {
         {next && <input type="hidden" name="next" value={next} />}
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="email">{t("email")}</Label>
-          <Input id="email" name="email" type="email" required autoComplete="email" />
+          <Input id="email" name="email" type="email" required autoComplete="email" className="min-h-11" />
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="password">{t("password")}</Label>
@@ -67,12 +67,13 @@ export function SignInForm({ next }: { next?: string }) {
             type="password"
             required
             autoComplete="current-password"
+            className="min-h-11"
           />
         </div>
         {passwordState?.error && (
           <p className="text-sm text-destructive">{passwordState.error}</p>
         )}
-        <Button type="submit" disabled={passwordPending}>
+        <Button type="submit" disabled={passwordPending} className="min-h-11 w-full">
           {t("signIn")}
         </Button>
       </form>

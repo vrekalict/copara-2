@@ -18,18 +18,28 @@ export const NAV_LINKS = [
   { href: "/faq", label: "FAQ" },
 ] as const;
 
+export const FEATURE_LINKS = [
+  { href: "/features/steady-send", label: "Steady Send messaging" },
+  { href: "/features/calendar", label: "Shared calendar" },
+  { href: "/features/expenses", label: "Expenses" },
+  { href: "/features/journal", label: "Journal" },
+  { href: "/features/albums", label: "Albums" },
+  { href: "/features/vault", label: "Info Vault" },
+  { href: "/features/records", label: "Records & exports" },
+] as const;
+
 export const FOOTER_LINKS = {
   product: [
-    { href: "/features", label: "Features" },
+    ...FEATURE_LINKS,
     { href: "/pricing", label: "Pricing" },
-    { href: "/professionals", label: "Professionals" },
+    { href: "/professionals", label: "For professionals" },
     { href: "/security", label: "Security" },
     { href: "/faq", label: "FAQ" },
   ],
   resources: [
     { href: "/blog", label: "Blog & guides" },
     { href: "/coparenting-guide", label: "Co-parenting guide" },
-    { href: "/early-access", label: "Early access" },
+    { href: "/sign-up", label: "Sign up" },
     { href: "/contact", label: "Contact" },
   ],
   legal: [

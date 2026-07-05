@@ -73,7 +73,7 @@ export default function SteadySendPage() {
         </p>
       </Section>
       <Section variant="mist" className="pb-20">
-        <CtaBand title="Try Steady Send in early access" />
+        <CtaBand title="Try Steady Send with a free trial" />
       </Section>
     </>
   );

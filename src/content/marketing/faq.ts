@@ -24,7 +24,7 @@ export const FAQ_GENERAL: FaqItem[] = [
   {
     question: "Can professionals use Copara?",
     answer:
-      "Yes. Mediators, family lawyers, and parenting coordinators can apply for design partner access during early access. Professionals can view connected circles where parents grant permission, generate dispute summaries, and export organized records, read-only by default.",
+      "Yes. Mediators, family lawyers, and parenting coordinators can apply for free partner access. Professionals can view connected circles where parents grant permission, generate dispute summaries, and export organized records, read-only by default.",
   },
   {
     question: "Is Copara available in Canada?",
@@ -126,7 +126,7 @@ export const FAQ_PRICING: FaqItem[] = [
   {
     question: "How much does Copara cost?",
     answer:
-      "During early access: Parent Monthly is CAD $8/month per parent; Parent Yearly is CAD $72/year (CAD $6/month equivalent); Family Circle is CAD $12/month or CAD $108/year for both parents in one circle.",
+      "Parent Monthly is CAD $8/month per parent; Parent Yearly is CAD $72/year (CAD $6/month equivalent); Family Circle is CAD $12/month or CAD $108/year for both parents in one circle. All paid plans include a 14-day free trial.",
   },
   {
     question: "Is there monthly and yearly billing?",
@@ -141,17 +141,22 @@ export const FAQ_PRICING: FaqItem[] = [
   {
     question: "Do professionals pay?",
     answer:
-      "Design partner access for mediators, family lawyers, and parenting coordinators is free during early access while we refine the professional dashboard with real practitioners.",
+      "Partner access for mediators, family lawyers, and parenting coordinators is free while we refine the professional dashboard with practitioners.",
   },
   {
-    question: "Is early access pricing permanent?",
+    question: "Is there a free trial?",
     answer:
-      "Early access pricing may change before general availability. We will give active users reasonable notice before any price increase. Joining during early access helps shape the product and locks in current published rates for your billing term.",
+      "Yes. All paid parent plans include a 14-day free trial. You will not be charged until the trial ends, and you can cancel anytime from your account.",
+  },
+  {
+    question: "Will my price change?",
+    answer:
+      "We will give active subscribers reasonable notice before any price increase takes effect on an existing paid subscription, where required by applicable law.",
   },
   {
     question: "Are exports included?",
     answer:
-      "Yes. Exports are included with no per-export fees during early access. We believe organized records should not be nickel-and-dimed.",
+      "Yes. Exports are included with no per-export fees. We believe organized records should not be nickel-and-dimed.",
   },
   {
     question: "Do both parents need to pay?",
@@ -170,12 +175,13 @@ export const FAQ_ALL: FaqItem[] = [
 
 export const FAQ_PRICING_PAGE: FaqItem[] = [
   FAQ_PRICING[0]!,
-  FAQ_PRICING[6]!,
+  FAQ_PRICING[4]!,
   FAQ_PRICING[2]!,
   FAQ_PRICING[3]!,
-  FAQ_PRICING[4]!,
   FAQ_PRICING[5]!,
+  FAQ_PRICING[6]!,
   FAQ_PRICING[1]!,
+  FAQ_PRICING[7]!,
 ];
 
 export const FAQ_PROFESSIONALS: FaqItem[] = [
@@ -197,7 +203,12 @@ export const FAQ_PROFESSIONALS: FaqItem[] = [
   {
     question: "Is design partner access really free?",
     answer:
-      "Yes during early access. We are not charging professionals while the dashboard is in active development with design partners.",
+      "Yes. We are not charging professionals for partner dashboard access.",
+  },
+  {
+    question: "How does the referral bonus program work?",
+    answer:
+      "Approved partners receive a unique referral link in the professional dashboard. When a referred family subscribes, you may earn a referral bonus according to the partner program terms shown in your dashboard. One bonus is paid per household.",
   },
 ];
 

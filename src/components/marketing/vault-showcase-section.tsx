@@ -61,10 +61,10 @@ export function VaultShowcaseSection() {
               inside your co-parenting circle.
             </p>
             <Link
-              href="/early-access"
+              href="/sign-up"
               className={cn(buttonVariants(), "mt-8 min-h-11 px-6")}
             >
-              Open the vault in early access
+              Open the vault with a free trial
             </Link>
           </div>
           <VaultMockup variant="desktop" />

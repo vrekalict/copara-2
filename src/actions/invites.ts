@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
+import { getAppAccess } from "@/lib/stripe/access";
 import { BRAND } from "@/lib/brand";
 
 export async function getInvitePreview(inviteId: string) {
@@ -59,6 +60,11 @@ export async function acceptInvite(inviteId: string) {
 
   if (error) {
     return { error: error.message };
+  }
+
+  const access = await getAppAccess(supabase, user.id);
+  if (!access.hasAccess) {
+    redirect("/subscribe");
   }
 
   redirect("/app");

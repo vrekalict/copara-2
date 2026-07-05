@@ -20,7 +20,7 @@ export default function ContactPage() {
         <PageHero
           eyebrow="Contact"
           title="Get in touch"
-          description="Questions about early access, privacy, or the design partner program? Send a message or email us directly."
+          description="Questions about Sign up, privacy, or the design partner program? Send a message or email us directly."
         />
       </Section>
       <Section variant="cream" className="pt-0 md:pb-20">

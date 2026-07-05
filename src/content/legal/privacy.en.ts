@@ -43,7 +43,7 @@ export const PRIVACY_SECTIONS: LegalSection[] = [
       "AI processing data: drafts submitted for tone review or rewriting, selected conversations for summaries, AI outputs, acceptance or rejection of suggestions, and related audit metadata.",
       "Professional access records: information about professionals connected to circles and permissions granted by parents.",
       "Technical and usage information: IP address, browser type, device information, log data, session identifiers, cookies required for authentication, locale cookies, and optional analytics events.",
-      "Support and waitlist information: information you provide when contacting support, requesting early access, or joining a waitlist.",
+      "Support and waitlist information: information you provide when contacting support, requesting Sign up, or joining a waitlist.",
     ],
   },
   {

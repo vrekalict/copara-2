@@ -61,7 +61,7 @@ export default function JournalFeaturePage() {
         </div>
       </Section>
       <Section className="pb-20">
-        <CtaBand title="Try the journal in early access" primaryLabel="Get started" />
+        <CtaBand title="Try the journal with a free trial" primaryLabel="Get started" />
       </Section>
     </>
   );

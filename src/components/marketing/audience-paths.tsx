@@ -8,8 +8,8 @@ const PATHS = [
     eyebrow: "For parents",
     title: "Coordinate without turning every thread into a fight",
     body: "Neutral messaging, shared schedules, expense tracking, and organized exports in one Canadian-focused workspace.",
-    href: "/early-access",
-    cta: "Join early access",
+    href: "/sign-up",
+    cta: "Start free trial",
     featured: true,
   },
   {

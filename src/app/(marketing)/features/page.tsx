@@ -29,8 +29,8 @@ export default function FeaturesPage() {
           eyebrow="Product"
           title="Tools built for the work co-parents actually do"
           description="Copara focuses on communication, coordination, records, and professional access. No social feed, no in-app money movement, no hidden location tracking."
-          primaryHref="/early-access"
-          primaryLabel="Join early access"
+          primaryHref="/sign-up"
+          primaryLabel="Start free trial"
           secondaryHref="/pricing"
           secondaryLabel="See pricing"
         />
@@ -121,7 +121,7 @@ export default function FeaturesPage() {
           </Link>
         </div>
         <div className="mt-12">
-          <CtaBand title="Join early access" dark={false} />
+          <CtaBand title="Start free trial" dark={false} />
         </div>
       </Section>
     </>

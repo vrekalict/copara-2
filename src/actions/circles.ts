@@ -3,6 +3,9 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
+import { createServiceClient } from "@/lib/supabase/service";
+import { getAppAccess } from "@/lib/stripe/access";
+import { attachFamilySubscriptionToCircle } from "@/lib/stripe/sync";
 import { BRAND, brandEmailFrom } from "@/lib/brand";
 import { Resend } from "resend";
 
@@ -36,6 +39,8 @@ export async function createCircle(formData: FormData) {
   if (memberError) {
     return { error: memberError.message };
   }
+
+  await attachFamilySubscriptionToCircle(createServiceClient(), user.id, circle.id as string);
 
   redirect(`/onboarding/invite?circle=${circle.id}`);
 }

@@ -108,7 +108,7 @@ export const GUIDE_CLOSING = {
     "Copara offre calendrier partagé, messagerie, suivi des dépenses, coffre-fort documentaire et exportations inviolables pour les familles canadiennes. En anglais et en français.",
   ],
   primaryLabel: "Demander l'accès anticipé",
-  primaryHref: "/early-access",
+  primaryHref: "/sign-up",
   secondaryLabel: "Découvrir Copara",
   secondaryHref: "/features",
 };
