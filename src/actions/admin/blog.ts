@@ -63,50 +63,72 @@ function parseBlogInput(formData: FormData): BlogPostInput | { error: string } {
 }
 
 export async function saveBlogPost(
-  _prev: { error?: string } | null,
+  _prev: { error?: string; redirectTo?: string } | null,
   formData: FormData,
-): Promise<{ error?: string } | null> {
-  const auth = await requireAdmin("/blog");
-  if (!auth.ok) return { error: "Access denied." };
+): Promise<{ error?: string; redirectTo?: string } | null> {
+  try {
+    const auth = await requireAdmin("/blog");
+    if (!auth.ok) return { error: "Access denied." };
 
-  const id = String(formData.get("id") ?? "").trim() || undefined;
-  const parsed = parseBlogInput(formData);
-  if ("error" in parsed) return { error: parsed.error };
+    const id = String(formData.get("id") ?? "").trim() || undefined;
+    const parsed = parseBlogInput(formData);
+    if ("error" in parsed) return { error: parsed.error };
 
-  const coverFile = formData.get("coverImage") as File | null;
-  let coverImagePath = String(formData.get("existingCoverPath") ?? "").trim() || null;
+    const coverFile = formData.get("coverImage") as File | null;
+    let coverImagePath = String(formData.get("existingCoverPath") ?? "").trim() || null;
 
-  if (coverFile && coverFile.size > 0) {
-    const service = createServiceClient();
-    const ext = coverFile.name.split(".").pop()?.toLowerCase() ?? "jpg";
-    const path = `${parsed.slug}/cover.${ext}`;
-    const buffer = Buffer.from(await coverFile.arrayBuffer());
-    const { error: uploadError } = await service.storage
-      .from("blog-images")
-      .upload(path, buffer, { contentType: coverFile.type, upsert: true });
+    if (coverFile && coverFile.size > 0) {
+      const maxBytes = 5 * 1024 * 1024;
+      if (coverFile.size > maxBytes) {
+        return { error: "Cover image must be 5 MB or smaller." };
+      }
 
-    if (uploadError) {
-      return { error: `Cover image upload failed: ${uploadError.message}` };
+      const service = createServiceClient();
+      const ext = coverFile.name.split(".").pop()?.toLowerCase() ?? "jpg";
+      const path = `${parsed.slug}/cover.${ext}`;
+      const buffer = Buffer.from(await coverFile.arrayBuffer());
+      const { error: uploadError } = await service.storage
+        .from("blog-images")
+        .upload(path, buffer, { contentType: coverFile.type, upsert: true });
+
+      if (uploadError) {
+        return { error: `Cover image upload failed: ${uploadError.message}` };
+      }
+      coverImagePath = path;
     }
-    coverImagePath = path;
+
+    const result = await upsertBlogPostInDb(
+      { ...parsed, coverImagePath },
+      auth.user.id,
+      id,
+    );
+
+    if (!result.ok) return { error: result.error };
+
+    revalidatePath("/blog");
+    revalidatePath(`/blog/${result.post.slug}`);
+    revalidatePath(staffPath("/blog"));
+    revalidatePath("/");
+    revalidatePath("/sitemap.xml");
+    revalidatePath("/llms.txt");
+    revalidatePath("/llms-full.txt");
+
+    return {
+      redirectTo: id
+        ? `${staffPath("/blog")}?saved=1`
+        : `${staffPath(`/blog/${result.post.id}/edit`)}?created=1`,
+    };
+  } catch (error) {
+    console.error("[admin/blog] saveBlogPost failed:", error);
+    const message = error instanceof Error ? error.message : "Could not save post.";
+    if (message.includes("Body exceeded") || message.includes("body size limit")) {
+      return {
+        error:
+          "Upload too large. Try a smaller cover image (under 5 MB) or shorten the article body.",
+      };
+    }
+    return { error: message };
   }
-
-  const result = await upsertBlogPostInDb(
-    { ...parsed, coverImagePath },
-    auth.user.id,
-    id,
-  );
-
-  if (!result.ok) return { error: result.error };
-
-  revalidatePath("/blog");
-  revalidatePath(`/blog/${result.post.slug}`);
-  revalidatePath(staffPath("/blog"));
-  revalidatePath("/");
-  revalidatePath("/sitemap.xml");
-  revalidatePath("/llms.txt");
-
-  redirect(id ? `${staffPath("/blog")}?saved=1` : `${staffPath(`/blog/${result.post.id}/edit`)}?created=1`);
 }
 
 export async function deleteBlogPost(formData: FormData): Promise<void> {

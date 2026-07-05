@@ -35,6 +35,10 @@ export default async function AdminBlogEditPage({
 
   const paths = getStaffBlogPaths();
   const isPublished = post.status === "published";
+  const formPost: typeof post = {
+    ...post,
+    body: post.body.replace(/\r\n/g, "\n"),
+  };
 
   return (
     <AdminShell
@@ -56,7 +60,7 @@ export default async function AdminBlogEditPage({
       }
     >
       <AdminCard>
-        <BlogPostForm post={post} cancelHref={paths.index} />
+        <BlogPostForm post={formPost} cancelHref={paths.index} />
       </AdminCard>
     </AdminShell>
   );

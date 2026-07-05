@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useActionState, useEffect, useState } from "react";
 import { saveBlogPost } from "@/actions/admin/blog";
 import { BLOG_CATEGORIES } from "@/lib/blog/constants";
 import { slugifyTitle } from "@/lib/blog/slugify";
@@ -11,6 +12,20 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
+const MAX_COVER_BYTES = 5 * 1024 * 1024;
+
+function normalizeBodyText(body: string | undefined): string {
+  return (body ?? "").replace(/\r\n/g, "\n");
+}
+
+function coverPathFromUrl(url: string | undefined): string {
+  if (!url) return "";
+  const marker = "/blog-images/";
+  const index = url.indexOf(marker);
+  if (index === -1) return "";
+  return url.slice(index + marker.length);
+}
+
 export function BlogPostForm({
   post,
   cancelHref,
@@ -18,9 +33,19 @@ export function BlogPostForm({
   post?: BlogPost;
   cancelHref: string;
 }) {
+  const router = useRouter();
   const [state, formAction, isPending] = useActionState(saveBlogPost, null);
   const [slug, setSlug] = useState(post?.slug ?? "");
   const [slugTouched, setSlugTouched] = useState(Boolean(post?.slug));
+  const [body, setBody] = useState(() => normalizeBodyText(post?.body));
+  const [coverError, setCoverError] = useState<string | null>(null);
+  const [coverPreview, setCoverPreview] = useState<string | null>(post?.coverImageUrl ?? null);
+
+  useEffect(() => {
+    if (state?.redirectTo) {
+      router.push(state.redirectTo);
+    }
+  }, [state?.redirectTo, router]);
 
   function handleTitleChange(title: string) {
     if (!slugTouched) {
@@ -28,16 +53,42 @@ export function BlogPostForm({
     }
   }
 
+  function handleCoverChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setCoverError(null);
+    const file = event.target.files?.[0];
+    if (!file) {
+      setCoverPreview(post?.coverImageUrl ?? null);
+      return;
+    }
+
+    if (file.size > MAX_COVER_BYTES) {
+      setCoverError("Cover image must be 5 MB or smaller.");
+      event.target.value = "";
+      setCoverPreview(post?.coverImageUrl ?? null);
+      return;
+    }
+
+    setCoverPreview(URL.createObjectURL(file));
+  }
+
+  const publishedAtDefault =
+    post?.publishedAt?.slice(0, 10) ??
+    new Date().toISOString().slice(0, 10);
+
   return (
-    <form action={formAction} className="space-y-6">
+    <form action={formAction} className="space-y-6" key={post?.id ?? "new"}>
       {post?.id && <input type="hidden" name="id" value={post.id} />}
-      {post?.coverImageUrl && (
-        <input type="hidden" name="existingCoverPath" value={post.coverImageUrl.split("/blog-images/")[1] ?? ""} />
+      {coverPathFromUrl(post?.coverImageUrl) && (
+        <input
+          type="hidden"
+          name="existingCoverPath"
+          value={coverPathFromUrl(post?.coverImageUrl)}
+        />
       )}
 
-      {state?.error && (
+      {(state?.error || coverError) && (
         <p className="rounded-lg border border-destructive/30 bg-destructive/5 px-3 py-2 text-sm text-destructive">
-          {state.error}
+          {coverError ?? state?.error}
         </p>
       )}
 
@@ -126,7 +177,7 @@ export function BlogPostForm({
             name="publishedAt"
             type="date"
             required
-            defaultValue={post?.publishedAt?.slice(0, 10) ?? new Date().toISOString().slice(0, 10)}
+            defaultValue={publishedAtDefault}
           />
         </div>
 
@@ -156,10 +207,17 @@ export function BlogPostForm({
 
         <div className="space-y-2 sm:col-span-2">
           <Label htmlFor="coverImage">Cover image (optional)</Label>
-          <Input id="coverImage" name="coverImage" type="file" accept="image/jpeg,image/png,image/webp,image/gif" />
-          {post?.coverImageUrl && (
+          <Input
+            id="coverImage"
+            name="coverImage"
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            onChange={handleCoverChange}
+          />
+          <p className="text-xs text-muted-foreground">JPEG, PNG, WebP, or GIF · max 5 MB</p>
+          {coverPreview && (
             <img
-              src={post.coverImageUrl}
+              src={coverPreview}
               alt=""
               className="mt-2 max-h-40 rounded-lg border object-cover"
             />
@@ -173,8 +231,9 @@ export function BlogPostForm({
             name="body"
             required
             rows={18}
-            defaultValue={post?.body}
-            className="w-full rounded-lg border border-input bg-transparent px-3 py-2 font-mono text-sm leading-relaxed"
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            className="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm leading-relaxed"
           />
           <p className="text-xs text-muted-foreground">
             Markdown supported: blank lines for paragraphs, <code>## </code> / <code>### </code> for
@@ -185,7 +244,7 @@ export function BlogPostForm({
       </div>
 
       <div className="flex flex-wrap gap-3">
-        <Button type="submit" disabled={isPending}>
+        <Button type="submit" disabled={isPending || Boolean(coverError)}>
           {isPending ? "Saving…" : post ? "Save changes" : "Create post"}
         </Button>
         {post?.status === "published" && (
