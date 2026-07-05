@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { useTransition } from "react";
 import { deleteBlogPost, importLegacyBlogPosts } from "@/actions/admin/blog";
-import type { StaffBlogPaths } from "@/components/admin/admin-nav";
-import { staffBlogEditPath } from "@/components/admin/admin-nav";
+import type { StaffBlogPaths } from "@/lib/admin/staff-blog-paths";
 import type { BlogPost } from "@/lib/blog/types";
 import { formatBlogDate } from "@/lib/blog/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -20,6 +19,10 @@ export function BlogPostsPanel({
   paths: StaffBlogPaths;
 }) {
   const [isPending, startTransition] = useTransition();
+
+  function editHref(id: string) {
+    return `${paths.index}/${id}/edit`;
+  }
 
   function handleImport() {
     startTransition(async () => {
@@ -56,7 +59,7 @@ export function BlogPostsPanel({
             <li key={post.id ?? post.slug} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <Link href={staffBlogEditPath(paths, post.id!)} className="font-medium hover:text-primary">
+                  <Link href={editHref(post.id!)} className="font-medium hover:text-primary">
                     {post.title}
                   </Link>
                   <span
@@ -90,7 +93,7 @@ export function BlogPostsPanel({
                   </Link>
                 )}
                 <Link
-                  href={staffBlogEditPath(paths, post.id!)}
+                  href={editHref(post.id!)}
                   className={cn(buttonVariants({ variant: "secondary", size: "sm" }))}
                 >
                   Edit

@@ -2,22 +2,6 @@ import Link from "next/link";
 import { buildStaffPath, getStaffBasePath } from "@/lib/admin/staff-path";
 import { cn } from "@/lib/utils";
 
-export type StaffBlogPaths = {
-  index: string;
-  new: string;
-};
-
-export function getStaffBlogPaths(): StaffBlogPaths {
-  return {
-    index: buildStaffPath("/blog") ?? "/",
-    new: buildStaffPath("/blog/new") ?? "/",
-  };
-}
-
-export function staffBlogEditPath(paths: StaffBlogPaths, id: string) {
-  return `${paths.index}/${id}/edit`;
-}
-
 export function AdminNav({ active }: { active: "blog" | "partners" }) {
   const base = getStaffBasePath();
   if (!base) return null;

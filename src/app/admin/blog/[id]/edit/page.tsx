@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AdminNav, getStaffBlogPaths } from "@/components/admin/admin-nav";
+import { AdminNav } from "@/components/admin/admin-nav";
+import { getStaffBlogPaths } from "@/lib/admin/staff-blog-paths";
 import { BlogPostForm } from "@/components/admin/blog-post-form";
 import { requireAdmin } from "@/lib/admin/require-admin";
 import { fetchPostByIdFromDb } from "@/lib/blog/repository";

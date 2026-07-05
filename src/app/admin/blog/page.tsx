@@ -1,6 +1,7 @@
-import { AdminNav, getStaffBlogPaths } from "@/components/admin/admin-nav";
+import { AdminNav } from "@/components/admin/admin-nav";
 import { BlogPostsPanel } from "@/components/admin/blog-posts-panel";
 import { requireAdmin } from "@/lib/admin/require-admin";
+import { getStaffBlogPaths } from "@/lib/admin/staff-blog-paths";
 import { getAllPostsForAdmin } from "@/lib/blog";
 import { isServiceClientConfigured } from "@/lib/supabase/service";
 
