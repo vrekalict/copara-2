@@ -78,6 +78,18 @@
     oklch(0.78 0.14 55 / 0.08) 70%,
     oklch(0.72 0.12 210 / 0.1) 100%
   );
+  /* Auth shell + homepage hero — navy base with mesh overlay */
+  --marketing-brand-mesh:
+    linear-gradient(
+      135deg,
+      rgb(99 91 255 / 0.42) 0%,
+      rgb(168 85 247 / 0.32) 28%,
+      rgb(255 107 157 / 0.28) 52%,
+      rgb(255 178 36 / 0.22) 72%,
+      rgb(34 211 238 / 0.26) 100%
+    ),
+    radial-gradient(ellipse 55% 48% at 8% 0%, rgb(99 91 255 / 0.55), transparent 58%),
+    linear-gradient(180deg, var(--marketing-navy) 0%, var(--marketing-navy-soft) 100%);
 
   /* shadcn / app shell tokens (aligned to brand) */
   --background: var(--marketing-lilac);
@@ -243,31 +255,9 @@
 .marketing-hero {
   position: relative;
   overflow: hidden;
-  background: var(--marketing-lilac);
-  color: var(--marketing-navy);
-}
-
-.marketing-hero::before {
-  content: "";
-  position: absolute;
-  top: -20%;
-  right: -12%;
-  width: min(80vw, 56rem);
-  height: 140%;
-  background:
-    linear-gradient(
-      135deg,
-      rgb(99 91 255 / 0.55) 0%,
-      rgb(168 85 247 / 0.45) 28%,
-      rgb(255 107 157 / 0.4) 52%,
-      rgb(255 178 36 / 0.38) 72%,
-      rgb(34 211 238 / 0.35) 100%
-    ),
-    radial-gradient(ellipse 50% 46% at 58% 38%, rgb(99 91 255 / 0.65), transparent 62%),
-    radial-gradient(ellipse 44% 40% at 72% 62%, rgb(255 107 157 / 0.5), transparent 58%),
-    radial-gradient(ellipse 40% 36% at 48% 78%, rgb(255 178 36 / 0.45), transparent 55%);
-  pointer-events: none;
-  filter: blur(1px);
+  background-color: var(--marketing-navy);
+  background: var(--marketing-brand-mesh);
+  color: white;
 }
 
 .marketing-hero__grid {
@@ -289,13 +279,6 @@
   position: relative;
 }
 
-.marketing-hero__visual::before {
-  content: "";
-  position: absolute;
-  inset: -8% -6%;
-  background: radial-gradient(circle, oklch(0.58 0.22 285 / 0.12), transparent 65%);
-  pointer-events: none;
-}
 
 .audience-paths {
   display: grid;
@@ -607,23 +590,9 @@
   color: var(--marketing-accent);
 }
 
-.marketing-hero--warm::before {
-  opacity: 1;
-}
-
 .auth-shell__brand {
   background-color: var(--marketing-navy);
-  background:
-    linear-gradient(
-      135deg,
-      rgb(99 91 255 / 0.42) 0%,
-      rgb(168 85 247 / 0.32) 28%,
-      rgb(255 107 157 / 0.28) 52%,
-      rgb(255 178 36 / 0.22) 72%,
-      rgb(34 211 238 / 0.26) 100%
-    ),
-    radial-gradient(ellipse 55% 48% at 8% 0%, rgb(99 91 255 / 0.55), transparent 58%),
-    linear-gradient(180deg, var(--marketing-navy) 0%, var(--marketing-navy-soft) 100%);
+  background: var(--marketing-brand-mesh);
   color: white;
 }
 

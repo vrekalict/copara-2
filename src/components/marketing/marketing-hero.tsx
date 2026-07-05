@@ -15,12 +15,12 @@ const TRUST_ITEMS = [
 
 export function MarketingHero() {
   return (
-    <section className="marketing-hero marketing-hero--warm">
+    <section className="marketing-hero">
       <div className="marketing-hero__grid mx-auto max-w-6xl px-5 pb-16 pt-14 sm:px-6 md:pb-24 md:pt-18">
         <div className="marketing-hero__copy">
-          <p className="eyebrow">Canadian co-parenting</p>
-          <h1 className="display mt-5">{SITE.tagline}</h1>
-          <p className="lead mt-6 max-w-xl">
+          <p className="eyebrow eyebrow--light">Canadian co-parenting</p>
+          <h1 className="display display--light mt-5">{SITE.tagline}</h1>
+          <p className="lead lead--light mt-6 max-w-xl">
             {SITE.name} gives you one calm place for messages, parenting schedules,
             shared expenses, child information, and tamper-evident records suitable
             for review by legal professionals.
@@ -30,7 +30,7 @@ export function MarketingHero() {
               href="/sign-up"
               className={cn(
                 buttonVariants({ size: "lg" }),
-                "btn-marketing-primary min-h-12 px-8 text-base font-semibold",
+                "btn-marketing-primary-on-dark min-h-12 px-8 text-base font-semibold",
               )}
             >
               Get started
@@ -39,7 +39,7 @@ export function MarketingHero() {
               href="/professionals"
               className={cn(
                 buttonVariants({ variant: "outline", size: "lg" }),
-                "min-h-12 border-2 border-[var(--marketing-navy)]/15 bg-[var(--marketing-lilac)] px-8 text-base font-medium text-[var(--marketing-navy)] hover:bg-white",
+                "min-h-12 border border-white/20 bg-white/5 px-8 text-base font-medium text-white hover:bg-white/10",
               )}
             >
               For mediators & lawyers
@@ -48,8 +48,14 @@ export function MarketingHero() {
           <PwaInstallBadges className="mt-6" />
           <ul className="mt-8 grid gap-2 sm:grid-cols-2">
             {TRUST_ITEMS.map((item) => (
-              <li key={item} className="trust-pill">
-                <Shield className="size-3.5 shrink-0 text-[var(--marketing-accent)]" aria-hidden />
+              <li
+                key={item}
+                className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-white/85"
+              >
+                <Shield
+                  className="size-3.5 shrink-0 text-[var(--marketing-accent-light)]"
+                  aria-hidden
+                />
                 {item}
               </li>
             ))}
