@@ -1,13 +1,16 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { BlogCard } from "@/components/blog/blog-card";
-import {
-  BLOG_CATEGORY_ALL,
-  BlogCategoryNav,
-} from "@/components/blog/blog-category-nav";
+import { BlogCategoryNav } from "@/components/blog/blog-category-nav";
 import { LegalDisclaimer } from "@/components/marketing/page-hero";
 import { Section, SectionHeader } from "@/components/marketing/section";
-import { BLOG_CATEGORIES, getPostsByCategory, type BlogCategory, type BlogPost } from "@/lib/blog";
+import {
+  BLOG_CATEGORIES,
+  BLOG_CATEGORY_ALL,
+  getAllPosts,
+  type BlogCategory,
+  type BlogPost,
+} from "@/lib/blog";
 import { pageMetadata } from "@/lib/marketing/metadata";
 
 export const metadata = pageMetadata({
@@ -17,11 +20,14 @@ export const metadata = pageMetadata({
   path: "/blog",
 });
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
-function parseCategory(value: string | undefined): BlogCategory | typeof BLOG_CATEGORY_ALL {
-  if (!value) return BLOG_CATEGORY_ALL;
-  if (BLOG_CATEGORIES.includes(value as BlogCategory)) return value as BlogCategory;
+function parseCategory(
+  value: string | string[] | undefined,
+): BlogCategory | typeof BLOG_CATEGORY_ALL {
+  const raw = Array.isArray(value) ? value[0] : value;
+  if (!raw) return BLOG_CATEGORY_ALL;
+  if (BLOG_CATEGORIES.includes(raw as BlogCategory)) return raw as BlogCategory;
   return BLOG_CATEGORY_ALL;
 }
 
@@ -35,11 +41,15 @@ function sortBlogPosts(posts: BlogPost[]): BlogPost[] {
 export default async function BlogIndexPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string }>;
+  searchParams: Promise<{ category?: string | string[] }>;
 }) {
   const { category: raw } = await searchParams;
   const category = parseCategory(raw);
-  const posts = sortBlogPosts(await getPostsByCategory(category));
+  const allPosts = sortBlogPosts(await getAllPosts());
+  const posts =
+    category === BLOG_CATEGORY_ALL
+      ? allPosts
+      : allPosts.filter((post) => post.category === category);
 
   return (
     <>

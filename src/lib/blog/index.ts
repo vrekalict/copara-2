@@ -1,14 +1,20 @@
 import type { BlogCategory, BlogPost } from "./types";
+import { BLOG_CATEGORY_ALL } from "./constants";
 import { getStaticPosts, STATIC_BLOG_POSTS } from "./static-posts";
 
-export { BLOG_CATEGORIES } from "./constants";
+export { BLOG_CATEGORIES, BLOG_CATEGORY_ALL } from "./constants";
 export { formatBlogDate, postThumbnailUrl, readingTimeMinutes } from "./utils";
 
 async function resolvePublishedPosts(): Promise<BlogPost[]> {
   const { fetchPublishedPostsFromDb } = await import("./repository");
   const fromDb = await fetchPublishedPostsFromDb();
-  if (fromDb.length > 0) return fromDb;
-  return getStaticPosts();
+  const staticPosts = getStaticPosts();
+
+  if (fromDb.length === 0) return staticPosts;
+
+  const dbSlugs = new Set(fromDb.map((post) => post.slug));
+  const legacyOnly = staticPosts.filter((post) => !dbSlugs.has(post.slug));
+  return [...fromDb, ...legacyOnly];
 }
 
 export async function getAllPosts(): Promise<BlogPost[]> {
@@ -27,9 +33,11 @@ export async function getFeaturedPosts(): Promise<BlogPost[]> {
   return posts.filter((p) => p.featured);
 }
 
-export async function getPostsByCategory(category: BlogCategory | "All"): Promise<BlogPost[]> {
+export async function getPostsByCategory(
+  category: BlogCategory | typeof BLOG_CATEGORY_ALL,
+): Promise<BlogPost[]> {
   const posts = await resolvePublishedPosts();
-  if (category === "All") return posts;
+  if (category === BLOG_CATEGORY_ALL) return posts;
   return posts.filter((p) => p.category === category);
 }
 

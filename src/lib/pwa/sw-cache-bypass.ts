@@ -2,6 +2,7 @@ declare const __COPARA_STAFF_PATH__: string;
 
 const BYPASS_PREFIXES = [
   "/admin",
+  "/blog",
   "/sign-in",
   "/sign-up",
   "/auth",

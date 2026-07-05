@@ -2,23 +2,21 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { BLOG_CATEGORIES } from "@/lib/blog/constants";
+import { BLOG_CATEGORIES, BLOG_CATEGORY_ALL } from "@/lib/blog/constants";
 import type { BlogCategory } from "@/lib/blog/types";
 import { cn } from "@/lib/utils";
 
-const ALL = "All" as const;
-
-export function BlogCategoryNav({ active }: { active: BlogCategory | typeof ALL }) {
+export function BlogCategoryNav({ active }: { active: BlogCategory | typeof BLOG_CATEGORY_ALL }) {
   const searchParams = useSearchParams();
 
-  function hrefFor(category: BlogCategory | typeof ALL) {
-    if (category === ALL) return "/blog";
+  function hrefFor(category: BlogCategory | typeof BLOG_CATEGORY_ALL) {
+    if (category === BLOG_CATEGORY_ALL) return "/blog";
     const params = new URLSearchParams(searchParams.toString());
     params.set("category", category);
     return `/blog?${params.toString()}`;
   }
 
-  const items: (BlogCategory | typeof ALL)[] = [ALL, ...BLOG_CATEGORIES];
+  const items: (BlogCategory | typeof BLOG_CATEGORY_ALL)[] = [BLOG_CATEGORY_ALL, ...BLOG_CATEGORIES];
 
   return (
     <nav aria-label="Blog categories" className="flex flex-wrap gap-2">
@@ -40,5 +38,3 @@ export function BlogCategoryNav({ active }: { active: BlogCategory | typeof ALL 
     </nav>
   );
 }
-
-export { ALL as BLOG_CATEGORY_ALL };
