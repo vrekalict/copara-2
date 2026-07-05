@@ -135,7 +135,7 @@ export async function importLegacyBlogPosts() {
 }
 
 export type BlogJsonImportResult =
-  | { ok: true; imported: number; skipped: number; failed: { slug: string; error: string }[] }
+  | { ok: true; imported: number; updated: number; skipped: number; failed: { slug: string; error: string }[] }
   | { ok: false; error: string };
 
 export async function importBlogPostsFromJson(json: string): Promise<BlogJsonImportResult> {
@@ -148,13 +148,18 @@ export async function importBlogPostsFromJson(json: string): Promise<BlogJsonImp
   const parsed = parseBlogPostsJson(trimmed);
   if (!parsed.ok) return { ok: false, error: parsed.error };
 
-  const result = await importBlogPostsToDb(auth.user.id, parsed.posts);
+  const result = await importBlogPostsToDb(auth.user.id, parsed.posts, { upsert: true });
 
   revalidatePath("/blog");
   revalidatePath(staffPath("/blog"));
   revalidatePath("/");
   revalidatePath("/sitemap.xml");
   revalidatePath("/llms.txt");
+  revalidatePath("/llms-full.txt");
+
+  for (const post of parsed.posts) {
+    revalidatePath(`/blog/${post.slug}`);
+  }
 
   return { ok: true, ...result };
 }

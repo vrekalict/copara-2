@@ -157,7 +157,7 @@ export async function deleteBlogPostFromDb(id: string): Promise<{ ok: boolean; e
 export async function importStaticPostsToDb(
   userId: string,
   posts: BlogPost[],
-): Promise<{ imported: number; skipped: number; failed: { slug: string; error: string }[] }> {
+): Promise<{ imported: number; updated: number; skipped: number; failed: { slug: string; error: string }[] }> {
   const inputs: BlogPostInput[] = posts.map((post) => ({
     slug: post.slug,
     title: post.title,
@@ -172,36 +172,58 @@ export async function importStaticPostsToDb(
     coverImagePath: null,
   }));
 
-  return importBlogPostsToDb(userId, inputs);
+  return importBlogPostsToDb(userId, inputs, { upsert: false });
 }
 
 export async function importBlogPostsToDb(
   userId: string,
   posts: BlogPostInput[],
-): Promise<{ imported: number; skipped: number; failed: { slug: string; error: string }[] }> {
+  options?: { upsert?: boolean },
+): Promise<{ imported: number; updated: number; skipped: number; failed: { slug: string; error: string }[] }> {
+  const upsert = options?.upsert ?? false;
   const service = createServiceClient();
-  const { data: existing } = await service.from("blog_posts").select("slug");
-  const existingSlugs = new Set((existing ?? []).map((r) => r.slug as string));
+  const { data: existing } = await service.from("blog_posts").select("id, slug, cover_image_path");
+  const existingBySlug = new Map(
+    (existing ?? []).map((row) => [
+      row.slug as string,
+      { id: row.id as string, coverImagePath: row.cover_image_path as string | null },
+    ]),
+  );
 
   let imported = 0;
+  let updated = 0;
   let skipped = 0;
   const failed: { slug: string; error: string }[] = [];
 
   for (const post of posts) {
-    if (existingSlugs.has(post.slug)) {
+    const existingRow = existingBySlug.get(post.slug);
+
+    if (existingRow && !upsert) {
       skipped++;
       continue;
     }
 
-    const result = await upsertBlogPostInDb(post, userId);
+    const input: BlogPostInput =
+      existingRow && post.coverImagePath == null
+        ? { ...post, coverImagePath: existingRow.coverImagePath }
+        : post;
+
+    const result = await upsertBlogPostInDb(input, userId, existingRow?.id);
 
     if (result.ok) {
-      imported++;
-      existingSlugs.add(post.slug);
+      if (existingRow) {
+        updated++;
+      } else {
+        imported++;
+        existingBySlug.set(post.slug, {
+          id: result.post.id!,
+          coverImagePath: input.coverImagePath ?? null,
+        });
+      }
     } else {
       failed.push({ slug: post.slug, error: result.error });
     }
   }
 
-  return { imported, skipped, failed };
+  return { imported, updated, skipped, failed };
 }

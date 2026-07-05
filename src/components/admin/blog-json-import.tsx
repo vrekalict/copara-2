@@ -14,7 +14,15 @@ export function BlogJsonImport() {
   const [open, setOpen] = useState(false);
   const [json, setJson] = useState("");
   const [result, setResult] = useState<
-    { type: "success"; imported: number; skipped: number; failed: { slug: string; error: string }[] } | { type: "error"; message: string } | null
+    | {
+        type: "success";
+        imported: number;
+        updated: number;
+        skipped: number;
+        failed: { slug: string; error: string }[];
+      }
+    | { type: "error"; message: string }
+    | null
   >(null);
   const [isPending, startTransition] = useTransition();
 
@@ -49,11 +57,12 @@ export function BlogJsonImport() {
       setResult({
         type: "success",
         imported: response.imported,
+        updated: response.updated,
         skipped: response.skipped,
         failed: response.failed,
       });
 
-      if (response.imported > 0) {
+      if (response.imported > 0 || response.updated > 0) {
         setJson("");
         router.refresh();
       }
@@ -75,7 +84,7 @@ export function BlogJsonImport() {
           <div>
             <h2 className="text-sm font-semibold text-[var(--marketing-slate)]">Import from JSON</h2>
             <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
-              Bulk-import posts from ChatGPT or another tool. Existing slugs are skipped.
+              Bulk-import or re-import posts from ChatGPT. Matching slugs update existing posts.
             </p>
           </div>
         </div>
@@ -97,7 +106,8 @@ export function BlogJsonImport() {
             <p className="mt-2">
               Categories: Communication, Schedules, Expenses, Records, Professionals. Body supports{" "}
               <code className="text-xs">## headings</code>, <code className="text-xs">**bold**</code>, and{" "}
-              <code className="text-xs">- bullets</code>.
+              <code className="text-xs">- bullets</code>. Re-uploading the same slug overwrites that post; cover
+              images uploaded in the CMS are kept unless you replace them manually.
             </p>
           </AdminInfoBox>
 
@@ -139,11 +149,24 @@ export function BlogJsonImport() {
           {result?.type === "success" && (
             <div className="space-y-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-900">
               <p>
-                Imported <strong>{result.imported}</strong>
+                {result.imported > 0 && (
+                  <>
+                    Created <strong>{result.imported}</strong>
+                  </>
+                )}
+                {result.imported > 0 && result.updated > 0 && " · "}
+                {result.updated > 0 && (
+                  <>
+                    Updated <strong>{result.updated}</strong>
+                  </>
+                )}
+                {result.imported === 0 && result.updated === 0 && result.failed.length === 0 && (
+                  <>No changes made.</>
+                )}
                 {result.skipped > 0 && (
                   <>
                     {" "}
-                    · skipped <strong>{result.skipped}</strong> (slug already exists)
+                    · skipped <strong>{result.skipped}</strong>
                   </>
                 )}
                 {result.failed.length > 0 && (
