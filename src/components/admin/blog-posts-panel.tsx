@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useTransition } from "react";
 import { deleteBlogPost, importLegacyBlogPosts } from "@/actions/admin/blog";
+import type { StaffBlogPaths } from "@/components/admin/admin-nav";
+import { staffBlogEditPath } from "@/components/admin/admin-nav";
 import type { BlogPost } from "@/lib/blog/types";
 import { formatBlogDate } from "@/lib/blog/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -15,7 +17,7 @@ export function BlogPostsPanel({
 }: {
   posts: BlogPost[];
   showImport: boolean;
-  paths: ReturnType<typeof import("@/components/admin/admin-nav").getStaffBlogPaths>;
+  paths: StaffBlogPaths;
 }) {
   const [isPending, startTransition] = useTransition();
 
@@ -54,7 +56,7 @@ export function BlogPostsPanel({
             <li key={post.id ?? post.slug} className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <Link href={paths.edit(post.id!)} className="font-medium hover:text-primary">
+                  <Link href={staffBlogEditPath(paths, post.id!)} className="font-medium hover:text-primary">
                     {post.title}
                   </Link>
                   <span
@@ -88,7 +90,7 @@ export function BlogPostsPanel({
                   </Link>
                 )}
                 <Link
-                  href={paths.edit(post.id!)}
+                  href={staffBlogEditPath(paths, post.id!)}
                   className={cn(buttonVariants({ variant: "secondary", size: "sm" }))}
                 >
                   Edit
