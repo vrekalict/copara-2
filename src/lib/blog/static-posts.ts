@@ -6,7 +6,7 @@ import { post as p4 } from "./posts/what-tamper-evident-records-mean";
 import { post as p5 } from "./posts/records-mediators-want-to-see";
 import { post as p6 } from "./posts/calm-messaging-high-conflict-weeks";
 
-/** Legacy file-based posts — used as fallback until CMS posts exist in the database. */
+/** Legacy file-based posts — import via admin CMS, not shown on the public site. */
 export const STATIC_BLOG_POSTS: BlogPost[] = [p1, p2, p3, p4, p5, p6];
 
 export function getStaticPosts(): BlogPost[] {

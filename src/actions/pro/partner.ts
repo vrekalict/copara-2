@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { Resend } from "resend";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
-import { BRAND, brandEmailFrom } from "@/lib/brand";
+import { brandEmailFrom } from "@/lib/brand";
 import { SITE } from "@/lib/marketing/site";
 import { isAdminEmail } from "@/lib/pro/partner";
 import { getStaffBasePath, staffPath } from "@/lib/admin/staff-path";
@@ -23,6 +23,9 @@ export type PartnerApplication = {
   status: string;
   createdAt: string;
   reviewedAt: string | null;
+  approvalEmailSentCount: number;
+  approvalEmailLastSentAt: string | null;
+  approvalTokenExpiresAt: string | null;
 };
 
 async function requireAdminUser() {
@@ -49,7 +52,7 @@ export async function listPartnerApplications(): Promise<PartnerApplication[]> {
   const { data, error } = await service
     .from("professional_partner_applications")
     .select(
-      "id, email, first_name, last_name, location, practice, message, status, created_at, reviewed_at",
+      "id, email, first_name, last_name, location, practice, message, status, created_at, reviewed_at, approval_email_sent_count, approval_email_last_sent_at, approval_token_expires_at",
     )
     .order("created_at", { ascending: false });
 
@@ -69,40 +72,70 @@ export async function listPartnerApplications(): Promise<PartnerApplication[]> {
     status: row.status as string,
     createdAt: row.created_at as string,
     reviewedAt: (row.reviewed_at as string | null) ?? null,
+    approvalEmailSentCount: (row.approval_email_sent_count as number | null) ?? 0,
+    approvalEmailLastSentAt: (row.approval_email_last_sent_at as string | null) ?? null,
+    approvalTokenExpiresAt: (row.approval_token_expires_at as string | null) ?? null,
   }));
 }
 
-async function sendPartnerApprovalEmail(input: {
-  email: string;
-  firstName: string;
-  token: string;
-}) {
+async function sendPartnerApprovalEmail(
+  service: ReturnType<typeof createServiceClient>,
+  applicationId: string,
+  input: {
+    email: string;
+    firstName: string;
+    token: string;
+  },
+): Promise<{ ok: true; sendCount: number } | { ok: false; error: string }> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) {
-    console.warn("[partner] RESEND_API_KEY not set; skipping approval email.");
-    return;
+    return { ok: false, error: "RESEND_API_KEY is not configured." };
   }
 
-  const origin = (await headers()).get("origin") ?? SITE.url;
-  const activateUrl = `${origin.replace(/\/$/, "")}/pro/activate?token=${encodeURIComponent(input.token)}`;
+  const activateUrl = `${SITE.url.replace(/\/$/, "")}/pro/activate?token=${encodeURIComponent(input.token)}`;
 
   const resend = new Resend(apiKey);
-  await resend.emails.send({
-    from: brandEmailFrom("hello"),
-    to: input.email,
-    subject: "Your Copara partner access is approved",
-    text: [
-      `Hi ${input.firstName},`,
-      "",
-      "Your Copara professional partner application has been approved.",
-      "",
-      `Activate your partner dashboard: ${activateUrl}`,
-      "",
-      "This link expires in 14 days. If you already have a Copara account, sign in with the email you used on your application.",
-      "",
-      `Questions? ${SITE.supportEmail}`,
-    ].join("\n"),
-  });
+  try {
+    await resend.emails.send({
+      from: brandEmailFrom("hello"),
+      to: input.email,
+      subject: "Your Copara partner access is approved",
+      text: [
+        `Hi ${input.firstName},`,
+        "",
+        "Your Copara professional partner application has been approved.",
+        "",
+        `Activate your partner dashboard: ${activateUrl}`,
+        "",
+        "This link expires in 14 days. If you already have a Copara account, sign in with the email you used on your application.",
+        "",
+        `Questions? ${SITE.supportEmail}`,
+      ].join("\n"),
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Email send failed.";
+    console.error("[partner] approval email failed:", message);
+    return { ok: false, error: message };
+  }
+
+  const { data: current } = await service
+    .from("professional_partner_applications")
+    .select("approval_email_sent_count")
+    .eq("id", applicationId)
+    .maybeSingle();
+
+  const sendCount = ((current?.approval_email_sent_count as number | null) ?? 0) + 1;
+  const now = new Date().toISOString();
+
+  await service
+    .from("professional_partner_applications")
+    .update({
+      approval_email_sent_count: sendCount,
+      approval_email_last_sent_at: now,
+    })
+    .eq("id", applicationId);
+
+  return { ok: true, sendCount };
 }
 
 export async function approvePartnerApplication(applicationId: string) {
@@ -143,17 +176,21 @@ export async function approvePartnerApplication(applicationId: string) {
     return { error: "Could not approve application." };
   }
 
-  try {
-    await sendPartnerApprovalEmail({
-      email: application.email as string,
-      firstName: application.first_name as string,
-      token,
-    });
-  } catch (err) {
-    console.warn("[admin] approval email failed:", err);
+  const emailResult = await sendPartnerApprovalEmail(service, applicationId, {
+    email: application.email as string,
+    firstName: application.first_name as string,
+    token,
+  });
+
+  if (!emailResult.ok) {
+    return {
+      success: true,
+      emailSent: false,
+      emailError: emailResult.error,
+    };
   }
 
-  return { success: true };
+  return { success: true, emailSent: true, sendCount: emailResult.sendCount };
 }
 
 export async function rejectPartnerApplication(
@@ -179,6 +216,92 @@ export async function rejectPartnerApplication(
   if (error) {
     console.error("[admin] reject failed:", error.message);
     return { error: "Could not reject application." };
+  }
+
+  return { success: true };
+}
+
+export async function resendPartnerApprovalEmail(applicationId: string) {
+  await requireAdminUser();
+  const service = createServiceClient();
+
+  const { data: application } = await service
+    .from("professional_partner_applications")
+    .select(
+      "id, email, first_name, status, approval_token, approval_token_expires_at, approval_email_sent_count",
+    )
+    .eq("id", applicationId)
+    .maybeSingle();
+
+  if (!application) {
+    return { error: "Application not found." };
+  }
+
+  if (application.status !== "approved") {
+    return { error: "Only approved applications can receive activation emails." };
+  }
+
+  let token = application.approval_token as string | null;
+  const expiresAt = application.approval_token_expires_at as string | null;
+  const tokenExpired = !expiresAt || new Date(expiresAt).getTime() < Date.now();
+
+  if (!token || tokenExpired) {
+    token = randomBytes(32).toString("hex");
+    const newExpiresAt = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString();
+
+    const { error: updateError } = await service
+      .from("professional_partner_applications")
+      .update({
+        approval_token: token,
+        approval_token_expires_at: newExpiresAt,
+      })
+      .eq("id", applicationId);
+
+    if (updateError) {
+      console.error("[admin] resend token refresh failed:", updateError.message);
+      return { error: "Could not refresh activation link." };
+    }
+  }
+
+  const emailResult = await sendPartnerApprovalEmail(service, applicationId, {
+    email: application.email as string,
+    firstName: application.first_name as string,
+    token,
+  });
+
+  if (!emailResult.ok) {
+    return { error: emailResult.error };
+  }
+
+  return { success: true, sendCount: emailResult.sendCount };
+}
+
+export async function deletePartnerApplication(applicationId: string) {
+  await requireAdminUser();
+  const service = createServiceClient();
+
+  const { data: application } = await service
+    .from("professional_partner_applications")
+    .select("id, status, user_id")
+    .eq("id", applicationId)
+    .maybeSingle();
+
+  if (!application) {
+    return { error: "Application not found." };
+  }
+
+  if (application.status === "activated" || application.user_id) {
+    return { error: "Activated partner accounts cannot be deleted from this list." };
+  }
+
+  const { error } = await service
+    .from("professional_partner_applications")
+    .delete()
+    .eq("id", applicationId);
+
+  if (error) {
+    console.error("[admin] delete application failed:", error.message);
+    return { error: "Could not delete application." };
   }
 
   return { success: true };
