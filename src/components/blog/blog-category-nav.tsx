@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import type { BlogCategory } from "@/lib/blog";
-import { BLOG_CATEGORIES } from "@/lib/blog";
+import { BLOG_CATEGORIES } from "@/lib/blog/constants";
+import type { BlogCategory } from "@/lib/blog/types";
 import { cn } from "@/lib/utils";
 
 const ALL = "All" as const;

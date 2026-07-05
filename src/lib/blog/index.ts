@@ -1,20 +1,11 @@
 import type { BlogCategory, BlogPost } from "./types";
 import { getStaticPosts, STATIC_BLOG_POSTS } from "./static-posts";
-import {
-  fetchAllPostsFromDb,
-  fetchPostBySlugFromDb,
-  fetchPublishedPostsFromDb,
-} from "./repository";
 
-export const BLOG_CATEGORIES: BlogCategory[] = [
-  "Communication",
-  "Schedules",
-  "Expenses",
-  "Records",
-  "Professionals",
-];
+export { BLOG_CATEGORIES } from "./constants";
+export { formatBlogDate, readingTimeMinutes } from "./utils";
 
 async function resolvePublishedPosts(): Promise<BlogPost[]> {
+  const { fetchPublishedPostsFromDb } = await import("./repository");
   const fromDb = await fetchPublishedPostsFromDb();
   if (fromDb.length > 0) return fromDb;
   return getStaticPosts();
@@ -25,6 +16,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | undefined> {
+  const { fetchPostBySlugFromDb } = await import("./repository");
   const fromDb = await fetchPostBySlugFromDb(slug);
   if (fromDb) return fromDb;
   return getStaticPosts().find((p) => p.slug === slug);
@@ -56,25 +48,12 @@ export async function getRelatedPosts(slug: string, limit = 3): Promise<BlogPost
 }
 
 export async function getAllPostsForAdmin(): Promise<BlogPost[]> {
-  const fromDb = await fetchAllPostsFromDb();
-  return fromDb;
+  const { fetchAllPostsFromDb } = await import("./repository");
+  return fetchAllPostsFromDb();
 }
 
 export function getStaticPostsForImport(): BlogPost[] {
   return STATIC_BLOG_POSTS;
-}
-
-export function readingTimeMinutes(body: string): number {
-  const words = body.trim().split(/\s+/).length;
-  return Math.max(1, Math.ceil(words / 200));
-}
-
-export function formatBlogDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-CA", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
 }
 
 export type { BlogCategory, BlogPost, BlogPostInput, BlogPostStatus } from "./types";

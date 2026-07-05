@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useTransition } from "react";
 import { deleteBlogPost, importLegacyBlogPosts } from "@/actions/admin/blog";
-import type { BlogPost } from "@/lib/blog";
-import { formatBlogDate } from "@/lib/blog";
+import type { BlogPost } from "@/lib/blog/types";
+import { formatBlogDate } from "@/lib/blog/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 

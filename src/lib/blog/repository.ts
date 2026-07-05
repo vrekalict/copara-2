@@ -1,4 +1,3 @@
-import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import type { BlogPost, BlogPostInput, BlogPostStatus } from "./types";
 
@@ -45,7 +44,7 @@ export function mapBlogPostRow(row: BlogPostRow): BlogPost {
 }
 
 export async function fetchPublishedPostsFromDb(): Promise<BlogPost[]> {
-  const supabase = await createClient();
+  const supabase = createServiceClient();
   const { data, error } = await supabase
     .from("blog_posts")
     .select("*")
@@ -76,7 +75,7 @@ export async function fetchAllPostsFromDb(): Promise<BlogPost[]> {
 }
 
 export async function fetchPostBySlugFromDb(slug: string): Promise<BlogPost | undefined> {
-  const supabase = await createClient();
+  const supabase = createServiceClient();
   const { data, error } = await supabase
     .from("blog_posts")
     .select("*")
@@ -185,13 +184,4 @@ export async function importStaticPostsToDb(
   }
 
   return { imported, skipped };
-}
-
-export function slugifyTitle(title: string): string {
-  return title
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 80);
 }

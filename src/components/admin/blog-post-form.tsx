@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useActionState, useState } from "react";
 import { saveBlogPost } from "@/actions/admin/blog";
-import { BLOG_CATEGORIES } from "@/lib/blog";
-import { slugifyTitle } from "@/lib/blog/repository";
+import { BLOG_CATEGORIES } from "@/lib/blog/constants";
+import { slugifyTitle } from "@/lib/blog/slugify";
 import type { BlogPost } from "@/lib/blog/types";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
