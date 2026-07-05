@@ -11,7 +11,15 @@ import { Label } from "@/components/ui/label";
 
 type ActionState = { error?: string; sent?: boolean } | null;
 
-export function SignInForm({ next }: { next?: string }) {
+export function SignInForm({
+  next,
+  defaultEmail,
+  hideSignUpLink = false,
+}: {
+  next?: string;
+  defaultEmail?: string;
+  hideSignUpLink?: boolean;
+}) {
   const t = useTranslations("auth");
   const [mode, setMode] = useState<"password" | "magic-link">("password");
 
@@ -37,7 +45,16 @@ export function SignInForm({ next }: { next?: string }) {
             {next && <input type="hidden" name="next" value={next} />}
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="email">{t("email")}</Label>
-              <Input id="email" name="email" type="email" required autoComplete="email" className="min-h-11" />
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                required
+                autoComplete="email"
+                className="min-h-11"
+                defaultValue={defaultEmail}
+                readOnly={Boolean(defaultEmail)}
+              />
             </div>
             {magicLinkState?.error && (
               <p className="text-sm text-destructive">{magicLinkState.error}</p>
@@ -62,7 +79,16 @@ export function SignInForm({ next }: { next?: string }) {
         {next && <input type="hidden" name="next" value={next} />}
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="email">{t("email")}</Label>
-          <Input id="email" name="email" type="email" required autoComplete="email" className="min-h-11" />
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            required
+            autoComplete="email"
+            className="min-h-11"
+            defaultValue={defaultEmail}
+            readOnly={Boolean(defaultEmail)}
+          />
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="password">{t("password")}</Label>
@@ -85,15 +111,17 @@ export function SignInForm({ next }: { next?: string }) {
       <Button variant="ghost" size="sm" onClick={() => setMode("magic-link")}>
         {t("magicLinkSend")}
       </Button>
-      <p className="text-center text-sm text-muted-foreground">
-        {t("noAccount")}{" "}
-        <Link
-          href={next ? `/sign-up?next=${encodeURIComponent(next)}` : "/sign-up"}
-          className="font-medium text-foreground underline"
-        >
-          {t("signUp")}
-        </Link>
-      </p>
+      {!hideSignUpLink && (
+        <p className="text-center text-sm text-muted-foreground">
+          {t("noAccount")}{" "}
+          <Link
+            href={next ? `/sign-up?next=${encodeURIComponent(next)}` : "/sign-up"}
+            className="font-medium text-foreground underline"
+          >
+            {t("signUp")}
+          </Link>
+        </p>
+      )}
     </div>
   );
 }

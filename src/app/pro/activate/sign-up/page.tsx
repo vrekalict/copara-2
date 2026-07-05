@@ -37,9 +37,10 @@ export default async function ProActivateSignUpPage({
     <main className="flex flex-1 items-center justify-center p-6">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Create partner account</CardTitle>
+          <CardTitle>Create your partner account</CardTitle>
           <p className="text-sm text-muted-foreground">
-            Use the email address from your approved application: {activation.email}
+            Set a password for <strong>{activation.email}</strong> — the email on your approved
+            application. You do not need an existing Copara account.
           </p>
         </CardHeader>
         <CardContent>

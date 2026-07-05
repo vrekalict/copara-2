@@ -78,12 +78,12 @@ export function PartnerSignUpForm({
         {pending ? "Creating account…" : "Create partner account"}
       </Button>
       <p className="text-center text-sm text-muted-foreground">
-        Already have an account?{" "}
+        Already have a Copara account with this email?{" "}
         <Link
-          href={`/pro/activate?token=${encodeURIComponent(token)}`}
+          href={`/pro/activate?token=${encodeURIComponent(token)}&sign-in=1`}
           className="font-medium underline"
         >
-          Sign in
+          Sign in instead
         </Link>
       </p>
     </form>

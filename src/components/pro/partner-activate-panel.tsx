@@ -12,19 +12,41 @@ export function PartnerActivatePanel({
   token,
   email,
   firstName,
-  isSignedIn,
-  emailMatches,
+  mode,
 }: {
   token: string;
   email: string;
   firstName: string;
-  isSignedIn: boolean;
-  emailMatches: boolean;
+  mode: "activate" | "sign-in" | "wrong-account";
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const next = `/pro/activate?token=${encodeURIComponent(token)}`;
 
-  if (isSignedIn && emailMatches) {
+  if (mode === "wrong-account") {
+    return (
+      <div className="flex flex-col gap-4">
+        <p className="text-sm text-muted-foreground">
+          You are signed in with a different email than <strong>{email}</strong>. Sign out, then
+          create or sign in with the email from your approved application.
+        </p>
+        <Link
+          href={`/pro/activate/sign-up?token=${encodeURIComponent(token)}`}
+          className={cn(buttonVariants(), "min-h-11 justify-center")}
+        >
+          Create partner account
+        </Link>
+        <Link
+          href={`/pro/activate?token=${encodeURIComponent(token)}&sign-in=1`}
+          className={cn(buttonVariants({ variant: "outline" }), "min-h-11 justify-center")}
+        >
+          Sign in with {email}
+        </Link>
+      </div>
+    );
+  }
+
+  if (mode === "activate") {
     return (
       <div className="flex flex-col gap-4">
         <p className="text-sm text-muted-foreground">
@@ -54,9 +76,10 @@ export function PartnerActivatePanel({
   return (
     <div className="flex flex-col gap-6">
       <p className="text-sm text-muted-foreground">
-        Hi {firstName}. Sign in with <strong>{email}</strong> to activate your partner account.
+        Hi {firstName}. Sign in with <strong>{email}</strong> — the email on your approved
+        application.
       </p>
-      <SignInForm next={`/pro/activate?token=${encodeURIComponent(token)}`} />
+      <SignInForm next={next} defaultEmail={email} hideSignUpLink />
       <p className="text-center text-sm text-muted-foreground">
         No account yet?{" "}
         <Link

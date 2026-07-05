@@ -1,16 +1,19 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getPartnerActivation } from "@/actions/pro/partner";
 import { PartnerActivatePanel } from "@/components/pro/partner-activate-panel";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SITE } from "@/lib/marketing/site";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default async function ProActivatePage({
   searchParams,
 }: {
-  searchParams: Promise<{ token?: string }>;
+  searchParams: Promise<{ token?: string; "sign-in"?: string }>;
 }) {
-  const { token = "" } = await searchParams;
+  const { token = "", "sign-in": signIn } = await searchParams;
   const activation = token ? await getPartnerActivation(token) : null;
 
   if (!activation) {
@@ -42,6 +45,20 @@ export default async function ProActivatePage({
     );
   }
 
+  if (activation.alreadyActivated) {
+    return (
+      <main className="mx-auto flex max-w-lg flex-col gap-4 px-6 py-12">
+        <h1 className="text-2xl font-semibold">Partner access already active</h1>
+        <p className="text-sm text-muted-foreground">
+          This application for {activation.email} has already been activated.
+        </p>
+        <Link href="/pro/dashboard" className={cn(buttonVariants(), "min-h-11 w-fit")}>
+          Open partner dashboard
+        </Link>
+      </main>
+    );
+  }
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -51,11 +68,17 @@ export default async function ProActivatePage({
     Boolean(user?.email) &&
     user!.email!.trim().toLowerCase() === activation.email.trim().toLowerCase();
 
+  if (!user && signIn !== "1") {
+    redirect(`/pro/activate/sign-up?token=${encodeURIComponent(token)}`);
+  }
+
+  const panelMode = user ? (emailMatches ? "activate" : "wrong-account") : "sign-in";
+
   return (
     <main className="flex flex-1 items-center justify-center p-6">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Activate partner access</CardTitle>
+          <CardTitle>{panelMode === "sign-in" ? "Sign in to activate" : "Activate partner access"}</CardTitle>
           <p className="text-sm text-muted-foreground">
             Welcome, {activation.firstName}. Complete activation for your Copara partner dashboard.
           </p>
@@ -65,8 +88,7 @@ export default async function ProActivatePage({
             token={token}
             email={activation.email}
             firstName={activation.firstName}
-            isSignedIn={Boolean(user)}
-            emailMatches={emailMatches}
+            mode={panelMode}
           />
         </CardContent>
       </Card>
