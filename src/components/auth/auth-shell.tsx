@@ -78,7 +78,7 @@ export function AuthShell({
             )}
           </div>
 
-          <div className="rounded-2xl border border-[var(--marketing-border)] bg-background p-6 shadow-[0_16px_48px_-28px_oklch(0.24_0.03_252_/_0.35)] sm:p-7">
+          <div className="rounded-2xl border border-[var(--marketing-border)] bg-card p-6 shadow-[0_16px_48px_-28px_oklch(0.24_0.03_252_/_0.35)] sm:p-7">
             {children}
           </div>
 

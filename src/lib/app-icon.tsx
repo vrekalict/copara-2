@@ -1,6 +1,6 @@
 /** Brand hex values aligned with marketing CSS tokens in globals.css */
 export const BRAND_COLORS = {
-  navy: "#2B3040",
+  navy: "#111439",
   teal: "#5BA89F",
   tealLight: "#8EC4BE",
   white: "#FFFFFF",

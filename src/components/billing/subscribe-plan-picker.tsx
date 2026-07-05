@@ -80,7 +80,7 @@ export function SubscribePlanPicker({ referralCode }: { referralCode?: string })
                 "flex flex-col gap-3 rounded-xl border p-4 transition-colors hover:border-primary/40",
                 plan.highlight
                   ? "border-primary/30 bg-primary/5 ring-1 ring-primary/10"
-                  : "border-[var(--marketing-border)] bg-background",
+                  : "border-[var(--marketing-border)] bg-card",
               )}
             >
               <div className="flex items-start justify-between gap-3">
