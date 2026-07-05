@@ -45,6 +45,7 @@ function MaterialRow({
   downloadLabel,
   comingSoonLabel,
   englishFallbackLabel,
+  personalizedLabel,
 }: {
   item: PartnerMaterialItem;
   title: string;
@@ -52,6 +53,7 @@ function MaterialRow({
   downloadLabel: string;
   comingSoonLabel: string;
   englishFallbackLabel: string;
+  personalizedLabel?: string;
 }) {
   const Icon = item.kind === "zip" ? Download : FileText;
 
@@ -63,6 +65,9 @@ function MaterialRow({
         </div>
         <div className="min-w-0">
           <p className="font-semibold text-[var(--marketing-slate)]">{title}</p>
+          {item.personalized && personalizedLabel ? (
+            <p className="mt-1 text-xs font-medium text-[var(--marketing-teal)]">{personalizedLabel}</p>
+          ) : null}
           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{description}</p>
           {englishFallbackLabel ? (
             <p className="mt-1 text-xs text-muted-foreground">{englishFallbackLabel}</p>
@@ -113,6 +118,7 @@ export async function ProPartnerMaterials({ referralUrl }: { referralUrl: string
                 englishFallbackLabel={
                   isFrench && item.usedLocale === "en" ? t("englishFallback") : ""
                 }
+                personalizedLabel={item.personalized ? t("personalized") : undefined}
               />
             );
           })}

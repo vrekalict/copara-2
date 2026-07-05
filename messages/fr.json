@@ -325,6 +325,7 @@
       "downloadsIntro": "PDF et ressources de marque pour votre pratique. Les fichiers marqués Bientôt disponible seront activés automatiquement lors de la publication.",
       "download": "Télécharger",
       "comingSoon": "Bientôt disponible",
+      "personalized": "Personnalisé avec votre lien de parrainage",
       "englishFallback": "Version anglaise (PDF français pas encore disponible).",
       "copy": "Copier",
       "copied": "Copié",
@@ -343,7 +344,7 @@
         },
         "referralHandout": {
           "title": "Fiche parrainage",
-          "description": "PDF pour la salle d'attente ou l'accueil — aperçu de Copara et votre lien de parrainage."
+          "description": "PDF d'une page pour la salle d'attente ou l'accueil — généré avec votre lien de parrainage unique."
         },
         "partnerOnePager": {
           "title": "Aperçu partenaire",

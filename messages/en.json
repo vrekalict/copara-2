@@ -325,6 +325,7 @@
       "downloadsIntro": "PDFs and brand assets for your practice. Files marked Coming soon will unlock automatically when published.",
       "download": "Download",
       "comingSoon": "Coming soon",
+      "personalized": "Personalized with your referral link",
       "englishFallback": "English version (French PDF not yet available).",
       "copy": "Copy to clipboard",
       "copied": "Copied",
@@ -343,7 +344,7 @@
         },
         "referralHandout": {
           "title": "Referral handout",
-          "description": "PDF for your waiting room or intake — Copara overview plus your referral link."
+          "description": "One-page PDF for your waiting room or intake — generated with your unique referral link."
         },
         "partnerOnePager": {
           "title": "Partner one-pager",

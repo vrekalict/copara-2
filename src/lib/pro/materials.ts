@@ -81,12 +81,27 @@ export type PartnerMaterialItem = {
   available: boolean;
   downloadHref: string | null;
   usedLocale: string | null;
+  /** Generated per partner (not a static file in public/partner/). */
+  personalized?: boolean;
 };
+
+const REFERRAL_HANDOUT_ROUTE = "/pro/materials/referral-handout";
 
 export function getPartnerMaterials(locale: string): PartnerMaterialItem[] {
   const normalizedLocale = locale.startsWith("fr") ? "fr" : "en";
 
   return PARTNER_MATERIALS.map((def) => {
+    if (def.id === "referral-handout") {
+      return {
+        id: def.id,
+        kind: def.kind,
+        available: true,
+        downloadHref: REFERRAL_HANDOUT_ROUTE,
+        usedLocale: normalizedLocale,
+        personalized: true,
+      };
+    }
+
     if (def.folder === "brand") {
       const absolute = materialAbsolutePath(def, normalizedLocale);
       const available = fileExists(absolute);
