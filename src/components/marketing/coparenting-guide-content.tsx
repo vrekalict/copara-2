@@ -1,11 +1,11 @@
 import Link from "next/link";
-import type { GuideRule } from "@/content/marketing/coparenting-guide.en";
+import type { GuideSection } from "@/content/marketing/coparenting-guide.en";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export function CoparentingGuideContent({
   intro,
-  rules,
+  sections,
   closing,
   langSwitch,
   disclaimer = "Copara does not provide legal advice. This guide is general information for parents, not a substitute for counselling, mediation, or legal advice.",
@@ -16,7 +16,7 @@ export function CoparentingGuideContent({
     subtitle: string;
     description: string;
   };
-  rules: GuideRule[];
+  sections: GuideSection[];
   closing: {
     title: string;
     paragraphs: string[];
@@ -45,19 +45,28 @@ export function CoparentingGuideContent({
         <p className="lead mt-5 max-w-2xl">{intro.description}</p>
       </header>
 
-      <ol className="mt-14 space-y-14">
-        {rules.map((rule) => (
-          <li key={rule.number} id={`rule-${rule.number}`} className="scroll-mt-24">
-            <GuideRuleBlock rule={rule} />
-          </li>
+      <div className="mt-14 space-y-12">
+        {sections.map((section) => (
+          <section
+            key={section.id}
+            id={section.id}
+            className="scroll-mt-24 border-t border-[var(--marketing-border)] pt-10 first:border-t-0 first:pt-0"
+          >
+            <h2 className="text-xl font-semibold text-slate-heading md:text-2xl">{section.title}</h2>
+            <div className="mt-4 space-y-4 text-base leading-relaxed text-muted-foreground md:text-[17px] md:leading-relaxed">
+              {section.paragraphs.map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))}
+            </div>
+          </section>
         ))}
-      </ol>
+      </div>
 
       <section className="mt-16 rounded-2xl border border-[var(--marketing-border)] bg-muted/30 p-8 md:p-10">
         <h2 className="text-2xl font-semibold text-slate-heading">{closing.title}</h2>
         <div className="mt-4 space-y-4 text-base leading-relaxed text-muted-foreground md:text-[17px]">
-          {closing.paragraphs.map((p, i) => (
-            <p key={i}>{p}</p>
+          {closing.paragraphs.map((paragraph, index) => (
+            <p key={index}>{paragraph}</p>
           ))}
         </div>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -80,31 +89,5 @@ export function CoparentingGuideContent({
         {disclaimer}
       </p>
     </article>
-  );
-}
-
-function GuideRuleBlock({ rule }: { rule: GuideRule }) {
-  return (
-    <div className="grid gap-6 md:grid-cols-[auto_1fr] md:gap-8">
-      <div
-        aria-hidden
-        className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10 text-lg font-bold text-primary md:size-14 md:text-xl"
-      >
-        {rule.number}
-      </div>
-      <div>
-        <h2 className="text-xl font-semibold text-slate-heading md:text-2xl">{rule.title}</h2>
-        {rule.pullQuote && (
-          <blockquote className="mt-4 border-l-4 border-primary/40 pl-4 text-base italic leading-relaxed text-foreground/85 md:text-lg">
-            {rule.pullQuote}
-          </blockquote>
-        )}
-        <div className="mt-4 space-y-4 text-base leading-relaxed text-muted-foreground md:text-[17px] md:leading-relaxed">
-          {rule.paragraphs.map((p, i) => (
-            <p key={i}>{p}</p>
-          ))}
-        </div>
-      </div>
-    </div>
   );
 }

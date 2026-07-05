@@ -1,114 +1,78 @@
-import type { GuideRule } from "./coparenting-guide.en";
+import type { GuideSection } from "./coparenting-guide.en";
 
 export const GUIDE_INTRO = {
   eyebrow: "Ressources",
-  title: "Dix règles pour une coparentalité saine",
-  subtitle: "La coparentalité, comment ça marche",
+  title: "Une coparentalité organisée au Canada",
+  subtitle: "Un guide Copara pour parents séparés ou divorcés",
   description:
-    "Un mini-guide pratique pour les parents séparés au Canada qui souhaitent une communication plus calme, des dossiers plus clairs et un environnement stable pour leurs enfants.",
+    "La coparentalité n'est pas une longue conversation sur le passé. Ce sont des centaines de petits détails — école, formulaires médicaux, frais d'activités, changements de cueillette — qui doivent rester exacts lorsque les parents ne partagent plus le même quotidien. Ce guide explique comment les familles canadiennes réduisent les frictions du quotidien grâce à des dossiers plus clairs, pas des disputes plus bruyantes.",
 };
 
-export const GUIDE_RULES: GuideRule[] = [
+export const GUIDE_SECTIONS: GuideSection[] = [
   {
-    number: 1,
-    title: "Ne forcez pas vos enfants à choisir un camp",
-    pullQuote:
-      "Encouragez vos enfants à maintenir des liens avec grands-parents, oncles, tantes et cousins des deux côtés.",
+    id: "scattered-info",
+    title: "L'information éparpillée transforme la logistique en conflit",
     paragraphs: [
-      "Demander aux enfants de couper les ponts avec la belle-famille crée souvent la première fracture durable après la séparation.",
-      "Encouragez les liens avec la parenté des deux côtés. Ces relations peuvent soutenir l'estime de soi et le sentiment d'appartenance de l'enfant.",
-      "Quand un enfant revient d'un séjour chez l'autre parent ou sa famille, évitez les comparaisons. Les enfants ont besoin du parent qui aide aux devoirs et du parent qui prépare un bon repas — les deux comptent.",
+      "La plupart des disputes de coparentalité ne sont pas philosophiques. Elles commencent quand deux personnes se souviennent différemment du mardi : qui a accepté l'échange, si le camp de jour a été payé, quel parent a l'inhalateur.",
+      "Textos, courriels, calendriers papier et ententes verbales ne montrent chacun qu'une partie de la réalité. Quand rien n'est officiel, chaque désaccord rouvre de vieilles querelles.",
+      "Une première étape pratique : choisir un système partagé pour les horaires, les messages concernant les enfants et les dossiers financiers. Vous n'avez pas besoin de tout approuver — vous devez savoir où se trouvent les faits.",
     ],
   },
   {
-    number: 2,
-    title: "Parlez de votre co-parent sur un ton positif",
+    id: "shared-calendar",
+    title: "Construisez un horaire parental visible et modifiable par écrit",
     paragraphs: [
-      "La séparation fait mal. Pourtant, vos enfants ont besoin de respecter leurs deux parents. Ce respect les aide à respecter l'autorité en général et à grandir en étant respectés eux-mêmes.",
-      "Même si votre co-parent parle négativement de vous, évitez les répliques. L'hostilité constante érode davantage le respect de votre enfant que le silence.",
-      "Vous êtes l'adulte. Montrez l'exemple d'une communication calme et respectueuse.",
+      "La garde fonctionne mieux lorsque les deux parents ouvrent le même calendrier et voient le plan actuel — pas celui d'il y a trois disputes.",
+      "Quand un changement est demandé, confirmez-le par écrit avec la date, l'heure et la raison. « Peut-on échanger vendredi? » devient fiable seulement lorsque les deux parties reconnaissent la nouvelle entente.",
+      "Les enfants ont besoin de prévisibilité. Les adultes ont besoin de moins d'échanges du type « tu ne m'as jamais dit ». Le calendrier partagé de Copara garde ces mises à jour visibles et horodatées.",
     ],
   },
   {
-    number: 3,
-    title: "Épargnez-leur les détails d'adultes",
+    id: "messages-as-records",
+    title: "Traitez les messages de coparentalité comme des dossiers, pas comme des débats",
     paragraphs: [
-      "Raconter à vos enfants à quel point votre vie est difficile crée de la confusion et leur impose un fardeau qu'ils ne devraient pas porter.",
-      "Plutôt que de longues explications sur l'argent ou les conflits, restez simple : « Nous devons être prudents avec nos dépenses en ce moment. »",
-      "En tant qu'adulte, vous devez trouver des solutions. Vos enfants ne devraient pas être vos messagers ni vos conseillers.",
+      "Les messages au sujet de votre enfant peuvent être lus plus tard par un médiateur, un coordonnateur parental ou un avocat. Cela ne signifie pas que chaque phrase doit être formelle — cela signifie rester dans le sujet.",
+      "Commencez par ce dont vous avez besoin : une décision, une date, un document, un remboursement. Évitez les jugements de personnalité, sauf si un professionnel en a besoin.",
+      "Steady Send de Copara propose des suggestions de reformulation lorsque le ton est vif. Vous décidez de ce qui est envoyé. L'objectif est un fil qui documente les décisions parentales.",
     ],
   },
   {
-    number: 4,
-    title: "N'utilisez pas vos enfants comme messagers",
-    pullQuote:
-      "Copara offre un canal partagé pour les horaires, les dépenses et les messages — sans mettre les enfants au milieu.",
+    id: "expense-paper-trail",
+    title: "Conservez une trace écrite pour les dépenses liées aux enfants",
     paragraphs: [
-      "Le téléphone, le courriel et les outils sécurisés de coparentalité sont de bien meilleures options que de demander à un enfant de transmettre un message ou une plainte.",
-      "Copara est conçu pour cela : communication organisée sur les horaires, les dépenses, les documents et les messages — dans un dossier qui reste entre adultes.",
-      "Les règles peuvent différer d'une maison à l'autre. C'est normal. Si vous assumez vos choix avec calme, vos enfants accepteront plus facilement les deux environnements.",
+      "Les conflits d'argent commencent rarement par des chiffres. Ils commencent quand un reçu est introuvable, qu'une approbation est contestée ou qu'on oublie qui a payé l'inscription au hockey.",
+      "Au moment de chaque dépense, notez le montant, la catégorie, le reçu et le partage proposé. Attendre que la rancune s'installe garantit une pire conversation.",
+      "Le suivi des dépenses de Copara permet aux deux parents de voir propositions, téléversements et historique au même endroit.",
     ],
   },
   {
-    number: 5,
-    title: "Détachez-vous du conflit avec votre co-parent",
+    id: "documents-vault",
+    title: "Rangez les documents scolaires et médicaux où les deux parents peuvent les trouver",
     paragraphs: [
-      "Vous êtes séparés. Certaines personnes restent prisonnières d'une relation de haine longtemps après la fin du mariage.",
-      "Plus tôt vous acceptez la séparation, plus tôt vous pouvez cesser de revivre le combat. Copara aide en séparant la coordination pratique du débat émotionnel.",
+      "Cartes d'assurance, carnets de vaccination, courriels des enseignants et contacts d'urgence ne devraient pas vivre dans la boîte courriel d'un seul parent. Quand l'autre en a besoin un dimanche soir, fouiller de vieux textos est un problème d'organisation — pas une preuve de mauvaise foi.",
+      "Gardez les documents à jour dans un coffre-fort partagé. Mettez-les à jour quand quelque chose change : nouvelle école, nouveau médicament, nouvelle activité.",
+      "Une bonne documentation empêche les enfants de devenir des messagers répétés pour des renseignements que les adultes devraient partager directement.",
     ],
   },
   {
-    number: 6,
-    title: "Fixez des limites et des attentes claires",
+    id: "exports-professionals",
+    title: "Sachez quoi exporter — et quand consulter un professionnel",
     paragraphs: [
-      "Établissez des limites saines à la maison. En cas de doute, consultez un professionnel de confiance.",
-      "Certains enfants savent très bien jouer un parent contre l'autre. Partagez des attentes claires sur l'école, les devoirs, les corvées, le coucher et le respect.",
-    ],
-  },
-  {
-    number: 7,
-    title: "Restez ouverts à la communication avec vos enfants",
-    paragraphs: [
-      "Écoutez sans juger. N'imposez pas ce qu'ils devraient ressentir.",
-      "Accueillez leurs émotions du moment tout en leur rappelant que les sentiments évoluent. Évitez les questions qui les incitent à se plaindre de l'autre parent.",
-    ],
-  },
-  {
-    number: 8,
-    title: "Soyez l'adulte responsable",
-    paragraphs: [
-      "Choisissez qui vous voulez devenir après cette séparation. Fixez des objectifs à court, moyen et long terme.",
-      "Des dossiers organisés, un calendrier partagé et des messages calmes montrent à vos enfants que les adultes peuvent traverser les périodes difficiles.",
-    ],
-  },
-  {
-    number: 9,
-    title: "Aidez vos enfants à se sentir en sécurité",
-    paragraphs: [
-      "Faites de votre foyer un lieu de respect, de prévisibilité et de soin.",
-      "La sécurité ne dépend pas d'un accord parfait entre parents, mais du fait que l'enfant sait qu'il est aimé et que les adultes sont fiables.",
-    ],
-  },
-  {
-    number: 10,
-    title: "Apprenez à rebondir ensemble",
-    pullQuote:
-      "Montrez à vos enfants que les périodes difficiles peuvent être traversées sans s'effondrer.",
-    paragraphs: [
-      "La résilience est l'un des plus beaux cadeaux qu'un parent puisse offrir. Montrez l'exemple après un contretemps — un échange manqué, un message tendu, un horaire modifié.",
-      "Copara ne répare pas votre relation de coparentalité, mais il peut réduire les frictions du quotidien.",
+      "Si vous travaillez avec un médiateur, un avocat ou un coordonnateur parental, des dossiers organisés économisent temps et frais. Un historique chronologique vaut mieux qu'un dossier de captures d'écran.",
+      "Les exportations Copara sont des résumés inviolables conçus pour une revue professionnelle. Ce ne sont pas des preuves judiciaires certifiées et elles ne remplacent pas un avis juridique — mais elles sont plus claires qu'une boîte de documents imprimés.",
+      "Certaines situations exigent plus qu'une application : sécurité, refus de communiquer ou ordonnances à faire respecter. Consultez alors un professionnel du droit familial dans votre province. Copara soutient la coordination; il ne décide pas de la garde ni ne résout la violence.",
     ],
   },
 ];
 
 export const GUIDE_CLOSING = {
-  title: "Une communication constructive commence par les bons outils",
+  title: "Moins de friction sur la logistique, plus d'espace pour parent",
   paragraphs: [
-    "Les enfants doivent sentir que leurs deux parents sont attentifs à l'école, aux activités, à la santé et au quotidien.",
-    "Copara offre calendrier partagé, messagerie, suivi des dépenses, coffre-fort documentaire et exportations inviolables pour les familles canadiennes. En anglais et en français.",
+    "Vous ne contrôlez pas la façon dont votre co-parent communique. Vous pouvez contrôler si horaires, reçus et avis scolaires vivent au même endroit fiable.",
+    "Copara aide les familles canadiennes à coordonner en anglais et en français — calendrier partagé, messagerie, dépenses, coffre-fort documentaire et exportations pour les parents séparés qui ont besoin de clarté plus que de conflit.",
   ],
-  primaryLabel: "Demander l'accès anticipé",
+  primaryLabel: "Commencer l'essai gratuit",
   primaryHref: "/sign-up",
-  secondaryLabel: "Découvrir Copara",
+  secondaryLabel: "Voir les fonctionnalités",
   secondaryHref: "/features",
 };
