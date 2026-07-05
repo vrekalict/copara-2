@@ -11,4 +11,9 @@ export const { dynamic, dynamicParams, revalidate, generateStaticParams, GET } =
     additionalPrecacheEntries: [{ url: "/offline", revision }],
     swSrc: "src/app/sw.ts",
     useNativeEsbuild: true,
+    esbuildOptions: {
+      define: {
+        __COPARA_STAFF_PATH__: JSON.stringify(process.env.COPARA_STAFF_PATH ?? ""),
+      },
+    },
   });

@@ -2,8 +2,9 @@
 /// <reference lib="webworker" />
 import { defaultCache } from "@serwist/turbopack/worker";
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
-import { Serwist } from "serwist";
+import { NetworkOnly, Serwist, type RuntimeCaching } from "serwist";
 import { BRAND } from "@/lib/brand";
+import { shouldBypassSwCache } from "@/lib/pwa/sw-cache-bypass";
 
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {
@@ -13,18 +14,24 @@ declare global {
 
 declare const self: ServiceWorkerGlobalScope;
 
+const networkOnlyRoutes: RuntimeCaching = {
+  matcher: ({ url: { pathname }, sameOrigin }) => sameOrigin && shouldBypassSwCache(pathname),
+  handler: new NetworkOnly(),
+};
+
 const serwist = new Serwist({
   precacheEntries: self.__SW_MANIFEST,
   skipWaiting: true,
   clientsClaim: true,
   navigationPreload: true,
-  runtimeCaching: defaultCache,
+  runtimeCaching: [networkOnlyRoutes, ...defaultCache],
   fallbacks: {
     entries: [
       {
         url: "/offline",
         matcher({ request }) {
-          return request.destination === "document";
+          if (request.destination !== "document") return false;
+          return !shouldBypassSwCache(new URL(request.url).pathname);
         },
       },
     ],
