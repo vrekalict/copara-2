@@ -75,10 +75,9 @@ export function MarketingFooter() {
       </div>
 
       <div className="border-t border-white/10 px-5 py-6 sm:px-6">
-        <p className="mx-auto max-w-6xl text-xs leading-relaxed text-white/50">
+        <p className="mx-auto max-w-6xl text-center text-xs leading-relaxed text-white/50">
           © {new Date().getFullYear()} {SITE.name}. Not legal advice. Exports are
-          tamper-evident records suitable for review by legal professionals. They are
-          not certified or court-approved.
+          tamper-evident records suitable for review by legal professionals.
         </p>
       </div>
     </footer>

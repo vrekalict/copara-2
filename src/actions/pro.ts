@@ -86,7 +86,7 @@ export async function createProCase(formData: FormData) {
     });
   }
 
-  redirect(`/pro?case=${circle.id}`);
+  redirect(`/pro/dashboard?case=${circle.id}`);
 }
 
 async function sendProInviteEmail({

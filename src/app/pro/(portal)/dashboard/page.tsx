@@ -1,13 +1,17 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { getProCircles } from "@/actions/pro";
 import { getProReferralDashboard } from "@/actions/pro/referrals";
-import { ProReferralDashboard } from "@/components/pro/referral-dashboard";
+import { ProCaseList } from "@/components/pro/pro-case-list";
+import { ProGettingStarted } from "@/components/pro/pro-getting-started";
 import { ProSetupForm } from "@/components/pro/pro-setup-form";
+import { ProPortalShell, ProSectionHeading } from "@/components/pro/pro-portal-shell";
+import { ProReferralDashboard } from "@/components/pro/referral-dashboard";
 import { buttonVariants } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 export default async function ProDashboardPage({
   searchParams,
@@ -23,52 +27,74 @@ export default async function ProDashboardPage({
   const t = await getTranslations("pro");
   const params = await searchParams;
 
-  const referral = await getProReferralDashboard(user.id);
-  const circles = await getProCircles(user.id);
-
-  if (circles.length === 0) {
-    return (
-      <div className="mx-auto flex max-w-3xl flex-col gap-8 px-6 py-12">
-        <div>
-          <h1 className="text-2xl font-semibold">{t("title")}</h1>
-          <p className="mt-2 text-muted-foreground">{t("setupSubtitle")}</p>
-        </div>
-        <ProReferralDashboard {...referral} />
-        <ProSetupForm />
-      </div>
-    );
-  }
-
   if (params.case) {
     redirect(`/pro/circles/${params.case}`);
   }
 
+  const referral = await getProReferralDashboard(user.id);
+  const circles = await getProCircles(user.id);
+  const isEmpty = circles.length === 0;
+
   return (
-    <div className="mx-auto flex max-w-4xl flex-col gap-8 px-6 py-12">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold">{t("title")}</h1>
-        <Link href="/pro/setup" className={buttonVariants({ variant: "outline", size: "sm" })}>
-          {t("newCase")}
-        </Link>
-      </div>
-
-      <ProReferralDashboard {...referral} />
-
-      <div>
-        <h2 className="mb-3 text-lg font-semibold">Your cases</h2>
-        <div className="flex flex-col gap-3">
-          {circles.map((circle) => (
-            <Link key={circle.circleId} href={`/pro/circles/${circle.circleId}`}>
-              <Card className="p-4 transition-colors hover:bg-muted/50">
-                <p className="font-medium">{circle.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  {new Date(circle.createdAt).toLocaleDateString()}
-                </p>
-              </Card>
-            </Link>
-          ))}
+    <ProPortalShell
+      eyebrow="Partner program"
+      title={t("title")}
+      description={isEmpty ? t("setupSubtitle") : t("dashboardSubtitle")}
+      actions={
+        !isEmpty ? (
+          <Link
+            href="/pro/setup"
+            className={cn(buttonVariants(), "min-h-11 gap-2 bg-[var(--marketing-navy)] hover:bg-[var(--marketing-navy-soft)]")}
+          >
+            <Plus className="size-4" aria-hidden />
+            {t("newCase")}
+          </Link>
+        ) : undefined
+      }
+      maxWidth="4xl"
+    >
+      {isEmpty ? (
+        <div className="flex flex-col gap-8">
+          <ProGettingStarted
+            title={t("gettingStarted")}
+            steps={[
+              { title: t("step1Title"), body: t("step1Body") },
+              { title: t("step2Title"), body: t("step2Body") },
+              { title: t("step3Title"), body: t("step3Body") },
+            ]}
+          />
+          <div>
+            <ProSectionHeading title={t("createFirstCase")} description={t("createFirstCaseHint")} />
+            <ProSetupForm />
+          </div>
+          <div>
+            <ProSectionHeading title={t("referralProgram")} description={t("referralProgramHint")} />
+            <ProReferralDashboard {...referral} compact />
+          </div>
         </div>
-      </div>
-    </div>
+      ) : (
+        <div className="flex flex-col gap-10">
+          <section>
+            <ProSectionHeading
+              title={t("yourCases")}
+              description={t("yourCasesHint")}
+            />
+            <ProCaseList
+              cases={circles}
+              newCaseLabel={t("newCase")}
+              emptyHint={t("noCasesHint")}
+            />
+          </section>
+
+          <section>
+            <ProSectionHeading
+              title={t("referralProgram")}
+              description={t("referralProgramHint")}
+            />
+            <ProReferralDashboard {...referral} />
+          </section>
+        </div>
+      )}
+    </ProPortalShell>
   );
 }

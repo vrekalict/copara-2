@@ -3,7 +3,9 @@ import { redirect } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { ExportWizard } from "@/components/exports/export-wizard";
-import { Card } from "@/components/ui/card";
+import { ProPortalCard, ProPortalShell } from "@/components/pro/pro-portal-shell";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default async function ProCirclePage({
   params,
@@ -56,49 +58,71 @@ export default async function ProCirclePage({
     .limit(20);
 
   const caseLink = `/join/case/${circleId}`;
+  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? "https://copara.ca";
+  const fullCaseLink = `${origin.replace(/\/$/, "")}${caseLink}`;
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between border-b px-4 py-3">
-        <div>
-          <Link href="/pro/dashboard" className="text-sm text-muted-foreground">
-            ← {t("back")}
-          </Link>
-          <h1 className="text-lg font-semibold">{circle?.name ?? t("case")}</h1>
+    <ProPortalShell
+      eyebrow="Client case"
+      title={circle?.name ?? t("case")}
+      description={t("casePageDescription")}
+      backHref="/pro/dashboard"
+      backLabel={t("back")}
+      maxWidth="6xl"
+    >
+      <div className="flex flex-col gap-6">
+        <div className="grid gap-4 lg:grid-cols-2">
+          <ProPortalCard>
+            <p className="font-semibold text-[var(--marketing-slate)]">{t("dualInviteLink")}</p>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{t("dualInviteHint")}</p>
+            <code className="mt-4 block break-all rounded-lg border border-[var(--marketing-border)] bg-[var(--marketing-mist)]/50 p-3 text-xs">
+              {fullCaseLink}
+            </code>
+            <Link
+              href={fullCaseLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(buttonVariants({ variant: "outline" }), "mt-4 min-h-10 inline-flex")}
+            >
+              Open invite link
+            </Link>
+          </ProPortalCard>
+
+          <ProPortalCard>
+            <p className="font-semibold text-[var(--marketing-slate)]">{t("members")}</p>
+            <ul className="mt-3 flex flex-col gap-2 text-sm">
+              {(members ?? []).map((m) => {
+                const profile = Array.isArray(m.profiles) ? m.profiles[0] : m.profiles;
+                const label =
+                  profile?.display_name ?? m.invited_email ?? m.role;
+                return (
+                  <li
+                    key={`${m.role}-${m.invited_email ?? profile?.display_name}`}
+                    className="flex items-center justify-between gap-2 rounded-lg border border-[var(--marketing-border)] bg-[var(--marketing-mist)]/30 px-3 py-2"
+                  >
+                    <span className="font-medium text-[var(--marketing-slate)]">{label}</span>
+                    <span className="text-xs capitalize text-muted-foreground">
+                      {m.role} · {m.status}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </ProPortalCard>
         </div>
+
+        <ProPortalCard className="p-0 sm:p-0">
+          <ExportWizard
+            circleId={circleId}
+            threads={(threads ?? []).map((th) => ({
+              id: th.id as string,
+              title: th.title as string | null,
+            }))}
+            locale={locale}
+            initialHistory={(exports ?? []) as Parameters<typeof ExportWizard>[0]["initialHistory"]}
+          />
+        </ProPortalCard>
       </div>
-
-      <div className="px-4">
-        <Card className="mb-4 p-4 text-sm">
-          <p className="mb-1 font-medium">{t("dualInviteLink")}</p>
-          <p className="mb-2 text-muted-foreground">{t("dualInviteHint")}</p>
-          <code className="block break-all rounded bg-muted p-2 text-xs">{caseLink}</code>
-        </Card>
-
-        <Card className="mb-4 p-4 text-sm">
-          <p className="mb-2 font-medium">{t("members")}</p>
-          {(members ?? []).map((m) => {
-            const profile = Array.isArray(m.profiles) ? m.profiles[0] : m.profiles;
-            return (
-              <p key={m.invited_email ?? profile?.display_name} className="text-muted-foreground">
-                {m.role} · {m.status}
-                {profile?.display_name ? ` · ${profile.display_name}` : ""}
-                {m.invited_email ? ` · ${m.invited_email}` : ""}
-              </p>
-            );
-          })}
-        </Card>
-      </div>
-
-      <ExportWizard
-        circleId={circleId}
-        threads={(threads ?? []).map((th) => ({
-          id: th.id as string,
-          title: th.title as string | null,
-        }))}
-        locale={locale}
-        initialHistory={(exports ?? []) as Parameters<typeof ExportWizard>[0]["initialHistory"]}
-      />
-    </div>
+    </ProPortalShell>
   );
 }

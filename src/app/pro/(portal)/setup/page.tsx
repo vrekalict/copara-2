@@ -1,9 +1,8 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { ProSetupForm } from "@/components/pro/pro-setup-form";
-import { buttonVariants } from "@/components/ui/button";
+import { ProPortalShell } from "@/components/pro/pro-portal-shell";
 
 export default async function ProSetupPage() {
   const supabase = await createClient();
@@ -15,12 +14,15 @@ export default async function ProSetupPage() {
   const t = await getTranslations("pro");
 
   return (
-    <div className="mx-auto flex max-w-lg flex-col gap-6 px-6 py-12">
-      <Link href="/pro/dashboard" className={buttonVariants({ variant: "ghost", size: "sm" })}>
-        ← {t("back")}
-      </Link>
-      <h1 className="text-2xl font-semibold">{t("newCase")}</h1>
+    <ProPortalShell
+      eyebrow="Partner program"
+      title={t("newCase")}
+      description={t("newCaseDescription")}
+      backHref="/pro/dashboard"
+      backLabel={t("back")}
+      maxWidth="3xl"
+    >
       <ProSetupForm />
-    </div>
+    </ProPortalShell>
   );
 }
