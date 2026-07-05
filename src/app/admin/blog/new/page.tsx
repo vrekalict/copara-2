@@ -45,8 +45,9 @@ export default async function AdminBlogNewPage() {
               <strong className="font-medium text-foreground">SEO description</strong> — aim for 150–160 characters for Google snippets.
             </li>
             <li>
-              <strong className="font-medium text-foreground">Body</strong> — use blank lines between paragraphs;{" "}
-              <code className="text-xs">## </code> for headings and <code className="text-xs">- </code> for lists.
+              <strong className="font-medium text-foreground">Body</strong> — markdown: blank lines,{" "}
+              <code className="text-xs">## </code> headings, <code className="text-xs">- </code> lists,{" "}
+              <code className="text-xs">**bold**</code>, <code className="text-xs">[links](url)</code>.
             </li>
           </ul>
         </AdminInfoBox>

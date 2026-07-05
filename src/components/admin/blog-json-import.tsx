@@ -104,10 +104,11 @@ export function BlogJsonImport() {
               (&quot;draft&quot; | &quot;published&quot;), featured (boolean), author (optional)
             </code>
             <p className="mt-2">
-              Categories: Communication, Schedules, Expenses, Records, Professionals. Body supports{" "}
-              <code className="text-xs">## headings</code>, <code className="text-xs">**bold**</code>, and{" "}
-              <code className="text-xs">- bullets</code>. Re-uploading the same slug overwrites that post; cover
-              images uploaded in the CMS are kept unless you replace them manually.
+              Categories: Communication, Schedules, Expenses, Records, Professionals. Body supports
+              markdown: <code className="text-xs">## headings</code>,{" "}
+              <code className="text-xs">**bold**</code>, <code className="text-xs">- bullets</code>, and{" "}
+              <code className="text-xs">[links](url)</code>. Re-uploading the same slug overwrites that
+              post; cover images uploaded in the CMS are kept unless you replace them manually.
             </p>
           </AdminInfoBox>
 

@@ -1,51 +1,57 @@
-function renderInline(text: string) {
-  const parts = text.split(/(\*\*[^*]+\*\*)/g);
-  return parts.map((part, i) => {
-    if (part.startsWith("**") && part.endsWith("**")) {
-      return (
-        <strong key={i} className="font-semibold text-foreground">
-          {part.slice(2, -2)}
-        </strong>
-      );
-    }
-    return part;
-  });
-}
+import Link from "next/link";
+import ReactMarkdown, { type Components } from "react-markdown";
 
-export function BlogContent({ body }: { body: string }) {
-  const blocks = body.split(/\n\n+/);
+function BlogMarkdownLink({
+  href,
+  children,
+}: {
+  href?: string;
+  children?: React.ReactNode;
+}) {
+  if (!href) return <>{children}</>;
+
+  const isExternal = href.startsWith("http") && !href.includes("copara.ca");
+
+  if (isExternal) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className="blog-link">
+        {children}
+      </a>
+    );
+  }
+
+  let path = href;
+  if (href.startsWith("http")) {
+    try {
+      const url = new URL(href);
+      path = `${url.pathname}${url.search}${url.hash}`;
+    } catch {
+      path = href;
+    }
+  }
 
   return (
+    <Link href={path} className="blog-link">
+      {children}
+    </Link>
+  );
+}
+
+const MARKDOWN_COMPONENTS: Components = {
+  h2: ({ children }) => <h2 className="blog-h2">{children}</h2>,
+  h3: ({ children }) => <h3 className="blog-h3">{children}</h3>,
+  p: ({ children }) => <p className="blog-p">{children}</p>,
+  ul: ({ children }) => <ul className="blog-ul">{children}</ul>,
+  ol: ({ children }) => <ol className="blog-ol">{children}</ol>,
+  li: ({ children }) => <li className="blog-li">{children}</li>,
+  strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
+  a: ({ href, children }) => <BlogMarkdownLink href={href}>{children}</BlogMarkdownLink>,
+};
+
+export function BlogContent({ body }: { body: string }) {
+  return (
     <div className="blog-prose">
-      {blocks.map((block, index) => {
-        const trimmed = block.trim();
-        if (!trimmed) return null;
-
-        if (trimmed.startsWith("## ")) {
-          return (
-            <h2 key={index} className="blog-h2">
-              {trimmed.replace(/^##\s+/, "")}
-            </h2>
-          );
-        }
-
-        if (trimmed.startsWith("- ")) {
-          const items = trimmed.split("\n").filter((l) => l.startsWith("- "));
-          return (
-            <ul key={index} className="blog-ul">
-              {items.map((item, i) => (
-                <li key={i}>{renderInline(item.replace(/^-\s+/, ""))}</li>
-              ))}
-            </ul>
-          );
-        }
-
-        return (
-          <p key={index} className="blog-p">
-            {renderInline(trimmed)}
-          </p>
-        );
-      })}
+      <ReactMarkdown components={MARKDOWN_COMPONENTS}>{body}</ReactMarkdown>
     </div>
   );
 }

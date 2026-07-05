@@ -177,8 +177,9 @@ export function BlogPostForm({
             className="w-full rounded-lg border border-input bg-transparent px-3 py-2 font-mono text-sm leading-relaxed"
           />
           <p className="text-xs text-muted-foreground">
-            Use blank lines between paragraphs. Start lines with <code>## </code> for headings and{" "}
-            <code>- </code> for bullet lists. Wrap text in <code>**</code> for bold.
+            Markdown supported: blank lines for paragraphs, <code>## </code> / <code>### </code> for
+            headings, <code>- </code> for lists, <code>**bold**</code>, and{" "}
+            <code>[link text](url)</code> for links.
           </p>
         </div>
       </div>
