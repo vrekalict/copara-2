@@ -8,7 +8,7 @@ import { SITE } from "@/lib/marketing/site";
 export const metadata = pageMetadata({
   title: "Shared custody calendar and exchange tracking",
   description:
-    "Copara shared calendar for parenting-time schedules, change requests, and exchange check-ins with location verification that never shares raw GPS between parents.",
+    "Copara shared calendar for parenting-time schedules, change requests, and exchange check-ins that can record whether GPS was provided — without storing or sharing raw coordinates between parents.",
   path: "/features/calendar",
 });
 

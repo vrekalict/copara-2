@@ -7,6 +7,9 @@ export function isSafeRedirectPath(path: string): boolean {
   if (trimmed.startsWith("//")) return false;
   if (trimmed.includes("\\")) return false;
   if (trimmed.includes("://")) return false;
+  // WHATWG URL parsers strip TAB/CR/LF before resolving; reject embedded C0 controls
+  // so paths like "/\t/evil.com" cannot become protocol-relative redirects.
+  if (/[\u0000-\u001F\u007F]/.test(trimmed)) return false;
   return true;
 }
 

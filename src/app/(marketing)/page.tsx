@@ -147,7 +147,7 @@ export default async function HomePage() {
             { title: "Append-only messages", body: "Sent messages cannot be edited or deleted, supporting record integrity." },
             { title: "Server timestamps", body: "Delivery and read receipts use server time, not device clocks." },
             { title: "Hash-chain verification", body: "Exports include a digest anyone can verify at a public link." },
-            { title: "No hidden GPS tracking", body: "Check-ins verify arrival; raw coordinates are not shared between parents." },
+            { title: "No hidden GPS tracking", body: "Check-ins can record whether GPS was provided; raw coordinates are not stored or shared between parents." },
             { title: "Row-level security", body: "Database policies restrict access to your circle members only." },
             { title: "PIPEDA-aware", body: "Privacy framing is designed for Canadian users. See our Privacy Policy." },
           ].map((item) => (

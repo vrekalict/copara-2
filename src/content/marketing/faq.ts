@@ -103,12 +103,12 @@ export const FAQ_PRIVACY: FaqItem[] = [
   {
     question: "Does Copara track my location?",
     answer:
-      "Exchange check-ins use location only to verify arrival at an expected exchange point. Copara does not provide continuous GPS tracking or a live location map between parents.",
+      "Exchange check-ins can optionally use GPS on your device at check-in time. Copara does not compare your position to the exchange location — it only records whether valid coordinates were provided. There is no continuous GPS tracking or live location map between parents.",
   },
   {
     question: "Are raw GPS coordinates shared?",
     answer:
-      "No. Raw GPS coordinates are not shared between parents. Check-ins store a verified or not verified result and timestamp, not a sharable map pin the other parent can browse.",
+      "No. Raw GPS coordinates are never stored or shared between parents. Check-ins record whether GPS was provided at check-in time and a timestamp — not a map pin the other parent can browse.",
   },
   {
     question: "How is child information stored?",

@@ -21,7 +21,7 @@ export default function SecurityPage() {
         data={webPageSchema(
           "Security and records",
           "/security",
-          "Copara security overview for messages, exports, and location verification.",
+          "Copara security overview for messages, exports, and privacy-conscious check-ins.",
         )}
       />
       <PageHero
@@ -52,7 +52,7 @@ export default function SecurityPage() {
             <h2 className="text-xl font-semibold text-slate-heading">Location and check-ins</h2>
             <ul className="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground">
               <li>No continuous GPS tracking between parents</li>
-              <li>Check-ins verify arrival with a boolean result, not a shared map pin</li>
+              <li>Check-ins record whether GPS was provided at check-in — not a shared map pin</li>
               <li>Raw GPS coordinates are not visible to your co-parent</li>
               <li>Designed for exchange verification, not surveillance</li>
             </ul>

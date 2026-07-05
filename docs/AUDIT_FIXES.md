@@ -118,14 +118,18 @@ Source: [`app-review-findings.md`](../app-review-findings.md) (2026-07-05). Trac
 
 ## Deploy notes
 
-Run pending Supabase migrations on production:
+Apply migrations with the Supabase CLI only (tracks history and avoids duplicate-run errors):
 
 ```bash
-# Includes partner email tracking (Batch 0) and gps_provided rename (Batch 3)
 supabase db push
 ```
 
-Or apply manually:
+All migrations through `20260705170000` are applied on the linked **Copara-app** project as of 2026-07-05.
 
-- `supabase/migrations/20260705160000_partner_approval_email_tracking.sql`
-- `supabase/migrations/20260705170000_checkins_gps_provided.sql`
+## Verification follow-up (2026-07-05)
+
+See [`AUDIT_VERIFICATION.md`](./AUDIT_VERIFICATION.md). Closed three residual items:
+
+- Control-character open-redirect bypass in `isSafeRedirectPath`
+- Misleading check-in copy in FAQ/marketing pages
+- Deploy docs standardized on `supabase db push` only

@@ -37,7 +37,7 @@ export const PRIVACY_SECTIONS: LegalSection[] = [
       "Circle and membership information: circle names, roles, invite status, permissions, and relationships between users in a shared circle.",
       "Co-parenting communications: message content, attachments, delivery and read timestamps, thread membership, and append-only metadata including hash-chain values used for tamper-evident exports.",
       "Child-related information: names, dates of birth, school details, medical notes, emergency contacts, and documents uploaded to the Info Vault, subject to sharing settings you control.",
-      "Scheduling and activity information: parenting schedules, calendar events, exchange reminders, check-in verification results, and related timestamps.",
+      "Scheduling and activity information: parenting schedules, calendar events, exchange reminders, check-in GPS-provided flags, and related timestamps.",
       "Financial information: shared expenses, split percentages, reimbursement requests, receipt images, dispute notes, and payment-related identifiers when you subscribe to a paid plan.",
       "Documents and files: documents, photos, and other files you upload to Copara, including vault items, message attachments, journal entries, and album content.",
       "AI processing data: drafts submitted for tone review or rewriting, selected conversations for summaries, AI outputs, acceptance or rejection of suggestions, and related audit metadata.",

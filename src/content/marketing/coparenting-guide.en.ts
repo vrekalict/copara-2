@@ -72,7 +72,7 @@ export const GUIDE_SECTIONS: GuideSection[] = [
     paragraphs: [
       "Parenting time, holidays, school breaks, and activity pickups should be visible to both parents in the same view. When only one parent holds the master calendar, the other parent is always reacting — and children feel the tension at handoffs.",
       "Change requests work best with a simple habit: propose in writing, include date/time/reason, and wait for explicit confirmation before assuming the swap is agreed. \"I thought you knew\" is how custody weekends go sideways.",
-      "Copara's shared calendar supports parenting-time blocks, change requests, and exchange check-ins. Check-ins verify arrival without sharing raw GPS between parents — useful when handoffs need documentation without surveillance.",
+      "Copara's shared calendar supports parenting-time blocks, change requests, and exchange check-ins. Check-ins can record whether GPS was provided at handoff time without storing or sharing raw coordinates between parents — useful when handoffs need documentation without surveillance.",
     ],
     bullets: [
       "Enter the baseline schedule first (week-on/week-off, 2-2-3, alternating weekends, etc.).",
