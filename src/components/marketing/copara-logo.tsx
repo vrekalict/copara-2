@@ -21,12 +21,12 @@ export function CoparaLogo({
         aria-hidden
         className="shrink-0"
       >
-        <rect width="32" height="32" rx="8" fill={variant === "light" ? "white" : "var(--marketing-teal)"} fillOpacity={variant === "light" ? "0.12" : "1"} />
+        <rect width="32" height="32" rx="8" fill={variant === "light" ? "white" : "var(--marketing-accent)"} fillOpacity={variant === "light" ? "0.12" : "1"} />
         <circle cx="12" cy="16" r="5.5" stroke={markFill} strokeWidth="2" fill="none" />
         <circle cx="20" cy="16" r="5.5" stroke={markFill} strokeWidth="2" fill="none" />
         <path
           d="M12 16h8"
-          stroke={variant === "light" ? "var(--marketing-teal-light)" : "white"}
+          stroke={variant === "light" ? "var(--marketing-accent-light)" : "white"}
           strokeWidth="2"
           strokeLinecap="round"
         />

@@ -81,16 +81,34 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  /* Marketing palette — shared with auth shell and marketing pages */
-  --marketing-navy: oklch(0.22 0.04 252);
-  --marketing-navy-soft: oklch(0.28 0.035 252);
-  --marketing-teal: oklch(0.58 0.09 195);
-  --marketing-teal-light: oklch(0.72 0.08 195);
-  --marketing-cream: oklch(0.985 0.008 95);
-  --marketing-mist: oklch(0.962 0.014 240);
-  --marketing-slate: oklch(0.24 0.03 252);
-  --marketing-slate-muted: oklch(0.46 0.025 250);
-  --marketing-border: oklch(0.88 0.014 240);
+  /* Marketing palette — Stripe-inspired: white lilac, dark blue, gradient accents */
+  --marketing-lilac: #F8F8F9;
+  --marketing-navy: #111439;
+  --marketing-navy-soft: #1a1f4d;
+  --marketing-accent: #635BFF;
+  --marketing-accent-light: #8B84FF;
+  --marketing-teal: #635BFF;
+  --marketing-teal-light: #8B84FF;
+  --marketing-cream: #F8F8F9;
+  --marketing-mist: #FFFFFF;
+  --marketing-slate: #111439;
+  --marketing-slate-muted: #5C607A;
+  --marketing-border: #E4E5EB;
+  --marketing-gradient: linear-gradient(
+    135deg,
+    #635BFF 0%,
+    #A855F7 30%,
+    #FF6B9D 55%,
+    #FFB224 75%,
+    #22D3EE 100%
+  );
+  --marketing-gradient-soft: linear-gradient(
+    135deg,
+    oklch(0.58 0.22 285 / 0.12) 0%,
+    oklch(0.72 0.16 330 / 0.1) 40%,
+    oklch(0.78 0.14 55 / 0.08) 70%,
+    oklch(0.72 0.12 210 / 0.1) 100%
+  );
 }
 
 .dark {
@@ -153,10 +171,14 @@
   }
 }
 
-/* Marketing site — Canadian legal-tech / family-tech palette */
+/* Marketing site — white lilac, dark blue, gradient accents */
 .marketing {
-  --primary: oklch(0.52 0.14 245);
-  --primary-foreground: oklch(0.985 0 0);
+  --primary: var(--marketing-accent);
+  --primary-foreground: #ffffff;
+  --background: var(--marketing-lilac);
+  --foreground: var(--marketing-navy);
+  background-color: var(--marketing-lilac);
+  color: var(--marketing-navy);
   font-family: var(--font-marketing), var(--font-geist-sans), system-ui, sans-serif;
 }
 
@@ -179,29 +201,64 @@
 }
 
 .marketing-header__bar {
-  background: var(--marketing-teal);
-  color: var(--marketing-navy);
+  background: var(--marketing-lilac);
+  color: var(--marketing-slate-muted);
+  border-bottom: 1px solid var(--marketing-border);
   padding: 0.5rem 0;
 }
 
 .marketing-header__main {
-  border-bottom: 1px solid oklch(1 0 0 / 0.08);
-  background: var(--marketing-navy);
+  border-bottom: 1px solid var(--marketing-border);
+  background: var(--marketing-lilac);
 }
 
 .marketing-footer {
   background: var(--marketing-navy);
   color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.marketing-footer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 0%, oklch(0.55 0.22 285 / 0.35), transparent 55%),
+    radial-gradient(ellipse 50% 45% at 85% 100%, oklch(0.72 0.14 55 / 0.2), transparent 50%);
+  pointer-events: none;
+}
+
+.marketing-footer > * {
+  position: relative;
+  z-index: 1;
 }
 
 .marketing-hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--marketing-lilac);
+  color: var(--marketing-navy);
+}
+
+.marketing-hero::before {
+  content: "";
+  position: absolute;
+  top: -15%;
+  right: -8%;
+  width: min(72vw, 52rem);
+  height: 130%;
   background:
-    radial-gradient(ellipse 80% 60% at 70% 0%, oklch(0.35 0.06 245 / 0.45), transparent 55%),
-    linear-gradient(180deg, var(--marketing-navy) 0%, oklch(0.19 0.038 252) 100%);
-  color: white;
+    radial-gradient(ellipse 55% 48% at 35% 28%, oklch(0.58 0.24 285 / 0.55), transparent 68%),
+    radial-gradient(ellipse 48% 42% at 62% 52%, oklch(0.72 0.2 330 / 0.42), transparent 65%),
+    radial-gradient(ellipse 44% 38% at 50% 78%, oklch(0.78 0.18 55 / 0.38), transparent 62%),
+    radial-gradient(ellipse 40% 36% at 78% 40%, oklch(0.72 0.14 210 / 0.32), transparent 60%);
+  pointer-events: none;
 }
 
 .marketing-hero__grid {
+  position: relative;
+  z-index: 1;
   display: grid;
   align-items: center;
   gap: 3rem;
@@ -222,7 +279,7 @@
   content: "";
   position: absolute;
   inset: -8% -6%;
-  background: radial-gradient(circle, oklch(0.58 0.09 195 / 0.18), transparent 65%);
+  background: radial-gradient(circle, oklch(0.58 0.22 285 / 0.12), transparent 65%);
   pointer-events: none;
 }
 
@@ -248,12 +305,12 @@
 }
 
 .audience-path:hover {
-  border-color: oklch(0.52 0.14 245 / 0.35);
-  box-shadow: 0 20px 50px -32px oklch(0.24 0.03 252 / 0.25);
+  border-color: oklch(0.58 0.22 285 / 0.35);
+  box-shadow: 0 20px 50px -32px oklch(0.17 0.04 280 / 0.18);
 }
 
 .audience-path--featured {
-  border-color: oklch(0.52 0.14 245 / 0.25);
+  border-color: oklch(0.58 0.22 285 / 0.25);
   background: linear-gradient(180deg, white, var(--marketing-cream));
 }
 
@@ -287,7 +344,7 @@
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.08em;
-  color: oklch(0.52 0.14 245 / 0.55);
+  color: oklch(0.58 0.22 285 / 0.55);
   min-width: 1.75rem;
 }
 
@@ -323,7 +380,7 @@
 }
 
 .marketing .eyebrow--light {
-  color: var(--marketing-teal-light);
+  color: var(--marketing-accent-light);
 }
 
 .marketing .trust-pill {
@@ -331,7 +388,7 @@
   align-items: center;
   gap: 0.375rem;
   border: 1px solid var(--marketing-border);
-  background: oklch(1 0 0 / 0.85);
+  background: white;
   padding: 0.4375rem 0.8125rem;
   border-radius: 9999px;
   font-size: 0.8125rem;
@@ -340,13 +397,13 @@
 }
 
 .marketing .trust-pill--light {
-  border-color: oklch(1 0 0 / 0.14);
-  background: oklch(1 0 0 / 0.07);
-  color: oklch(0.94 0.01 240 / 0.88);
+  border-color: var(--marketing-border);
+  background: white;
+  color: var(--marketing-slate-muted);
 }
 
 .marketing .accent-rule {
-  border-left: 3px solid var(--marketing-teal);
+  border-left: 3px solid var(--marketing-accent);
   padding-left: 1.25rem;
 }
 
@@ -417,11 +474,36 @@
 }
 
 .marketing .marketing-page-hero {
-  background:
-    radial-gradient(ellipse 70% 55% at 20% 0%, oklch(0.58 0.09 195 / 0.2), transparent 50%),
-    radial-gradient(ellipse 80% 60% at 80% 20%, oklch(0.35 0.06 245 / 0.35), transparent 55%),
-    linear-gradient(180deg, var(--marketing-navy) 0%, oklch(0.19 0.038 252) 100%);
+  position: relative;
+  overflow: hidden;
+  background: var(--marketing-navy);
   color: white;
+}
+
+.marketing .marketing-page-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 45% at 10% 0%, oklch(0.58 0.24 285 / 0.45), transparent 55%),
+    radial-gradient(ellipse 50% 42% at 90% 20%, oklch(0.72 0.18 330 / 0.3), transparent 52%),
+    radial-gradient(ellipse 45% 40% at 70% 100%, oklch(0.72 0.14 55 / 0.22), transparent 50%);
+  pointer-events: none;
+}
+
+.marketing .marketing-page-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.marketing .btn-marketing-gradient {
+  border: 0;
+  background: var(--marketing-gradient);
+  color: white;
+}
+
+.marketing .btn-marketing-gradient:hover {
+  opacity: 0.92;
 }
 
 @media (max-width: 640px) {
@@ -490,22 +572,19 @@
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--marketing-teal);
+  color: var(--marketing-accent);
 }
 
-.marketing-hero--warm {
-  background:
-    radial-gradient(ellipse 70% 55% at 20% 0%, oklch(0.58 0.09 195 / 0.2), transparent 50%),
-    radial-gradient(ellipse 80% 60% at 80% 20%, oklch(0.35 0.06 245 / 0.35), transparent 55%),
-    linear-gradient(180deg, var(--marketing-navy) 0%, oklch(0.19 0.038 252) 100%);
+.marketing-hero--warm::before {
+  opacity: 1;
 }
 
 .auth-shell__brand {
   background-color: var(--marketing-navy);
   background:
-    radial-gradient(ellipse 70% 55% at 20% 0%, oklch(0.58 0.09 195 / 0.2), transparent 50%),
-    radial-gradient(ellipse 80% 60% at 80% 20%, oklch(0.35 0.06 245 / 0.35), transparent 55%),
-    linear-gradient(180deg, var(--marketing-navy) 0%, oklch(0.19 0.038 252) 100%);
+    radial-gradient(ellipse 55% 45% at 10% 0%, oklch(0.58 0.24 285 / 0.45), transparent 55%),
+    radial-gradient(ellipse 50% 42% at 90% 20%, oklch(0.72 0.18 330 / 0.3), transparent 52%),
+    linear-gradient(180deg, var(--marketing-navy) 0%, var(--marketing-navy-soft) 100%);
   color: white;
 }
 

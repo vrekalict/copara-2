@@ -50,7 +50,7 @@ export function PageHero({
             leading && "mt-6",
           )}
         >
-          <div className={isDark ? "border-l-[3px] border-[var(--marketing-teal-light)] pl-5" : "accent-rule"}>
+          <div className={isDark ? "border-l-[3px] border-[var(--marketing-accent-light)] pl-5" : "accent-rule"}>
             <p className={cn("eyebrow", isDark && "eyebrow--light")}>{eyebrow}</p>
             <h1 className={cn("display mt-4", isDark && "display--light")}>{title}</h1>
             <p className={cn("lead mt-5 max-w-2xl", isDark && "lead--light")}>{description}</p>
@@ -62,8 +62,8 @@ export function PageHero({
                     className={cn(
                       buttonVariants({ size: "lg" }),
                       "min-h-12 px-8 font-semibold",
-                      isDark &&
-                        "border-0 bg-white text-[var(--marketing-navy)] hover:bg-white/92",
+                    isDark &&
+                      "btn-marketing-gradient border-0 hover:opacity-90",
                     )}
                   >
                     {primaryLabel}
@@ -117,7 +117,7 @@ export function ProSegmentBanner() {
           href="/professionals"
           className={cn(
             buttonVariants(),
-            "min-h-11 shrink-0 border-0 bg-white px-6 text-[var(--marketing-navy)] hover:bg-white/92",
+            "btn-marketing-gradient min-h-11 shrink-0 border-0 px-6 hover:opacity-90",
           )}
         >
           Learn more

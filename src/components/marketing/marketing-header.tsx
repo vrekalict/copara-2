@@ -24,7 +24,7 @@ export function MarketingHeader() {
       <div className="marketing-header__main">
         <div className="mx-auto flex h-[4.25rem] max-w-6xl items-center justify-between gap-4 px-5 sm:px-6">
           <Link href="/" aria-label="Copara home">
-            <CoparaLogo variant="light" />
+            <CoparaLogo />
           </Link>
 
           <nav className="hidden items-center gap-0.5 md:flex" aria-label="Main">
@@ -35,8 +35,8 @@ export function MarketingHeader() {
                 className={cn(
                   "min-h-10 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                   pathname === link.href || pathname.startsWith(`${link.href}/`)
-                    ? "bg-white/12 text-white"
-                    : "text-white/75 hover:bg-white/8 hover:text-white",
+                    ? "bg-[var(--marketing-navy)]/8 text-[var(--marketing-navy)]"
+                    : "text-[var(--marketing-slate-muted)] hover:bg-[var(--marketing-navy)]/5 hover:text-[var(--marketing-navy)]",
                 )}
               >
                 {link.label}
@@ -46,7 +46,7 @@ export function MarketingHeader() {
               href="/sign-up"
               className={cn(
                 buttonVariants(),
-                "ml-3 min-h-10 border-0 bg-white px-5 text-sm font-semibold text-[var(--marketing-navy)] hover:bg-white/92",
+                "btn-marketing-gradient ml-3 min-h-10 px-5 text-sm font-semibold hover:opacity-90",
               )}
             >
               Start free trial
@@ -55,7 +55,7 @@ export function MarketingHeader() {
 
           <button
             type="button"
-            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-white/20 text-white md:hidden"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--marketing-border)] text-[var(--marketing-navy)] md:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}
@@ -69,7 +69,7 @@ export function MarketingHeader() {
       {open && (
         <nav
           id="mobile-nav"
-          className="border-t border-white/10 bg-[var(--marketing-navy)] px-5 py-4 md:hidden"
+          className="border-t border-[var(--marketing-border)] bg-[var(--marketing-lilac)] px-5 py-4 md:hidden"
           aria-label="Mobile"
         >
           <ul className="flex flex-col gap-1">
@@ -77,7 +77,7 @@ export function MarketingHeader() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="flex min-h-11 items-center rounded-lg px-3 text-sm font-medium text-white/90 hover:bg-white/10"
+                  className="flex min-h-11 items-center rounded-lg px-3 text-sm font-medium text-[var(--marketing-navy)] hover:bg-[var(--marketing-navy)]/5"
                   onClick={() => setOpen(false)}
                 >
                   {link.label}
@@ -89,7 +89,7 @@ export function MarketingHeader() {
                 href="/sign-up"
                 className={cn(
                   buttonVariants(),
-                  "flex min-h-11 w-full justify-center border-0 bg-white text-[var(--marketing-navy)] hover:bg-white/92",
+                  "btn-marketing-gradient flex min-h-11 w-full justify-center hover:opacity-90",
                 )}
                 onClick={() => setOpen(false)}
               >

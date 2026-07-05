@@ -53,7 +53,7 @@ export function CtaBand({
             className={cn(
               buttonVariants({ size: "lg" }),
               "min-h-12 w-full px-8 text-base font-semibold sm:w-auto",
-              dark && "bg-white text-[var(--marketing-slate)] hover:bg-white/90",
+              dark && "btn-marketing-gradient border-0 hover:opacity-90",
             )}
           >
             {primaryLabel}
