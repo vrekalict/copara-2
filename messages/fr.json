@@ -338,7 +338,7 @@
     "materials": {
       "sectionTitle": "Matériel marketing",
       "sectionDescription": "Téléchargez des dépliants numériques et copiez des modèles de courriel pour vos clients. Les PDF apparaîtront ici une fois ajoutés au kit partenaire.",
-      "downloadsIntro": "PDF et ressources de marque pour votre pratique. Les fichiers marqués Bientôt disponible seront activés automatiquement lors de la publication.",
+      "downloadsIntro": "PDF et ressources de marque pour votre pratique. Les PDF générés sont prêts à télécharger; le pack logos apparaît lors de la publication.",
       "download": "Télécharger",
       "comingSoon": "Bientôt disponible",
       "personalized": "Personnalisé avec votre lien /r/",
@@ -364,11 +364,11 @@
         },
         "partnerOnePager": {
           "title": "Aperçu partenaire",
-          "description": "Programme : accès lecture seule, dossiers, exportations et bonus de parrainage."
+          "description": "Aperçu du programme — avantages, invitations de dossier vs parrainage, facturation et démarrage."
         },
         "brandGuidelines": {
           "title": "Guide de marque",
-          "description": "Utilisation du logo, couleurs et co-marque."
+          "description": "Utilisation du logo, couleurs de marque et co-marque pour vos documents professionnels."
         },
         "logoPack": {
           "title": "Pack logos (ZIP)",

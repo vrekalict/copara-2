@@ -113,6 +113,11 @@ export function ReferralHandoutDocument({
         </View>
 
         <View style={styles.section}>
+          <Text style={styles.sectionTitle}>{copy.signupTitle}</Text>
+          <Text style={styles.body}>{copy.signupBody}</Text>
+        </View>
+
+        <View style={styles.section}>
           <Text style={styles.sectionTitle}>{copy.linkTitle}</Text>
           <View style={styles.linkBox}>
             <View style={styles.linkTextWrap}>
@@ -122,11 +127,6 @@ export function ReferralHandoutDocument({
           </View>
           <Text style={styles.linkHint}>{copy.linkHint}</Text>
           <Text style={styles.linkHint}>{copy.qrScanHint}</Text>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>{copy.signupTitle}</Text>
-          <Text style={styles.body}>{copy.signupBody}</Text>
         </View>
 
         <View style={styles.section}>

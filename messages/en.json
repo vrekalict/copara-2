@@ -338,7 +338,7 @@
     "materials": {
       "sectionTitle": "Marketing materials",
       "sectionDescription": "Download digital handouts and copy email templates to share with clients. PDFs appear here once added to the partner kit.",
-      "downloadsIntro": "PDFs and brand assets for your practice. Files marked Coming soon will unlock automatically when published.",
+      "downloadsIntro": "PDFs and brand assets for your practice. Generated PDFs are ready to download; the logo pack appears when published.",
       "download": "Download",
       "comingSoon": "Coming soon",
       "personalized": "Personalized with your /r/ referral link",
@@ -364,11 +364,11 @@
         },
         "partnerOnePager": {
           "title": "Partner one-pager",
-          "description": "Program overview: read-only access, cases, exports, and referral bonuses."
+          "description": "Program overview — benefits, case invites vs referral links, billing, and getting started."
         },
         "brandGuidelines": {
           "title": "Brand guidelines",
-          "description": "Logo usage, colours, and co-branding guidance."
+          "description": "Logo usage, brand colours, co-branding do's and don'ts for your practice materials."
         },
         "logoPack": {
           "title": "Logo pack (ZIP)",

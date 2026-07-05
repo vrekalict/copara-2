@@ -78,20 +78,25 @@ export type PartnerMaterialItem = {
   personalized?: boolean;
 };
 
-const REFERRAL_HANDOUT_ROUTE = "/pro/materials/referral-handout";
+const GENERATED_PDF_ROUTES: Partial<Record<PartnerMaterialId, string>> = {
+  "referral-handout": "/pro/materials/referral-handout",
+  "partner-one-pager": "/pro/materials/partner-one-pager",
+  "brand-guidelines": "/pro/materials/brand-guidelines",
+};
 
 export function getPartnerMaterials(locale: string): PartnerMaterialItem[] {
   const normalizedLocale = locale.startsWith("fr") ? "fr" : "en";
 
   return PARTNER_MATERIALS.map((def) => {
-    if (def.id === "referral-handout") {
+    const generatedRoute = GENERATED_PDF_ROUTES[def.id];
+    if (generatedRoute) {
       return {
         id: def.id,
         kind: def.kind,
         available: true,
-        downloadHref: REFERRAL_HANDOUT_ROUTE,
+        downloadHref: generatedRoute,
         usedLocale: normalizedLocale,
-        personalized: true,
+        personalized: def.id === "referral-handout",
       };
     }
 
