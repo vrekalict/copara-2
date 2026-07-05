@@ -15,7 +15,7 @@ const LINKS = [
     href: "/partners",
     label: "Partners",
     key: "partners" as const,
-    description: "Review professional partner applications",
+    description: "Review applications and track referral payouts",
     icon: Users,
   },
 ];

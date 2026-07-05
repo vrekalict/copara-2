@@ -1,5 +1,6 @@
 import { listPartnerApplications } from "@/actions/pro/partner";
 import { requireAdmin } from "@/lib/admin/require-admin";
+import { AdminPartnersSubnav } from "@/components/admin/admin-partners-subnav";
 import {
   AdminInfoBox,
   AdminShell,
@@ -43,6 +44,8 @@ export default async function AdminPartnersPage() {
       }
       maxWidth="4xl"
     >
+      <AdminPartnersSubnav active="applications" />
+
       <div className="space-y-6">
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <AdminStat
