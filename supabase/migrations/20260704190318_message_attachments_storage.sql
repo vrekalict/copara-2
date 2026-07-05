@@ -28,6 +28,7 @@ as $$
   select split_part(object_path, '/', 2)::uuid;
 $$;
 
+drop policy if exists "message_attachments_select" on storage.objects;
 create policy "message_attachments_select" on storage.objects for select
   to authenticated
   using (
@@ -35,6 +36,7 @@ create policy "message_attachments_select" on storage.objects for select
     and public.is_thread_participant(public.storage_thread_id(name))
   );
 
+drop policy if exists "message_attachments_insert" on storage.objects;
 create policy "message_attachments_insert" on storage.objects for insert
   to authenticated
   with check (
@@ -42,6 +44,7 @@ create policy "message_attachments_insert" on storage.objects for insert
     and public.is_thread_participant(public.storage_thread_id(name))
   );
 
+drop policy if exists "message_attachments_update" on storage.objects;
 create policy "message_attachments_update" on storage.objects for update
   to authenticated
   using (
@@ -49,6 +52,7 @@ create policy "message_attachments_update" on storage.objects for update
     and public.is_thread_participant(public.storage_thread_id(name))
   );
 
+drop policy if exists "message_attachments_delete" on storage.objects;
 create policy "message_attachments_delete" on storage.objects for delete
   to authenticated
   using (

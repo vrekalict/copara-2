@@ -3,6 +3,7 @@
 import { defaultCache } from "@serwist/turbopack/worker";
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
 import { Serwist } from "serwist";
+import { BRAND } from "@/lib/brand";
 
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {
@@ -31,3 +32,38 @@ const serwist = new Serwist({
 });
 
 serwist.addEventListeners();
+
+self.addEventListener("push", (event) => {
+  if (!event.data) return;
+
+  let payload: { title?: string; body?: string; url?: string } = {};
+  try {
+    payload = event.data.json();
+  } catch {
+    payload = { title: BRAND.name, body: event.data.text() };
+  }
+
+  event.waitUntil(
+    self.registration.showNotification(payload.title ?? BRAND.name, {
+      body: payload.body ?? "",
+      data: { url: payload.url ?? "/app" },
+      tag: payload.url,
+    }),
+  );
+});
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const url = (event.notification.data?.url as string) ?? "/app";
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
+      for (const client of clients) {
+        if ("focus" in client) {
+          client.navigate(url);
+          return client.focus();
+        }
+      }
+      return self.clients.openWindow(url);
+    }),
+  );
+});

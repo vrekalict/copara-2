@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { BRAND } from "@/lib/brand";
 
 export async function getActiveCircleForUser(userId: string) {
   const supabase = await createClient();
@@ -16,6 +17,6 @@ export async function getActiveCircleForUser(userId: string) {
   const circle = Array.isArray(circles) ? circles[0] : circles;
   return {
     circleId: membership.circle_id as string,
-    circleName: circle?.name ?? "Accord",
+    circleName: circle?.name ?? BRAND.defaultCircleName,
   };
 }

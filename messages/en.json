@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Accord",
+    "appName": "Copara",
     "loading": "Loading...",
     "save": "Save",
     "cancel": "Cancel",
@@ -8,10 +8,10 @@
     "back": "Back"
   },
   "marketing": {
-    "tagline": "Co-parenting, without the conflict.",
-    "subtitle": "Accord helps separated parents communicate neutrally, coordinate custody schedules, and keep court-ready records — all in one place.",
-    "ctaParent": "Get started",
-    "ctaProfessional": "I'm a mediator or attorney"
+    "tagline": "Co-parenting communication, made calmer and clearer.",
+    "subtitle": "Copara helps separated parents message neutrally, manage parenting schedules, track shared expenses, and keep organized records without turning every conversation into a conflict.",
+    "ctaParent": "Join early access",
+    "ctaProfessional": "For mediators & lawyers"
   },
   "auth": {
     "signIn": "Sign in",
@@ -31,7 +31,8 @@
     "calendar": "Calendar",
     "expenses": "Expenses",
     "vault": "Vault",
-    "more": "More"
+    "more": "More",
+    "mainNav": "Main navigation"
   },
   "app": {
     "comingSoon": "Coming in a later phase."
@@ -54,7 +55,7 @@
   },
   "join": {
     "title": "You've been invited to {circleName}",
-    "subtitle": "Accord helps separated parents communicate neutrally, coordinate schedules, and keep court-ready records.",
+    "subtitle": "Copara helps separated parents communicate neutrally, coordinate schedules, and keep organized tamper-evident records.",
     "accept": "Accept invite",
     "invalid": "This invite is no longer valid.",
     "signUpFirst": "Create an account to accept this invite."
@@ -62,6 +63,8 @@
   "messages": {
     "title": "Messages",
     "empty": "No conversations yet.",
+    "emptyTitle": "No conversations yet",
+    "emptyDescription": "Start a neutral, documented conversation with your co-parent. Every message is timestamped and tamper-evident.",
     "start": "Start a conversation",
     "untitled": "Conversation",
     "noMessagesYet": "No messages yet",
@@ -74,6 +77,14 @@
     "removeAttachment": "Remove attachment",
     "attachmentTooLarge": "Each file must be 25 MB or smaller.",
     "attachmentType": "Only images, PDFs, and Word documents are allowed.",
+    "offlineBanner": "You're offline. Text messages will be queued and sent when you reconnect.",
+    "offlineNoAttachments": "Attachments can't be sent offline. Try again when you're back online.",
+    "queuedBanner": "{count, plural, one {# message queued to send} other {# messages queued to send}}",
+    "queuedPending": "Queued — will send when online",
+    "hashVerified": "Record #{number} · verified",
+    "typing": "{name} is typing…",
+    "typingGeneric": "Co-parent is typing…",
+    "typingMultiple": "{count} people are typing…",
     "toneReview": {
       "analyzing": "Checking tone…",
       "error": "Tone review unavailable right now.",
@@ -98,6 +109,10 @@
     "endsAt": "Ends (optional)",
     "location": "Location",
     "checkIn": "Check in",
+    "checkInPending": "Checking in…",
+    "checkInSuccess": "Check-in recorded.",
+    "checkInFailed": "Check-in failed. Try again.",
+    "checkInNoLocation": "Location access is required to check in.",
     "changeRequests": "Change requests",
     "newRequest": "Request a change",
     "generalRequest": "General request",
@@ -115,6 +130,27 @@
       "time_change": "Time change",
       "location_change": "Location change",
       "other": "Other"
+    },
+    "scheduleTemplates": "Schedule templates",
+    "scheduleTemplatesHint": "Set up a recurring custody pattern and optionally generate events for the next 4 weeks.",
+    "needTwoParents": "Both parents must be active in the circle to configure a schedule.",
+    "presetLabel": "Pattern",
+    "preset": {
+      "week_on_off": "Week on / week off",
+      "two_two_three": "2-2-3",
+      "alternating_weekends": "Alternating weekends"
+    },
+    "parentA": "Parent A",
+    "parentB": "Parent B",
+    "applyNow": "Generate events for the next 4 weeks",
+    "saveTemplate": "Save template",
+    "applyTemplate": "Regenerate events",
+    "violations": "Recent schedule flags",
+    "violation": {
+      "late": "Late check-in",
+      "missed": "Missed exchange",
+      "unlogged": "Unlogged exchange",
+      "on_time": "On time"
     }
   },
   "expenses": {
@@ -122,13 +158,30 @@
     "balanceLabel": "Running balance",
     "owedToYou": "{amount} owed to you",
     "youOwe": "You owe {amount}",
+    "totalLogged": "{amount} logged in this view",
+    "byCategory": "By category",
     "recent": "Recent expenses",
     "empty": "No expenses logged yet.",
     "addExpense": "Log expense",
     "amount": "Amount",
+    "date": "Date",
     "categoryLabel": "Category",
+    "splitPct": "Co-parent share",
+    "splitOption": "{pct}% co-parent share",
+    "splitLabel": "{pct}% co-parent share",
+    "child": "Child (optional)",
+    "noChild": "Not linked to a child",
     "description": "Description (optional)",
     "noDescription": "No description",
+    "receipt": "Receipt (optional)",
+    "viewReceipt": "View receipt",
+    "receiptLoading": "Loading receipt…",
+    "receiptTooLarge": "Receipt must be under 25 MB.",
+    "receiptType": "Receipt must be an image or PDF.",
+    "removeReceipt": "Remove receipt",
+    "saved": "Expense saved.",
+    "saving": "Saving…",
+    "exportPdf": "Export PDF",
     "reimbursement": "Reimbursement",
     "requestReimbursement": "Request reimbursement",
     "approve": "Approve",
@@ -140,5 +193,290 @@
       "clothing": "Clothing",
       "other": "Other"
     }
+  },
+  "exports": {
+    "title": "Exports",
+    "subtitle": "Generate tamper-evident PDF records with hash-chain verification.",
+    "exportType": "Export type",
+    "dateFrom": "From",
+    "dateTo": "To",
+    "threads": "Threads",
+    "untitledThread": "Conversation",
+    "selectThread": "Select at least one thread.",
+    "generate": "Generate PDF export",
+    "generating": "Generating…",
+    "verifyLink": "Verify export integrity",
+    "downloadPdf": "Download PDF",
+    "history": "Export history",
+    "summaryTitle": "AI dispute summary",
+    "summarySubtitle": "Summarize conflicts with message-ID citations. Not legal advice.",
+    "topicFilter": "Topic filter (optional)",
+    "topicPlaceholder": "e.g. pickup times",
+    "summarize": "Generate summary",
+    "summarizing": "Summarizing…",
+    "verifyTitle": "Export verification",
+    "verifyLoading": "Verifying…",
+    "verifyPass": "Verified",
+    "verifyFail": "Mismatch",
+    "verifyDisclaimer": "Tamper-evident record export — not certified or court-admitted.",
+    "exportId": "Export ID",
+    "circle": "Circle",
+    "kindLabel": "Type",
+    "exportedAt": "Exported",
+    "recordCount": "Records",
+    "tamperDetected": "Tamper detected: live records no longer match this export digest.",
+    "kind": {
+      "messages": "Messages",
+      "expenses": "Expenses",
+      "schedule": "Schedule & check-ins",
+      "change_requests": "Change requests"
+    },
+    "summary": {
+      "timeline": "Timeline",
+      "positions": "Positions",
+      "unresolved": "Unresolved",
+      "citations": "Citations"
+    }
+  },
+  "pro": {
+    "title": "Professional dashboard",
+    "signInPrompt": "Sign in to manage your co-parenting cases.",
+    "signUp": "Create professional account",
+    "setupSubtitle": "Create a case and invite both parents with one link.",
+    "caseName": "Case name",
+    "caseNamePlaceholder": "e.g. Smith v. Smith",
+    "parent1Email": "Parent 1 email",
+    "parent2Email": "Parent 2 email",
+    "createCase": "Create case & send invites",
+    "creating": "Creating…",
+    "newCase": "New case",
+    "back": "Back",
+    "case": "Case",
+    "dualInviteLink": "Dual-parent invite link",
+    "dualInviteHint": "Share this single link with both parents. Each signs in with the email that received the invite.",
+    "members": "Members",
+    "invalidCase": "This case link is no longer valid.",
+    "goHome": "Go home",
+    "caseInviteTitle": "Join {caseName}",
+    "caseInviteSubtitle": "Your mediator invited both parents to Copara. Sign in with the email address that received the invite.",
+    "allAccepted": "Both parents have already joined this case.",
+    "signUpToAccept": "Create account to accept",
+    "acceptCase": "Accept invite",
+    "accepting": "Accepting…"
+  },
+  "more": {
+    "title": "More",
+    "journal": "Journal",
+    "albums": "Albums",
+    "exports": "Exports & summaries",
+    "language": "Language",
+    "professional": "Professional dashboard",
+    "privacy": "Privacy policy",
+    "terms": "Terms of service"
+  },
+  "vault": {
+    "title": "Vault",
+    "subtitle": "Medical notes, school details, emergency contacts, and documents for each child.",
+    "emptyTitle": "Nothing in the vault yet",
+    "emptyDescription": "Store medical info, school details, emergency contacts, and documents for each child — with sharing controls for professionals.",
+    "hasItems": "{count, plural, one {# item stored} other {# items stored}}",
+    "addChildTitle": "Add a child to get started",
+    "addChildHint": "Vault info is organized per child. Add at least one child to store medical and school notes.",
+    "firstName": "First name",
+    "dob": "Date of birth (optional)",
+    "addChild": "Add child",
+    "medicalNotes": "Medical notes",
+    "schoolNotes": "School notes",
+    "emergencyContacts": "Emergency contacts",
+    "emergencyPlaceholder": "Name, phone (one per line)",
+    "saveProfile": "Save profile",
+    "saved": "Saved.",
+    "saving": "Saving…",
+    "documents": "Documents",
+    "noDocuments": "No documents yet.",
+    "documentTitle": "Document title",
+    "documentFile": "File",
+    "addDocument": "Add document",
+    "documentAdded": "Document added.",
+    "viewDocument": "View document",
+    "loadingFile": "Loading…",
+    "fileTooLarge": "File must be under 25 MB.",
+    "fileType": "File must be an image, PDF, or Word document.",
+    "removeFile": "Remove file",
+    "shareWithProfessional": "Share with professionals in this circle",
+    "sharedWithPro": "Shared with professionals",
+    "delete": "Delete",
+    "circleDocuments": "Circle documents",
+    "circleDocumentsHint": "Documents not linked to a specific child."
+  },
+  "journal": {
+    "title": "Journal",
+    "subtitle": "Circle updates for both parents",
+    "empty": "No journal entries yet. Share the first update.",
+    "newEntry": "New entry",
+    "entryBody": "Update",
+    "entryPlaceholder": "Share news, a funny quote, or a moment from your week…",
+    "child": "Child (optional)",
+    "noChild": "Not linked to a child",
+    "addMedia": "Photos or video (optional)",
+    "removeMedia": "Remove",
+    "mediaTooLarge": "Each file must be under 25 MB.",
+    "mediaType": "Files must be images or video (MP4/MOV).",
+    "postEntry": "Post entry",
+    "posting": "Posting…",
+    "saved": "Entry posted.",
+    "delete": "Delete",
+    "unknownAuthor": "Parent"
+  },
+  "albums": {
+    "title": "Albums",
+    "subtitle": "Private to your co-parenting circle",
+    "empty": "No albums yet. Create one to start sharing photos.",
+    "newAlbum": "New album",
+    "albumTitle": "Album title",
+    "createAlbum": "Create album",
+    "creating": "Creating…",
+    "photoCount": "{count, plural, one {# photo} other {# photos}}",
+    "backToAlbums": "Back to albums",
+    "emptyAlbum": "No photos in this album yet.",
+    "addPhoto": "Add photo",
+    "photoFile": "Photo",
+    "caption": "Caption (optional)",
+    "uploadPhoto": "Upload photo",
+    "uploading": "Uploading…",
+    "photoAdded": "Photo added.",
+    "photoTooLarge": "Photo must be under 25 MB.",
+    "photoType": "Photo must be an image.",
+    "removePhoto": "Remove",
+    "deleteAlbum": "Delete album"
+  },
+  "settings": {
+    "notifications": "Notifications",
+    "notificationsHint": "Enable push notifications for new messages when Copara is installed.",
+    "enablePush": "Enable push notifications",
+    "messageNotifications": "New message notifications",
+    "prefsSaved": "Preferences saved.",
+    "pushEnabled": "Push notifications enabled.",
+    "pushDenied": "Notification permission was denied.",
+    "pushNotConfigured": "Push is not configured on this server.",
+    "pushFailed": "Could not enable push notifications."
+  },
+  "offline": {
+    "title": "You're offline",
+    "description": "Copara couldn't reach the server. Text messages you send will be queued and delivered once you're back online.",
+    "backToApp": "Back to messages"
+  },
+  "errors": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. You can try again or return to the app.",
+    "retry": "Try again",
+    "goHome": "Back to messages"
+  },
+  "a11y": {
+    "skipToContent": "Skip to main content"
+  },
+  "legal": {
+    "back": "Back",
+    "privacyLink": "Privacy",
+    "termsLink": "Terms",
+    "terms": {
+      "title": "Terms of Service",
+      "lastUpdated": "Last updated: July 4, 2026",
+      "intro": "These Terms govern your use of Copara, a co-parenting coordination service operated for separated parents and the professionals who support them.",
+      "sections": [
+        {
+          "title": "Service description",
+          "paragraphs": [
+            "Copara provides messaging, scheduling, expense tracking, record exports, and AI-assisted tools. Copara is not a law firm, mediator, or court. Nothing in the service constitutes legal advice.",
+            "Exports are tamper-evident, timestamped records suitable for review by legal professionals. They are not certified, notarized, or guaranteed to be admissible in any proceeding."
+          ]
+        },
+        {
+          "title": "Accounts and circles",
+          "paragraphs": [
+            "You are responsible for maintaining the confidentiality of your account credentials and for activity under your account.",
+            "A circle may include up to two parent members plus invited third parties or professionals, subject to sharing controls set by parents."
+          ]
+        },
+        {
+          "title": "Acceptable use",
+          "paragraphs": [
+            "You agree not to use Copara to harass, threaten, or impersonate others, or to upload unlawful content.",
+            "We may suspend accounts that violate these Terms or pose a safety risk to other users."
+          ]
+        },
+        {
+          "title": "AI features",
+          "paragraphs": [
+            "Tone review and dispute summaries are AI-generated assistive tools. You remain responsible for messages you send.",
+            "AI outputs may be inaccurate. Always review suggestions before sending or sharing with third parties."
+          ]
+        },
+        {
+          "title": "Limitation of liability",
+          "paragraphs": [
+            "Copara is provided \"as is\" to the fullest extent permitted by applicable law. We are not liable for indirect, incidental, or consequential damages arising from your use of the service."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "lastUpdated": "Last updated: July 4, 2026",
+      "intro": "Copara respects your privacy. This policy describes how we collect, use, and protect personal information, including for users in Canada subject to PIPEDA.",
+      "sections": [
+        {
+          "title": "Information we collect",
+          "paragraphs": [
+            "Account information: name, email address, and profile preferences.",
+            "Co-parenting records: messages, calendar events, expenses, check-in confirmations (location verified as true/false only — raw GPS coordinates are never stored or shared), attachments, and exports you generate.",
+            "Technical data: device push subscription endpoints, service logs, and analytics events such as PWA install funnel steps."
+          ]
+        },
+        {
+          "title": "How we use information",
+          "paragraphs": [
+            "We use your information to operate the service, deliver notifications, maintain tamper-evident records, and improve reliability.",
+            "AI features process content server-side. We store hashed inputs and structured outputs in audit logs rather than retaining raw drafts indefinitely unless required for the feature you requested."
+          ]
+        },
+        {
+          "title": "Sharing",
+          "paragraphs": [
+            "Information in your circle is shared with active circle members according to role and sharing settings. Professionals receive read-only access only to content parents choose to share.",
+            "We use subprocessors including Supabase (database, auth, storage), OpenAI (AI processing), Resend (email), and Vercel (hosting). Data may be processed in the United States unless otherwise configured."
+          ]
+        },
+        {
+          "title": "Canadian users (PIPEDA)",
+          "paragraphs": [
+            "If you are in Canada, you have the right to access, correct, and withdraw consent to non-essential processing of your personal information, subject to legal and contractual restrictions.",
+            "We collect only information reasonably necessary for the identified purposes above. You may contact us to request access or deletion, understanding that some records may need to be retained where required by law or legitimate business needs (e.g., audit logs)."
+          ]
+        },
+        {
+          "title": "Retention and security",
+          "paragraphs": [
+            "Messages and financial records are designed to be append-only for integrity. Row-level security in our database restricts access to circle members.",
+            "We use encryption in transit and industry-standard safeguards. No method of transmission or storage is 100% secure."
+          ]
+        },
+        {
+          "title": "Contact",
+          "paragraphs": [
+            "Privacy questions or PIPEDA requests: contact Copara at the support email configured for your deployment."
+          ]
+        }
+      ]
+    }
+  },
+  "pwa": {
+    "installTitle": "Install Copara",
+    "installSubtitle": "Get faster access and notifications on your home screen.",
+    "install": "Install",
+    "dismiss": "Dismiss",
+    "enableNotifications": "Enable notifications",
+    "iosStep1": "Tap Share in Safari",
+    "iosStep2": "Tap Add to Home Screen"
   }
 }

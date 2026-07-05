@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
+import { EmptyState } from "@/components/ui/empty-state";
 import { StartConversationButton } from "@/components/messages/start-conversation-button";
+import { MessageSquare } from "lucide-react";
 
 type ThreadRow = {
   id: string;
@@ -41,8 +43,17 @@ export default async function MessagesPage() {
     <div className="flex flex-col gap-4 p-4">
       <h1 className="text-lg font-semibold">{t("title")}</h1>
 
-      {sorted.length === 0 && membership && (
-        <StartConversationButton circleId={membership.circle_id} />
+      {sorted.length === 0 && membership ? (
+        <EmptyState
+          icon={MessageSquare}
+          title={t("emptyTitle")}
+          description={t("emptyDescription")}
+          action={<StartConversationButton circleId={membership.circle_id} />}
+        />
+      ) : (
+        sorted.length === 0 && (
+          <p className="text-sm text-muted-foreground">{t("empty")}</p>
+        )
       )}
 
       <ul className="flex flex-col divide-y divide-border">
@@ -50,7 +61,7 @@ export default async function MessagesPage() {
           <li key={thread.id}>
             <Link
               href={`/app/messages/${thread.id}`}
-              className="flex flex-col gap-0.5 py-3"
+              className="flex flex-col gap-0.5 py-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
             >
               <span className="font-medium">{thread.title ?? t("untitled")}</span>
               <span className="truncate text-sm text-muted-foreground">

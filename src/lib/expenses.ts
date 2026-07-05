@@ -26,3 +26,35 @@ export function formatCents(cents: number, currency = "CAD") {
     currency,
   }).format(cents / 100);
 }
+
+export type ExpenseCategory =
+  | "medical"
+  | "school"
+  | "activities"
+  | "clothing"
+  | "other";
+
+export function computeCategoryTotals(
+  expenses: { amount_cents: number; category: string }[],
+): { category: ExpenseCategory; totalCents: number; pct: number }[] {
+  const totals = new Map<ExpenseCategory, number>();
+  let grand = 0;
+
+  for (const expense of expenses) {
+    const cat = (expense.category as ExpenseCategory) || "other";
+    totals.set(cat, (totals.get(cat) ?? 0) + expense.amount_cents);
+    grand += expense.amount_cents;
+  }
+
+  if (grand === 0) return [];
+
+  return Array.from(totals.entries())
+    .map(([category, totalCents]) => ({
+      category,
+      totalCents,
+      pct: Math.round((totalCents / grand) * 100),
+    }))
+    .sort((a, b) => b.totalCents - a.totalCents);
+}
+
+export const SPLIT_OPTIONS = [50, 60, 70, 80, 100] as const;

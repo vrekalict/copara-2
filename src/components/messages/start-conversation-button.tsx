@@ -18,9 +18,8 @@ export function StartConversationButton({ circleId }: { circleId: string }) {
   return (
     <form action={formAction} className="flex flex-col gap-2">
       <input type="hidden" name="circleId" value={circleId} />
-      <p className="text-sm text-muted-foreground">{t("empty")}</p>
       {state?.error && <p className="text-sm text-destructive">{state.error}</p>}
-      <Button type="submit" className="self-start" disabled={pending}>
+      <Button type="submit" disabled={pending}>
         {t("start")}
       </Button>
     </form>

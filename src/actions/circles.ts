@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
+import { BRAND, brandEmailFrom } from "@/lib/brand";
 import { Resend } from "resend";
 
 export async function createCircle(formData: FormData) {
@@ -76,7 +77,7 @@ export async function inviteCoParent(formData: FormData) {
 
   await sendInviteEmail({
     to: email,
-    circleName: circle?.name ?? "Accord",
+    circleName: circle?.name ?? BRAND.defaultCircleName,
     inviteId: invite.id,
   });
 
@@ -102,10 +103,10 @@ async function sendInviteEmail({
 
   try {
     await resend.emails.send({
-      from: "Accord <invites@accord.app>",
+      from: brandEmailFrom("invites"),
       to,
-      subject: `You've been invited to ${circleName} on Accord`,
-      html: `<p>You've been invited to co-parent together on Accord.</p>
+      subject: `You've been invited to ${circleName} on ${BRAND.name}`,
+      html: `<p>You've been invited to co-parent together on ${BRAND.name}.</p>
         <p><a href="${origin}/join/${inviteId}">Accept the invite</a></p>`,
     });
   } catch (err) {

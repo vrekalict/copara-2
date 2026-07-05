@@ -24,7 +24,7 @@ export default async function ThreadPage({
 
   const { data: messages } = await supabase
     .from("messages")
-    .select("id, body, sender_id, created_at, attachments")
+    .select("id, body, sender_id, created_at, attachments, hash")
     .eq("thread_id", threadId)
     .order("created_at", { ascending: true });
 
@@ -34,6 +34,19 @@ export default async function ThreadPage({
     .eq("id", user.id)
     .maybeSingle();
 
+  const { data: participants } = await supabase
+    .from("thread_participants")
+    .select("user_id, profiles(display_name)")
+    .eq("thread_id", threadId);
+
+  const participantNames: Record<string, string> = {};
+  for (const row of participants ?? []) {
+    const profileRow = Array.isArray(row.profiles) ? row.profiles[0] : row.profiles;
+    if (row.user_id && profileRow?.display_name) {
+      participantNames[row.user_id as string] = profileRow.display_name as string;
+    }
+  }
+
   return (
     <ThreadView
       threadId={threadId}
@@ -41,6 +54,7 @@ export default async function ThreadPage({
       locale={profile?.locale ?? "en"}
       currentUserId={user.id}
       initialMessages={messages ?? []}
+      participantNames={participantNames}
     />
   );
 }

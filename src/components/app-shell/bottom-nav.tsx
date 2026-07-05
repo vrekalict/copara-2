@@ -22,21 +22,25 @@ export function BottomNav() {
     <nav
       className="fixed inset-x-0 bottom-0 z-10 border-t border-border bg-background"
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      aria-label={t("mainNav")}
     >
       <ul className="flex">
         {items.map(({ href, labelKey, Icon }) => {
           const active = pathname.startsWith(href);
+          const label = t(labelKey);
           return (
             <li key={href} className="flex-1">
               <Link
                 href={href}
+                aria-current={active ? "page" : undefined}
+                aria-label={label}
                 className={cn(
-                  "flex min-h-11 flex-col items-center justify-center gap-0.5 py-2 text-xs",
+                  "flex min-h-11 flex-col items-center justify-center gap-0.5 py-2 text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                   active ? "text-primary" : "text-muted-foreground",
                 )}
               >
-                <Icon className="size-5" />
-                {t(labelKey)}
+                <Icon className="size-5" aria-hidden />
+                {label}
               </Link>
             </li>
           );

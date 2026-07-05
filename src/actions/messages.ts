@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { notifyThreadParticipants } from "@/lib/push/notify";
 import {
   MESSAGE_ATTACHMENT_BUCKET,
   parseAttachments,
@@ -132,6 +133,14 @@ export async function sendMessage(formData: FormData) {
   if (error) {
     return { error: error.message };
   }
+
+  void notifyThreadParticipants({
+    threadId,
+    excludeUserId: user.id,
+    title: "New message",
+    body: body.slice(0, 120) || "New attachment",
+    url: `/app/messages/${threadId}`,
+  });
 
   revalidatePath(`/app/messages/${threadId}`);
   return { success: true };

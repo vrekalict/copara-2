@@ -1,17 +1,20 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { signUpWithPassword } from "@/actions/auth";
+import { LegalAcceptanceFields } from "@/components/legal/legal-acceptance-fields";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PROVINCES } from "@/lib/marketing/site";
 
 type ActionState = { error?: string; confirmEmail?: boolean } | null;
 
 export function SignUpForm({ next }: { next?: string }) {
   const t = useTranslations("auth");
+  const [province, setProvince] = useState("");
 
   const [state, formAction, pending] = useActionState<ActionState, FormData>(
     async (_prev, formData) => (await signUpWithPassword(formData)) ?? null,
@@ -41,8 +44,31 @@ export function SignUpForm({ next }: { next?: string }) {
             autoComplete="new-password"
           />
         </div>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="province">Province / territory</Label>
+          <select
+            id="province"
+            name="province"
+            required
+            value={province}
+            onChange={(e) => setProvince(e.target.value)}
+            className="min-h-10 rounded-lg border border-input bg-background px-3 text-sm"
+          >
+            <option value="">Select…</option>
+            {PROVINCES.map((p) => (
+              <option key={p} value={p}>
+                {p}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {province && (
+          <LegalAcceptanceFields province={province} idPrefix="signup" compact />
+        )}
+
         {state?.error && <p className="text-sm text-destructive">{state.error}</p>}
-        <Button type="submit" disabled={pending}>
+        <Button type="submit" disabled={pending || !province}>
           {t("signUp")}
         </Button>
       </form>

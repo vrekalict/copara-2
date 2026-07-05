@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { SwProvider } from "@/components/sw-provider";
+import { SITE } from "@/lib/marketing/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -16,13 +17,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Accord — Co-Parenting Made Calmer",
+  metadataBase: new URL(SITE.url),
+  title: {
+    default: "Copara | Co-parenting, made calmer and clearer",
+    template: "%s | Copara",
+  },
   description:
-    "Neutral messaging, custody scheduling, expense tracking, and court-ready records for separated parents.",
+    "Copara helps separated parents communicate neutrally, coordinate custody schedules, track shared expenses, and keep tamper-evident records suitable for review by legal professionals.",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Accord",
+    title: "Copara",
   },
 };
 
@@ -45,6 +50,7 @@ export default async function RootLayout({
     <html
       lang={locale}
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
         <NextIntlClientProvider messages={messages}>

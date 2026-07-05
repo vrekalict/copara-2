@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
+import { BRAND } from "@/lib/brand";
 
 export async function getInvitePreview(inviteId: string) {
   const service = createServiceClient();
@@ -19,7 +20,7 @@ export async function getInvitePreview(inviteId: string) {
 
   return {
     status: invite.status as string,
-    circleName: (circle?.name as string | undefined) ?? "Accord",
+    circleName: (circle?.name as string | undefined) ?? BRAND.defaultCircleName,
   };
 }
 

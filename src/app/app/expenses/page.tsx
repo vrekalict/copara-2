@@ -25,12 +25,18 @@ export default async function ExpensesPage() {
   const partnerId =
     members?.find((m) => m.user_id !== user.id)?.user_id ?? null;
 
+  const { data: children } = await supabase
+    .from("children")
+    .select("id, first_name")
+    .eq("circle_id", circle.circleId)
+    .order("first_name");
+
   const { data: expenses } = await supabase
     .from("expenses")
-    .select("id, amount_cents, currency, category, description, created_by, created_at, split_pct, reimbursement_requests(id, status)")
+    .select("id, amount_cents, currency, category, description, created_by, created_at, split_pct, child_id, receipt_url, incurred_on, reimbursement_requests(id, status)")
     .eq("circle_id", circle.circleId)
     .order("created_at", { ascending: false })
-    .limit(30);
+    .limit(50);
 
   const balanceCents = computeBalance(expenses ?? [], user.id, partnerId);
 
@@ -40,6 +46,7 @@ export default async function ExpensesPage() {
       expenses={(expenses ?? []) as unknown as Parameters<typeof ExpensesView>[0]["expenses"]}
       balanceCents={balanceCents}
       currentUserId={user.id}
+      children={children ?? []}
     />
   );
 }

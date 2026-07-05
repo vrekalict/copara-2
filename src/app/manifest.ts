@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Accord — Co-Parenting Made Calmer",
-    short_name: "Accord",
+    name: "Copara | Co-parenting, made calmer",
+    short_name: "Copara",
     description:
-      "Neutral messaging, custody scheduling, expense tracking, and court-ready records for separated parents.",
+      "Neutral messaging, custody scheduling, expense tracking, and tamper-evident records for separated parents.",
     start_url: "/app",
     scope: "/",
     display: "standalone",

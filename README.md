@@ -1,6 +1,6 @@
-# Accord (copara-2)
+# Copara (copara-2)
 
-Co-parenting coordination app — messaging, calendar, expenses, and court-ready records.
+Canadian co-parenting platform: neutral messaging, custody schedules, shared expenses, and tamper-evident records.
 
 ## Stack
 
@@ -41,6 +41,16 @@ npm run dev      # development
 npm run build    # production build
 npm run lint     # ESLint
 ```
+
+## Cron (weekly digest)
+
+Schedule `GET /api/cron/digests` weekly (e.g. Vercel Cron). Send header:
+
+```
+Authorization: Bearer <CRON_SECRET>
+```
+
+The job detects late/missed/unlogged exchanges, writes to `schedule_events`, and emails active parents via Resend when configured.
 
 ## Docs
 

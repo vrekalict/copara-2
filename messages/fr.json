@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Accord",
+    "appName": "Copara",
     "loading": "Chargement...",
     "save": "Enregistrer",
     "cancel": "Annuler",
@@ -9,7 +9,7 @@
   },
   "marketing": {
     "tagline": "La coparentalité, sans le conflit.",
-    "subtitle": "Accord aide les parents séparés à communiquer sereinement, à coordonner la garde des enfants et à conserver des dossiers prêts pour le tribunal — le tout au même endroit.",
+    "subtitle": "Copara aide les parents séparés à communiquer sereinement, à coordonner la garde des enfants et à conserver des dossiers organisés inviolables, le tout au même endroit.",
     "ctaParent": "Commencer",
     "ctaProfessional": "Je suis médiateur ou avocat"
   },
@@ -31,7 +31,8 @@
     "calendar": "Calendrier",
     "expenses": "Dépenses",
     "vault": "Coffre",
-    "more": "Plus"
+    "more": "Plus",
+    "mainNav": "Navigation principale"
   },
   "app": {
     "comingSoon": "Disponible dans une phase ultérieure."
@@ -54,7 +55,7 @@
   },
   "join": {
     "title": "Vous êtes invité·e à {circleName}",
-    "subtitle": "Accord aide les parents séparés à communiquer sereinement, à coordonner les horaires et à conserver des dossiers prêts pour le tribunal.",
+    "subtitle": "Copara aide les parents séparés à communiquer sereinement, à coordonner les horaires et à conserver des dossiers organisés inviolables.",
     "accept": "Accepter l'invitation",
     "invalid": "Cette invitation n'est plus valide.",
     "signUpFirst": "Créez un compte pour accepter cette invitation."
@@ -62,6 +63,8 @@
   "messages": {
     "title": "Messages",
     "empty": "Aucune conversation pour l'instant.",
+    "emptyTitle": "Aucune conversation pour l'instant",
+    "emptyDescription": "Démarrez une conversation neutre et documentée avec votre coparent. Chaque message est horodaté et inviolable.",
     "start": "Démarrer une conversation",
     "untitled": "Conversation",
     "noMessagesYet": "Aucun message pour l'instant",
@@ -74,6 +77,14 @@
     "removeAttachment": "Retirer la pièce jointe",
     "attachmentTooLarge": "Chaque fichier doit faire 25 Mo ou moins.",
     "attachmentType": "Seules les images, les PDF et les documents Word sont acceptés.",
+    "offlineBanner": "Vous êtes hors ligne. Les messages texte seront mis en file d'attente et envoyés à la reconnexion.",
+    "offlineNoAttachments": "Les pièces jointes ne peuvent pas être envoyées hors ligne. Réessayez une fois en ligne.",
+    "queuedBanner": "{count, plural, one {# message en attente d'envoi} other {# messages en attente d'envoi}}",
+    "queuedPending": "En file d'attente — sera envoyé en ligne",
+    "hashVerified": "Enregistrement nº{number} · vérifié",
+    "typing": "{name} écrit…",
+    "typingGeneric": "Votre coparent écrit…",
+    "typingMultiple": "{count} personnes écrivent…",
     "toneReview": {
       "analyzing": "Analyse du ton…",
       "error": "L'analyse du ton n'est pas disponible pour l'instant.",
@@ -98,6 +109,10 @@
     "endsAt": "Fin (optionnel)",
     "location": "Lieu",
     "checkIn": "Enregistrer l'arrivée",
+    "checkInPending": "Enregistrement…",
+    "checkInSuccess": "Arrivée enregistrée.",
+    "checkInFailed": "Échec de l'enregistrement. Réessayez.",
+    "checkInNoLocation": "L'accès à la localisation est requis pour enregistrer l'arrivée.",
     "changeRequests": "Demandes de changement",
     "newRequest": "Demander un changement",
     "generalRequest": "Demande générale",
@@ -115,6 +130,27 @@
       "time_change": "Changement d'heure",
       "location_change": "Changement de lieu",
       "other": "Autre"
+    },
+    "scheduleTemplates": "Modèles d'horaire",
+    "scheduleTemplatesHint": "Configurez un modèle de garde récurrent et générez optionnellement les événements des 4 prochaines semaines.",
+    "needTwoParents": "Les deux parents doivent être actifs dans le cercle pour configurer un horaire.",
+    "presetLabel": "Modèle",
+    "preset": {
+      "week_on_off": "Semaine oui / semaine non",
+      "two_two_three": "2-2-3",
+      "alternating_weekends": "Fins de semaine alternées"
+    },
+    "parentA": "Parent A",
+    "parentB": "Parent B",
+    "applyNow": "Générer les événements des 4 prochaines semaines",
+    "saveTemplate": "Enregistrer le modèle",
+    "applyTemplate": "Régénérer les événements",
+    "violations": "Alertes d'horaire récentes",
+    "violation": {
+      "late": "Arrivée en retard",
+      "missed": "Échange manqué",
+      "unlogged": "Échange non enregistré",
+      "on_time": "À l'heure"
     }
   },
   "expenses": {
@@ -122,13 +158,30 @@
     "balanceLabel": "Solde courant",
     "owedToYou": "{amount} vous est dû",
     "youOwe": "Vous devez {amount}",
+    "totalLogged": "{amount} enregistré dans cette vue",
+    "byCategory": "Par catégorie",
     "recent": "Dépenses récentes",
     "empty": "Aucune dépense enregistrée.",
     "addExpense": "Enregistrer une dépense",
     "amount": "Montant",
+    "date": "Date",
     "categoryLabel": "Catégorie",
+    "splitPct": "Part du coparent",
+    "splitOption": "{pct} % part coparent",
+    "splitLabel": "{pct} % part coparent",
+    "child": "Enfant (optionnel)",
+    "noChild": "Non lié à un enfant",
     "description": "Description (optionnel)",
     "noDescription": "Sans description",
+    "receipt": "Reçu (optionnel)",
+    "viewReceipt": "Voir le reçu",
+    "receiptLoading": "Chargement du reçu…",
+    "receiptTooLarge": "Le reçu doit faire moins de 25 Mo.",
+    "receiptType": "Le reçu doit être une image ou un PDF.",
+    "removeReceipt": "Retirer le reçu",
+    "saved": "Dépense enregistrée.",
+    "saving": "Enregistrement…",
+    "exportPdf": "Exporter en PDF",
     "reimbursement": "Remboursement",
     "requestReimbursement": "Demander un remboursement",
     "approve": "Approuver",
@@ -140,5 +193,290 @@
       "clothing": "Vêtements",
       "other": "Autre"
     }
+  },
+  "exports": {
+    "title": "Exports",
+    "subtitle": "Générez des dossiers PDF inviolables avec vérification par chaîne de hachage.",
+    "exportType": "Type d'export",
+    "dateFrom": "Du",
+    "dateTo": "Au",
+    "threads": "Fil de discussion",
+    "untitledThread": "Conversation",
+    "selectThread": "Sélectionnez au moins un fil.",
+    "generate": "Générer l'export PDF",
+    "generating": "Génération…",
+    "verifyLink": "Vérifier l'intégrité",
+    "downloadPdf": "Télécharger le PDF",
+    "history": "Historique des exports",
+    "summaryTitle": "Résumé de conflit (IA)",
+    "summarySubtitle": "Résumez les conflits avec citations de messages. Ce n'est pas un avis juridique.",
+    "topicFilter": "Filtre de sujet (optionnel)",
+    "topicPlaceholder": "p. ex. heures de prise en charge",
+    "summarize": "Générer le résumé",
+    "summarizing": "Résumé en cours…",
+    "verifyTitle": "Vérification d'export",
+    "verifyLoading": "Vérification…",
+    "verifyPass": "Vérifié",
+    "verifyFail": "Non concordant",
+    "verifyDisclaimer": "Export inviolable — non certifié ni admis automatiquement au tribunal.",
+    "exportId": "ID d'export",
+    "circle": "Cercle",
+    "kindLabel": "Type",
+    "exportedAt": "Exporté le",
+    "recordCount": "Enregistrements",
+    "tamperDetected": "Altération détectée : les dossiers ne correspondent plus à ce résumé.",
+    "kind": {
+      "messages": "Messages",
+      "expenses": "Dépenses",
+      "schedule": "Horaire et arrivées",
+      "change_requests": "Demandes de changement"
+    },
+    "summary": {
+      "timeline": "Chronologie",
+      "positions": "Positions",
+      "unresolved": "Non résolu",
+      "citations": "Citations"
+    }
+  },
+  "pro": {
+    "title": "Tableau de bord professionnel",
+    "signInPrompt": "Connectez-vous pour gérer vos dossiers de coparentalité.",
+    "signUp": "Créer un compte professionnel",
+    "setupSubtitle": "Créez un dossier et invitez les deux parents avec un seul lien.",
+    "caseName": "Nom du dossier",
+    "caseNamePlaceholder": "p. ex. Tremblay c. Tremblay",
+    "parent1Email": "Courriel du parent 1",
+    "parent2Email": "Courriel du parent 2",
+    "createCase": "Créer le dossier et envoyer les invitations",
+    "creating": "Création…",
+    "newCase": "Nouveau dossier",
+    "back": "Retour",
+    "case": "Dossier",
+    "dualInviteLink": "Lien d'invitation pour les deux parents",
+    "dualInviteHint": "Partagez ce lien unique. Chaque parent se connecte avec le courriel qui a reçu l'invitation.",
+    "members": "Membres",
+    "invalidCase": "Ce lien de dossier n'est plus valide.",
+    "goHome": "Accueil",
+    "caseInviteTitle": "Rejoindre {caseName}",
+    "caseInviteSubtitle": "Votre médiateur a invité les deux parents sur Copara. Connectez-vous avec le courriel invité.",
+    "allAccepted": "Les deux parents ont déjà rejoint ce dossier.",
+    "signUpToAccept": "Créer un compte pour accepter",
+    "acceptCase": "Accepter l'invitation",
+    "accepting": "Acceptation…"
+  },
+  "more": {
+    "title": "Plus",
+    "journal": "Journal",
+    "albums": "Albums",
+    "exports": "Exports et résumés",
+    "language": "Langue",
+    "professional": "Tableau de bord professionnel",
+    "privacy": "Politique de confidentialité",
+    "terms": "Conditions d'utilisation"
+  },
+  "vault": {
+    "title": "Coffre",
+    "subtitle": "Notes médicales, infos scolaires, contacts d'urgence et documents pour chaque enfant.",
+    "emptyTitle": "Le coffre est vide",
+    "emptyDescription": "Conservez les infos médicales, scolaires, contacts d'urgence et documents pour chaque enfant — avec contrôles de partage pour les professionnels.",
+    "hasItems": "{count, plural, one {# élément enregistré} other {# éléments enregistrés}}",
+    "addChildTitle": "Ajoutez un enfant pour commencer",
+    "addChildHint": "Les infos du coffre sont organisées par enfant. Ajoutez au moins un enfant pour enregistrer les notes médicales et scolaires.",
+    "firstName": "Prénom",
+    "dob": "Date de naissance (optionnel)",
+    "addChild": "Ajouter l'enfant",
+    "medicalNotes": "Notes médicales",
+    "schoolNotes": "Notes scolaires",
+    "emergencyContacts": "Contacts d'urgence",
+    "emergencyPlaceholder": "Nom, téléphone (un par ligne)",
+    "saveProfile": "Enregistrer le profil",
+    "saved": "Enregistré.",
+    "saving": "Enregistrement…",
+    "documents": "Documents",
+    "noDocuments": "Aucun document pour l'instant.",
+    "documentTitle": "Titre du document",
+    "documentFile": "Fichier",
+    "addDocument": "Ajouter un document",
+    "documentAdded": "Document ajouté.",
+    "viewDocument": "Voir le document",
+    "loadingFile": "Chargement…",
+    "fileTooLarge": "Le fichier doit faire moins de 25 Mo.",
+    "fileType": "Le fichier doit être une image, un PDF ou un document Word.",
+    "removeFile": "Retirer le fichier",
+    "shareWithProfessional": "Partager avec les professionnels de ce cercle",
+    "sharedWithPro": "Partagé avec les professionnels",
+    "delete": "Supprimer",
+    "circleDocuments": "Documents du cercle",
+    "circleDocumentsHint": "Documents non liés à un enfant précis."
+  },
+  "journal": {
+    "title": "Journal",
+    "subtitle": "Nouvelles du cercle pour les deux parents",
+    "empty": "Aucune entrée pour l'instant. Partagez la première nouvelle.",
+    "newEntry": "Nouvelle entrée",
+    "entryBody": "Mise à jour",
+    "entryPlaceholder": "Partagez une nouvelle, une citation drôle ou un moment de la semaine…",
+    "child": "Enfant (optionnel)",
+    "noChild": "Non lié à un enfant",
+    "addMedia": "Photos ou vidéo (optionnel)",
+    "removeMedia": "Retirer",
+    "mediaTooLarge": "Chaque fichier doit faire moins de 25 Mo.",
+    "mediaType": "Les fichiers doivent être des images ou une vidéo (MP4/MOV).",
+    "postEntry": "Publier",
+    "posting": "Publication…",
+    "saved": "Entrée publiée.",
+    "delete": "Supprimer",
+    "unknownAuthor": "Parent"
+  },
+  "albums": {
+    "title": "Albums",
+    "subtitle": "Privé à votre cercle de coparentalité",
+    "empty": "Aucun album pour l'instant. Créez-en un pour partager des photos.",
+    "newAlbum": "Nouvel album",
+    "albumTitle": "Titre de l'album",
+    "createAlbum": "Créer l'album",
+    "creating": "Création…",
+    "photoCount": "{count, plural, one {# photo} other {# photos}}",
+    "backToAlbums": "Retour aux albums",
+    "emptyAlbum": "Aucune photo dans cet album.",
+    "addPhoto": "Ajouter une photo",
+    "photoFile": "Photo",
+    "caption": "Légende (optionnel)",
+    "uploadPhoto": "Téléverser la photo",
+    "uploading": "Téléversement…",
+    "photoAdded": "Photo ajoutée.",
+    "photoTooLarge": "La photo doit faire moins de 25 Mo.",
+    "photoType": "La photo doit être une image.",
+    "removePhoto": "Retirer",
+    "deleteAlbum": "Supprimer l'album"
+  },
+  "settings": {
+    "notifications": "Notifications",
+    "notificationsHint": "Activez les notifications push pour les nouveaux messages lorsque Copara est installé.",
+    "enablePush": "Activer les notifications push",
+    "messageNotifications": "Notifications de nouveaux messages",
+    "prefsSaved": "Préférences enregistrées.",
+    "pushEnabled": "Notifications push activées.",
+    "pushDenied": "L'autorisation de notification a été refusée.",
+    "pushNotConfigured": "Les notifications push ne sont pas configurées sur ce serveur.",
+    "pushFailed": "Impossible d'activer les notifications push."
+  },
+  "offline": {
+    "title": "Vous êtes hors ligne",
+    "description": "Copara n'a pas pu joindre le serveur. Les messages texte seront mis en file d'attente et livrés à la reconnexion.",
+    "backToApp": "Retour aux messages"
+  },
+  "errors": {
+    "title": "Une erreur s'est produite",
+    "description": "Une erreur inattendue s'est produite. Vous pouvez réessayer ou retourner à l'application.",
+    "retry": "Réessayer",
+    "goHome": "Retour aux messages"
+  },
+  "a11y": {
+    "skipToContent": "Aller au contenu principal"
+  },
+  "legal": {
+    "back": "Retour",
+    "privacyLink": "Confidentialité",
+    "termsLink": "Conditions",
+    "terms": {
+      "title": "Conditions d'utilisation",
+      "lastUpdated": "Dernière mise à jour : 4 juillet 2026",
+      "intro": "Les présentes conditions régissent votre utilisation de Copara, un service de coordination pour parents séparés et les professionnels qui les accompagnent.",
+      "sections": [
+        {
+          "title": "Description du service",
+          "paragraphs": [
+            "Copara offre la messagerie, l'horaire, le suivi des dépenses, les exports de dossiers et des outils assistés par IA. Copara n'est pas un cabinet juridique, un médiateur ni un tribunal. Rien dans le service ne constitue un avis juridique.",
+            "Les exports sont des dossiers inviolables et horodatés, adaptés à l'examen par des professionnels du droit. Ils ne sont pas certifiés, notariés ni garantis recevables dans une instance."
+          ]
+        },
+        {
+          "title": "Comptes et cercles",
+          "paragraphs": [
+            "Vous êtes responsable de la confidentialité de vos identifiants et de l'activité sous votre compte.",
+            "Un cercle peut inclure jusqu'à deux parents plus des tiers ou professionnels invités, selon les paramètres de partage définis par les parents."
+          ]
+        },
+        {
+          "title": "Usage acceptable",
+          "paragraphs": [
+            "Vous vous engagez à ne pas utiliser Copara pour harceler, menacer ou usurper l'identité d'autrui, ni pour téléverser du contenu illégal.",
+            "Nous pouvons suspendre les comptes qui violent ces conditions ou présentent un risque pour la sécurité des utilisateurs."
+          ]
+        },
+        {
+          "title": "Fonctionnalités IA",
+          "paragraphs": [
+            "L'analyse du ton et les résumés de conflit sont des outils d'aide générés par IA. Vous demeurez responsable des messages que vous envoyez.",
+            "Les résultats de l'IA peuvent être inexacts. Vérifiez toujours les suggestions avant d'envoyer ou de partager avec des tiers."
+          ]
+        },
+        {
+          "title": "Limitation de responsabilité",
+          "paragraphs": [
+            "Copara est fourni « tel quel » dans la mesure permise par la loi applicable. Nous ne sommes pas responsables des dommages indirects, accessoires ou consécutifs liés à votre utilisation du service."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "title": "Politique de confidentialité",
+      "lastUpdated": "Dernière mise à jour : 4 juillet 2026",
+      "intro": "Copara respecte votre vie privée. Cette politique décrit comment nous collectons, utilisons et protégeons les renseignements personnels, y compris pour les utilisateurs au Canada assujettis à la LPRPDE.",
+      "sections": [
+        {
+          "title": "Renseignements collectés",
+          "paragraphs": [
+            "Compte : nom, courriel et préférences de profil.",
+            "Dossiers de coparentalité : messages, événements du calendrier, dépenses, confirmations d'arrivée (lieu vérifié oui/non seulement — les coordonnées GPS brutes ne sont jamais stockées ni partagées), pièces jointes et exports générés.",
+            "Données techniques : points de terminaison d'abonnement push, journaux de service et événements analytiques (p. ex. entonnoir d'installation PWA)."
+          ]
+        },
+        {
+          "title": "Utilisation des renseignements",
+          "paragraphs": [
+            "Nous utilisons vos renseignements pour exploiter le service, envoyer des notifications, maintenir des dossiers inviolables et améliorer la fiabilité.",
+            "Les fonctionnalités IA traitent le contenu côté serveur. Nous stockons des empreintes de hachage et des sorties structurées dans des journaux d'audit plutôt que de conserver indéfiniment les brouillons bruts, sauf si nécessaire pour la fonctionnalité demandée."
+          ]
+        },
+        {
+          "title": "Partage",
+          "paragraphs": [
+            "Les renseignements de votre cercle sont partagés avec les membres actifs selon le rôle et les paramètres de partage. Les professionnels n'ont qu'un accès en lecture au contenu que les parents choisissent de partager.",
+            "Nous utilisons des sous-traitants incluant Supabase (base de données, auth, stockage), OpenAI (traitement IA), Resend (courriel) et Vercel (hébergement). Les données peuvent être traitées aux États-Unis sauf configuration contraire."
+          ]
+        },
+        {
+          "title": "Utilisateurs canadiens (LPRPDE)",
+          "paragraphs": [
+            "Si vous êtes au Canada, vous avez le droit d'accéder à vos renseignements personnels, de les corriger et de retirer votre consentement au traitement non essentiel, sous réserve des restrictions légales et contractuelles.",
+            "Nous ne collectons que les renseignements raisonnablement nécessaires aux fins identifiées ci-dessus. Vous pouvez nous contacter pour demander l'accès ou la suppression, sachant que certains dossiers peuvent devoir être conservés lorsque la loi ou des besoins commerciaux légitimes l'exigent (p. ex. journaux d'audit)."
+          ]
+        },
+        {
+          "title": "Conservation et sécurité",
+          "paragraphs": [
+            "Les messages et dossiers financiers sont conçus pour être append-only afin d'en préserver l'intégrité. La sécurité au niveau des lignes dans notre base de données limite l'accès aux membres du cercle.",
+            "Nous utilisons le chiffrement en transit et des mesures de protection reconnues. Aucune méthode de transmission ou de stockage n'est sécurisée à 100 %."
+          ]
+        },
+        {
+          "title": "Contact",
+          "paragraphs": [
+            "Questions de confidentialité ou demandes LPRPDE : contactez Copara à l'adresse de support configurée pour votre déploiement."
+          ]
+        }
+      ]
+    }
+  },
+  "pwa": {
+    "installTitle": "Installer Copara",
+    "installSubtitle": "Accès rapide et notifications sur votre écran d'accueil.",
+    "install": "Installer",
+    "dismiss": "Fermer",
+    "enableNotifications": "Activer les notifications",
+    "iosStep1": "Appuyez sur Partager dans Safari",
+    "iosStep2": "Appuyez sur Sur l'écran d'accueil"
   }
 }

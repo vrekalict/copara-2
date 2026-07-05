@@ -24,5 +24,6 @@ export async function addChild(formData: FormData) {
   }
 
   revalidatePath("/onboarding/children");
+  revalidatePath("/app/vault");
   return { success: true };
 }

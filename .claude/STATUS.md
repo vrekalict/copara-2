@@ -1,4 +1,4 @@
-# Accord — Build Status
+# Copara | Build Status
 
 **Last updated:** 2026-07-04
 **Handoff context:** Switching from prior AI tooling to Cursor to continue. This file is the handoff note — see "Known issues" below for resolved blockers.
@@ -81,26 +81,39 @@ create policy "circles_insert" on public.circles for insert
 
 ## 3. What remains (per PRD build plan)
 
-### Phase 1 (in progress — this session)
+### Phase 1 (complete)
 - [x] Message attachments via Supabase Storage (25MB max, images/PDF/docs)
 - [x] AI tone review + rewrite suggestions (`/api/ai/tone-review`, OpenAI API, debounced composer integration — `OPENAI_API_KEY` in `.env.local`)
 - [x] `ai_events` audit logging + rate limiting (30 calls/user/hour per PRD)
 
-### Phase 2 — Coordination (in progress)
+### Phase 2 — Coordination (complete)
 - [x] Calendar: events list, add event, change requests + approve/decline
 - [x] Check-ins: `POST /api/checkins` (GPS verified server-side, boolean only stored)
 - [x] Expenses + reimbursement requests + running balance
-- [ ] Schedule templates (2-2-3, week-on/off, alternating weekends)
-- [ ] Violation detection cron + weekly digest
+- [x] Schedule templates (2-2-3, week-on/off, alternating weekends) with 4-week event generation
+- [x] Violation detection + weekly digest cron (`GET /api/cron/digests`, Bearer `CRON_SECRET`)
 
-### Phase 3 — Records & Pro (not started)
-- PDF exports + hash-chain verification digest + public `/verify/[exportId]` page
-- AI dispute summarizer with message-ID citations
-- Professional role + `/pro` dashboard + dual-parent invite link
-- Web push (VAPID keys are already in `.env.local`) + `<InstallPrompt />` full logic + analytics events
+### Phase 3 — Records & Pro (complete)
+- [x] PDF exports + hash-chain verification digest + public `/verify/[exportId]` page
+- [x] AI dispute summarizer with message-ID citations (UI in `/app/exports` + existing `/api/ai/summarize`)
+- [x] Professional role + `/pro` dashboard + dual-parent invite link (`/join/case/[circleId]`)
+- [x] Web push (VAPID) + `<InstallPrompt />` + analytics events (`/api/analytics`, `/api/push/subscribe`)
 
-### Phase 4 — Polish (not started)
-- FR translation completeness pass, empty states, error boundaries, offline message queue, a11y (WCAG AA), legal pages (ToS/Privacy, PIPEDA-aware)
+**Migration:** `20260704193000_exports_storage_pro_bootstrap.sql` — exports storage bucket, pro bootstrap RLS, professional read access to threads/messages.
+
+**Env note:** Add `NEXT_PUBLIC_VAPID_PUBLIC_KEY` to `.env.local` (same value as `VAPID_PUBLIC_KEY`) for client-side push subscription.
+
+### Phase 4 — Polish (complete)
+- [x] FR translation completeness pass (all Phase 3–4 namespaces, legal pages, hardcoded strings removed)
+- [x] Empty states (`EmptyState` component; messages, vault)
+- [x] Error boundaries (`/app/error.tsx`, root `error.tsx`)
+- [x] Offline message queue (IndexedDB + flusher + thread composer integration)
+- [x] a11y: skip link, focus-visible, reduced motion, bottom nav ARIA, 44px touch targets
+- [x] Legal pages: `/legal/terms`, `/legal/privacy` (PIPEDA-aware copy, en + fr)
+
+### Launch prep (manual)
+- [ ] End-to-end test with a real two-parent pair
+- [ ] 3 design-partner mediators committed
 
 ---
 

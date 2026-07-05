@@ -1,11 +1,18 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useTranslations } from "next-intl";
 import { createEvent, createChangeRequest, respondToChangeRequest } from "@/actions/calendar";
+import { applyScheduleTemplate, createScheduleTemplate } from "@/actions/schedule";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  PRESET_OPTIONS,
+  type ParentOption,
+  type TemplateRow,
+  type ViolationRow,
+} from "@/components/calendar/calendar-types";
 
 type EventRow = {
   id: string;
@@ -30,10 +37,16 @@ export function CalendarView({
   circleId,
   events,
   changeRequests,
+  templates,
+  violations,
+  parents,
 }: {
   circleId: string;
   events: EventRow[];
   changeRequests: ChangeRequestRow[];
+  templates: TemplateRow[];
+  violations: ViolationRow[];
+  parents: ParentOption[];
 }) {
   const t = useTranslations("calendar");
 
@@ -55,21 +68,61 @@ export function CalendarView({
     null,
   );
 
-  async function checkIn(eventId: string) {
-    if (!navigator.geolocation) return;
+  const [templateState, templateAction, templatePending] = useActionState<ActionState, FormData>(
+    async (_prev, formData) => (await createScheduleTemplate(formData)) ?? null,
+    null,
+  );
 
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-      await fetch("/api/checkins", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          event_id: eventId,
-          circle_id: circleId,
-          latitude: pos.coords.latitude,
-          longitude: pos.coords.longitude,
-        }),
-      });
-    });
+  const [, applyTemplateAction] = useActionState<ActionState, FormData>(
+    async (_prev, formData) => {
+      await applyScheduleTemplate(formData);
+      return null;
+    },
+    null,
+  );
+
+  const [checkInStatus, setCheckInStatus] = useState<Record<string, string>>({});
+
+  async function checkIn(eventId: string) {
+    if (!navigator.geolocation) {
+      setCheckInStatus((prev) => ({ ...prev, [eventId]: t("checkInNoLocation") }));
+      return;
+    }
+
+    setCheckInStatus((prev) => ({ ...prev, [eventId]: t("checkInPending") }));
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        try {
+          const response = await fetch("/api/checkins", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              event_id: eventId,
+              circle_id: circleId,
+              latitude: pos.coords.latitude,
+              longitude: pos.coords.longitude,
+            }),
+          });
+
+          if (!response.ok) {
+            const data = (await response.json().catch(() => null)) as { error?: string } | null;
+            setCheckInStatus((prev) => ({
+              ...prev,
+              [eventId]: data?.error ?? t("checkInFailed"),
+            }));
+            return;
+          }
+
+          setCheckInStatus((prev) => ({ ...prev, [eventId]: t("checkInSuccess") }));
+        } catch {
+          setCheckInStatus((prev) => ({ ...prev, [eventId]: t("checkInFailed") }));
+        }
+      },
+      () => {
+        setCheckInStatus((prev) => ({ ...prev, [eventId]: t("checkInNoLocation") }));
+      },
+    );
   }
 
   return (
@@ -95,15 +148,102 @@ export function CalendarView({
                   )}
                 </div>
                 {(event.type === "exchange" || event.type === "parenting_time") && (
-                  <Button type="button" size="sm" variant="outline" onClick={() => void checkIn(event.id)}>
-                    {t("checkIn")}
-                  </Button>
+                  <div className="flex flex-col items-end gap-1">
+                    <Button type="button" size="sm" variant="outline" onClick={() => void checkIn(event.id)}>
+                      {t("checkIn")}
+                    </Button>
+                    {checkInStatus[event.id] && (
+                      <p className="text-xs text-muted-foreground">{checkInStatus[event.id]}</p>
+                    )}
+                  </div>
                 )}
               </div>
             </li>
           ))}
         </ul>
       </section>
+
+      <section className="flex flex-col gap-3 rounded-lg border border-border p-4">
+        <h2 className="font-medium">{t("scheduleTemplates")}</h2>
+        <p className="text-sm text-muted-foreground">{t("scheduleTemplatesHint")}</p>
+        {parents.length < 2 ? (
+          <p className="text-sm text-muted-foreground">{t("needTwoParents")}</p>
+        ) : (
+          <form action={templateAction} className="flex flex-col gap-3">
+            <input type="hidden" name="circleId" value={circleId} />
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="preset">{t("presetLabel")}</Label>
+              <select id="preset" name="preset" className="h-8 rounded-lg border border-border bg-background px-2 text-sm">
+                {PRESET_OPTIONS.map((preset) => (
+                  <option key={preset} value={preset}>
+                    {t(`preset.${preset}`)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="parentAId">{t("parentA")}</Label>
+              <select id="parentAId" name="parentAId" required className="h-8 rounded-lg border border-border bg-background px-2 text-sm">
+                {parents.map((p) => (
+                  <option key={p.user_id} value={p.user_id}>
+                    {p.display_name ?? p.user_id.slice(0, 8)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <Label htmlFor="parentBId">{t("parentB")}</Label>
+              <select id="parentBId" name="parentBId" required className="h-8 rounded-lg border border-border bg-background px-2 text-sm">
+                {parents.map((p) => (
+                  <option key={p.user_id} value={p.user_id}>
+                    {p.display_name ?? p.user_id.slice(0, 8)}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <label className="flex items-center gap-2 text-sm">
+              <input type="checkbox" name="applyNow" defaultChecked />
+              {t("applyNow")}
+            </label>
+            {templateState?.error && <p className="text-sm text-destructive">{templateState.error}</p>}
+            <Button type="submit" disabled={templatePending}>{t("saveTemplate")}</Button>
+          </form>
+        )}
+        {templates.length > 0 && (
+          <ul className="mt-2 flex flex-col gap-2">
+            {templates.map((tpl) => (
+              <li key={tpl.id} className="flex items-center justify-between rounded-md bg-muted px-3 py-2 text-sm">
+                <span>{t(`preset.${tpl.name as "week_on_off"}`)}</span>
+                <form action={applyTemplateAction}>
+                  <input type="hidden" name="templateId" value={tpl.id} />
+                  <Button type="submit" size="sm" variant="outline">{t("applyTemplate")}</Button>
+                </form>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      {violations.length > 0 && (
+        <section className="flex flex-col gap-2">
+          <h2 className="text-sm font-medium text-muted-foreground">{t("violations")}</h2>
+          <ul className="flex flex-col gap-2">
+            {violations.map((v) => {
+              const event = Array.isArray(v.events) ? v.events[0] : v.events;
+              return (
+                <li key={v.id} className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-sm">
+                  <p className="font-medium capitalize">{t(`violation.${v.kind}`)}</p>
+                  <p>{event?.title}</p>
+                  <p className="text-muted-foreground">
+                    {event?.starts_at ? new Date(event.starts_at).toLocaleString() : ""}
+                    {v.delta_minutes ? ` · ${v.delta_minutes} min` : ""}
+                  </p>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
 
       <section className="flex flex-col gap-3 rounded-lg border border-border p-4">
         <h2 className="font-medium">{t("addEvent")}</h2>
