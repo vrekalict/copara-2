@@ -4,26 +4,13 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { recordLegalAcceptance } from "@/actions/legal/acceptance";
 import { captureReferralLead } from "@/actions/pro/referrals";
-import { isPlanKey } from "@/lib/stripe/config";
+import { parseLegalFromForm, validateLegalForm } from "@/lib/auth/legal-form";
+import { authCallbackUrl, resolveAuthRedirect } from "@/lib/auth/redirect";
 import { createClient } from "@/lib/supabase/server";
 
 function nextPath(formData: FormData) {
   const value = String(formData.get("next") ?? "");
   return value.startsWith("/") ? value : "/onboarding/circle";
-}
-
-function subscribePath(plan: string, ref: string) {
-  const params = new URLSearchParams({ plan });
-  if (ref) params.set("ref", ref);
-  return `/subscribe?${params.toString()}`;
-}
-
-function parseLegalFromForm(formData: FormData) {
-  const province = String(formData.get("province") ?? "").trim();
-  const acceptedLegal = formData.get("acceptedLegal") === "true";
-  const confirmedFrenchAccess = formData.get("confirmedFrenchAccess") === "true";
-
-  return { province, acceptedTerms: acceptedLegal, acceptedPrivacy: acceptedLegal, confirmedFrenchAccess };
 }
 
 export async function signUpWithPassword(formData: FormData) {
@@ -35,38 +22,23 @@ export async function signUpWithPassword(formData: FormData) {
   const origin = (await headers()).get("origin");
   const legal = parseLegalFromForm(formData);
 
-  if (!legal.province) {
-    return { error: "Please select your province or territory." };
+  const validationError = validateLegalForm(legal);
+  if (validationError) {
+    return { error: validationError };
   }
 
-  if (!legal.acceptedTerms || !legal.acceptedPrivacy) {
-    return { error: "You must agree to the Terms and Privacy Policy." };
-  }
-
-  if (
-    legal.province.trim().toLowerCase() === "quebec" &&
-    !legal.confirmedFrenchAccess
-  ) {
-    return {
-      error:
-        "Quebec users must confirm access to the French legal documents before continuing in English.",
-    };
-  }
-
-  let next = nextPath(formData);
-  if (explicitNext.startsWith("/join/")) {
-    next = explicitNext;
-  } else if (plan && isPlanKey(plan)) {
-    next = subscribePath(plan, ref);
-  } else if (!explicitNext) {
-    next = "/pricing";
-  }
+  const next = resolveAuthRedirect({
+    next: explicitNext.startsWith("/join/") ? explicitNext : explicitNext || null,
+    plan: plan || null,
+    ref: ref || null,
+    fallback: explicitNext ? nextPath(formData) : "/pricing",
+  });
 
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { emailRedirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}` },
+    options: { emailRedirectTo: authCallbackUrl(origin ?? "", next) },
   });
 
   if (error) {
@@ -134,7 +106,7 @@ export async function signInWithMagicLink(formData: FormData) {
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}` },
+    options: { emailRedirectTo: authCallbackUrl(origin ?? "", next) },
   });
 
   if (error) {

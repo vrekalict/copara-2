@@ -2,6 +2,8 @@ import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { AuthShell } from "@/components/auth/auth-shell";
 import { SignUpForm } from "@/components/auth/sign-up-form";
+import { userHasLegalAcceptance } from "@/lib/auth/legal-gate";
+import { resolveAuthRedirect } from "@/lib/auth/redirect";
 import { createClient } from "@/lib/supabase/server";
 import { isPlanKey, PLAN_LABELS, STRIPE_TRIAL_DAYS } from "@/lib/stripe/config";
 
@@ -17,12 +19,21 @@ export default async function SignUpPage({
   } = await supabase.auth.getUser();
 
   if (user) {
-    if (plan && isPlanKey(plan)) {
-      const params = new URLSearchParams({ plan });
+    if (!(await userHasLegalAcceptance(supabase, user.id))) {
+      const params = new URLSearchParams();
+      if (next) params.set("next", next);
+      if (plan) params.set("plan", plan);
       if (ref) params.set("ref", ref);
-      redirect(`/subscribe?${params.toString()}`);
+      redirect(`/complete-signup?${params.toString()}`);
     }
-    redirect(next?.startsWith("/") ? next : "/app");
+    redirect(
+      resolveAuthRedirect({
+        next,
+        plan,
+        ref,
+        fallback: "/app",
+      }),
+    );
   }
 
   const t = await getTranslations("auth");

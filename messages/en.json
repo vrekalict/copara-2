@@ -24,7 +24,10 @@
     "signInWithPassword": "Sign in with password",
     "noAccount": "Don't have an account?",
     "haveAccount": "Already have an account?",
-    "confirmEmailSent": "Check your email to confirm your account, then sign in."
+    "confirmEmailSent": "Check your email to confirm your account, then sign in.",
+    "googleSignIn": "Continue with Google",
+    "googleSignUp": "Sign up with Google",
+    "googleRedirecting": "Redirecting to Google…"
   },
   "nav": {
     "messages": "Messages",

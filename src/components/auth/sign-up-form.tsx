@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { signUpWithPassword } from "@/actions/auth";
+import { AuthDivider, GoogleSignInButton } from "@/components/auth/google-sign-in-button";
 import { LegalAcceptanceFields } from "@/components/legal/legal-acceptance-fields";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,6 +37,8 @@ export function SignUpForm({
 
   return (
     <div className="flex flex-col gap-4">
+      <GoogleSignInButton next={next} plan={plan} ref={ref} mode="sign-up" />
+      <AuthDivider />
       <form action={formAction} className="flex flex-col gap-4">
         {next && <input type="hidden" name="next" value={next} />}
         {plan && <input type="hidden" name="plan" value={plan} />}

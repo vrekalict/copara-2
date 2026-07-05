@@ -7,6 +7,7 @@ import {
   isStaffRequestPath,
   staffPathToInternal,
 } from "@/lib/admin/staff-path";
+import { pathRequiresLegalAcceptance, userHasLegalAcceptance } from "@/lib/auth/legal-gate";
 
 function redirectWwwToCanonicalHost(request: NextRequest): NextResponse | null {
   const host = request.headers.get("host");
@@ -74,12 +75,31 @@ export async function updateSession(request: NextRequest) {
     internalPath.startsWith("/onboarding") ||
     internalPath.startsWith("/subscribe") ||
     internalPath.startsWith("/account") ||
-    internalPath.startsWith("/admin");
+    internalPath.startsWith("/admin") ||
+    internalPath === "/complete-signup";
 
   if (!user && requiresAuth) {
     const signInUrl = new URL("/sign-in", request.url);
     signInUrl.searchParams.set("next", pathname);
     return NextResponse.redirect(signInUrl);
+  }
+
+  if (user && internalPath === "/complete-signup") {
+    const hasLegal = await userHasLegalAcceptance(supabase, user.id);
+    if (hasLegal) {
+      const next = request.nextUrl.searchParams.get("next");
+      const destination = next?.startsWith("/") ? next : "/app";
+      return NextResponse.redirect(new URL(destination, request.url));
+    }
+  }
+
+  if (user && pathRequiresLegalAcceptance(internalPath)) {
+    const hasLegal = await userHasLegalAcceptance(supabase, user.id);
+    if (!hasLegal) {
+      const completeUrl = new URL("/complete-signup", request.url);
+      completeUrl.searchParams.set("next", `${pathname}${request.nextUrl.search}`);
+      return NextResponse.redirect(completeUrl);
+    }
   }
 
   if (staffRoute && getStaffBasePath()) {

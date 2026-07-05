@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { signInWithPassword, signInWithMagicLink } from "@/actions/auth";
+import { AuthDivider, GoogleSignInButton } from "@/components/auth/google-sign-in-button";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,6 +28,8 @@ export function SignInForm({ next }: { next?: string }) {
   if (mode === "magic-link") {
     return (
       <div className="flex flex-col gap-4">
+        <GoogleSignInButton next={next} mode="sign-in" />
+        <AuthDivider />
         {magicLinkState?.sent ? (
           <p className="text-sm text-muted-foreground">{t("magicLinkSent")}</p>
         ) : (
@@ -53,6 +56,8 @@ export function SignInForm({ next }: { next?: string }) {
 
   return (
     <div className="flex flex-col gap-4">
+      <GoogleSignInButton next={next} mode="sign-in" />
+      <AuthDivider />
       <form action={passwordAction} className="flex flex-col gap-4">
         {next && <input type="hidden" name="next" value={next} />}
         <div className="flex flex-col gap-1.5">
