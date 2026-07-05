@@ -1,10 +1,9 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AuthShell } from "@/components/auth/auth-shell";
 import { getPartnerActivation } from "@/actions/pro/partner";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { PartnerSignUpForm } from "@/components/pro/partner-sign-up-form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function ProActivateSignUpPage({
   searchParams,
@@ -34,23 +33,17 @@ export default async function ProActivateSignUpPage({
     .maybeSingle();
 
   return (
-    <main className="flex flex-1 items-center justify-center p-6">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Create your partner account</CardTitle>
-          <p className="text-sm text-muted-foreground">
-            Set a password for <strong>{activation.email}</strong> — the email on your approved
-            application. You do not need an existing Copara account.
-          </p>
-        </CardHeader>
-        <CardContent>
-          <PartnerSignUpForm
-            token={token}
-            email={activation.email}
-            province={(application?.location as string | undefined) ?? undefined}
-          />
-        </CardContent>
-      </Card>
-    </main>
+    <AuthShell
+      variant="partner"
+      eyebrow="Partner access"
+      title="Create your partner account"
+      description={`Set a password for ${activation.email}. You do not need an existing Copara account — this email must match your approved application.`}
+    >
+      <PartnerSignUpForm
+        token={token}
+        email={activation.email}
+        province={(application?.location as string | undefined) ?? undefined}
+      />
+    </AuthShell>
   );
 }

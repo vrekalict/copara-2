@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { AuthShell } from "@/components/auth/auth-shell";
 import { createClient } from "@/lib/supabase/server";
 import { getPartnerActivation } from "@/actions/pro/partner";
 import { PartnerActivatePanel } from "@/components/pro/partner-activate-panel";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SITE } from "@/lib/marketing/site";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -18,44 +18,58 @@ export default async function ProActivatePage({
 
   if (!activation) {
     return (
-      <main className="mx-auto flex max-w-lg flex-col gap-4 px-6 py-12">
-        <h1 className="text-2xl font-semibold">Invalid activation link</h1>
-        <p className="text-sm text-muted-foreground">
-          This partner activation link is invalid. Contact support or request access again.
-        </p>
-        <Link href="/professionals#request-access" className="text-sm font-medium underline">
-          Request partner access
-        </Link>
-      </main>
+      <AuthShell
+        variant="partner"
+        eyebrow="Partner access"
+        title="Invalid activation link"
+        description="This partner activation link is invalid or has already been used."
+      >
+        <div className="flex flex-col gap-4">
+          <p className="text-sm text-muted-foreground">
+            Contact support or submit a new partner access request.
+          </p>
+          <Link
+            href="/professionals#request-access"
+            className={cn(buttonVariants(), "min-h-11 justify-center")}
+          >
+            Request partner access
+          </Link>
+        </div>
+      </AuthShell>
     );
   }
 
   if ("expired" in activation && activation.expired) {
     return (
-      <main className="mx-auto flex max-w-lg flex-col gap-4 px-6 py-12">
-        <h1 className="text-2xl font-semibold">Link expired</h1>
+      <AuthShell
+        variant="partner"
+        eyebrow="Partner access"
+        title="Link expired"
+        description={`Your activation link for ${activation.email} has expired.`}
+      >
         <p className="text-sm text-muted-foreground">
-          Your activation link for {activation.email} has expired. Email{" "}
-          <a href={`mailto:${SITE.supportEmail}`} className="underline">
+          Email{" "}
+          <a href={`mailto:${SITE.supportEmail}`} className="font-medium underline">
             {SITE.supportEmail}
           </a>{" "}
-          to request a new one.
+          to request a new activation link.
         </p>
-      </main>
+      </AuthShell>
     );
   }
 
   if (activation.alreadyActivated) {
     return (
-      <main className="mx-auto flex max-w-lg flex-col gap-4 px-6 py-12">
-        <h1 className="text-2xl font-semibold">Partner access already active</h1>
-        <p className="text-sm text-muted-foreground">
-          This application for {activation.email} has already been activated.
-        </p>
-        <Link href="/pro/dashboard" className={cn(buttonVariants(), "min-h-11 w-fit")}>
+      <AuthShell
+        variant="partner"
+        eyebrow="Partner access"
+        title="Already activated"
+        description={`Partner access for ${activation.email} is already active.`}
+      >
+        <Link href="/pro/dashboard" className={cn(buttonVariants(), "min-h-11 justify-center")}>
           Open partner dashboard
         </Link>
-      </main>
+      </AuthShell>
     );
   }
 
@@ -75,23 +89,18 @@ export default async function ProActivatePage({
   const panelMode = user ? (emailMatches ? "activate" : "wrong-account") : "sign-in";
 
   return (
-    <main className="flex flex-1 items-center justify-center p-6">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>{panelMode === "sign-in" ? "Sign in to activate" : "Activate partner access"}</CardTitle>
-          <p className="text-sm text-muted-foreground">
-            Welcome, {activation.firstName}. Complete activation for your Copara partner dashboard.
-          </p>
-        </CardHeader>
-        <CardContent>
-          <PartnerActivatePanel
-            token={token}
-            email={activation.email}
-            firstName={activation.firstName}
-            mode={panelMode}
-          />
-        </CardContent>
-      </Card>
-    </main>
+    <AuthShell
+      variant="partner"
+      eyebrow="Partner access"
+      title={panelMode === "sign-in" ? "Sign in to activate" : "Activate partner access"}
+      description={`Welcome, ${activation.firstName}. Complete activation for your Copara partner dashboard.`}
+    >
+      <PartnerActivatePanel
+        token={token}
+        email={activation.email}
+        firstName={activation.firstName}
+        mode={panelMode}
+      />
+    </AuthShell>
   );
 }
