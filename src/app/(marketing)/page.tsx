@@ -134,9 +134,7 @@ export default async function HomePage() {
         />
       </FeatureShowcaseBand>
 
-      <Section variant="cream">
-        <ProSegmentBanner />
-      </Section>
+      <ProSegmentBanner />
 
       <Section>
         <SectionHeader
@@ -206,12 +204,11 @@ export default async function HomePage() {
         )}
       </Section>
 
-      <Section variant="cream" className="pb-20">
-        <CtaBand
-          title="Keep the focus on your child, not the conflict."
-          description="Start free trial and help shape a calmer co-parenting tool for Canadian families."
-        />
-      </Section>
+      <CtaBand
+        className="pb-20"
+        title="Keep the focus on your child, not the conflict."
+        description="Start free trial and help shape a calmer co-parenting tool for Canadian families."
+      />
     </>
   );
 }

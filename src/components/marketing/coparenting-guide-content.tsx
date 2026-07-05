@@ -73,25 +73,26 @@ export function CoparentingGuidePageContent({
 }) {
   return (
     <>
-      <Section className="pt-12 md:pt-16">
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-          {langSwitch && (
-            <Link href={langSwitch.href} className="text-sm font-medium text-primary hover:underline">
+      <PageHero
+        eyebrow={intro.eyebrow}
+        title={intro.title}
+        description={`${intro.subtitle}. ${intro.description}`}
+        primaryHref={intro.primaryHref}
+        primaryLabel={intro.primaryLabel}
+        secondaryHref={intro.secondaryHref}
+        secondaryLabel={intro.secondaryLabel}
+        variant="dark"
+        leading={
+          langSwitch ? (
+            <Link
+              href={langSwitch.href}
+              className="text-sm font-medium text-white/75 hover:text-white hover:underline"
+            >
               {langSwitch.label}
             </Link>
-          )}
-        </div>
-        <PageHero
-          eyebrow={intro.eyebrow}
-          title={intro.title}
-          description={`${intro.subtitle}. ${intro.description}`}
-          primaryHref={intro.primaryHref}
-          primaryLabel={intro.primaryLabel}
-          secondaryHref={intro.secondaryHref}
-          secondaryLabel={intro.secondaryLabel}
-          variant="dark"
-        />
-      </Section>
+          ) : undefined
+        }
+      />
 
       <Section variant="cream" className="py-14 md:py-20">
         <div className="grid gap-4 sm:grid-cols-3">
@@ -168,19 +169,16 @@ export function CoparentingGuidePageContent({
         </div>
       </Section>
 
-      <Section className="pb-20">
-        <CtaBand
-          title={closing.title}
-          description={closing.description}
-          primaryHref={closing.primaryHref}
-          primaryLabel={closing.primaryLabel}
-          secondaryHref={closing.secondaryHref}
-          secondaryLabel={closing.secondaryLabel}
-        />
-        <div className="mt-8">
-          <LegalDisclaimer>{disclaimer}</LegalDisclaimer>
-        </div>
-      </Section>
+      <CtaBand
+        className="pb-20"
+        title={closing.title}
+        description={closing.description}
+        primaryHref={closing.primaryHref}
+        primaryLabel={closing.primaryLabel}
+        secondaryHref={closing.secondaryHref}
+        secondaryLabel={closing.secondaryLabel}
+        footer={disclaimer ? <LegalDisclaimer>{disclaimer}</LegalDisclaimer> : undefined}
+      />
     </>
   );
 }

@@ -17,14 +17,12 @@ export const metadata = pageMetadata({
 export default function SteadySendPage() {
   return (
     <>
-      <Section className="pt-12 md:pt-16">
-        <PageHero
-          eyebrow="Steady Send"
-          title="Pause before you send something you might regret"
-          description={`When a draft might escalate tension, ${SITE.name} offers optional rewrite suggestions that preserve what you need to say. You choose whether to use a suggestion, edit it, or send your original message.`}
-          visual={<MessagesMockup variant="desktop" />}
-        />
-      </Section>
+      <PageHero
+        eyebrow="Steady Send"
+        title="Pause before you send something you might regret"
+        description={`When a draft might escalate tension, ${SITE.name} offers optional rewrite suggestions that preserve what you need to say. You choose whether to use a suggestion, edit it, or send your original message.`}
+        visual={<MessagesMockup variant="desktop" />}
+      />
       <Section variant="cream">
         <SectionHeader title="How Steady Send works" align="left" />
         <ol className="max-w-3xl space-y-6">
@@ -72,9 +70,7 @@ export default function SteadySendPage() {
           </Link>
         </p>
       </Section>
-      <Section variant="mist" className="pb-20">
-        <CtaBand title="Try Steady Send with a free trial" />
-      </Section>
+      <CtaBand className="pb-20" title="Try Steady Send with a free trial" />
     </>
   );
 }

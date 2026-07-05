@@ -40,14 +40,12 @@ const CAPABILITIES = [
 export default function AlbumsFeaturePage() {
   return (
     <>
-      <Section className="pt-12 md:pt-16">
-        <PageHero
-          eyebrow="Albums"
-          title="Private photo albums for your circle"
-          description="Albums let you share and download photos at full resolution in a closed, secure environment. Keep school events, milestones, and everyday memories where both parents can see them."
-          visual={<AlbumsMockup variant="desktop" />}
-        />
-      </Section>
+      <PageHero
+        eyebrow="Albums"
+        title="Private photo albums for your circle"
+        description="Albums let you share and download photos at full resolution in a closed, secure environment. Keep school events, milestones, and everyday memories where both parents can see them."
+        visual={<AlbumsMockup variant="desktop" />}
+      />
       <Section variant="cream">
         <div className="mx-auto max-w-3xl space-y-6 text-sm leading-relaxed text-muted-foreground">
           <p>
@@ -59,9 +57,7 @@ export default function AlbumsFeaturePage() {
           <FeatureCapabilityGrid items={CAPABILITIES} />
         </div>
       </Section>
-      <Section className="pb-20">
-        <CtaBand title="Try albums with a free trial" primaryLabel="Get started" />
-      </Section>
+      <CtaBand className="pb-20" title="Try albums with a free trial" primaryLabel="Get started" />
     </>
   );
 }

@@ -16,14 +16,12 @@ export const metadata = pageMetadata({
 export default function RecordsPage() {
   return (
     <>
-      <Section className="pt-12 md:pt-16">
-        <PageHero
-          eyebrow="Records and exports"
-          title="Organized records you can verify, not just print"
-          description={`${SITE.name} exports are tamper-evident records suitable for review by legal professionals. Each export includes server timestamps and a hash-chain verification digest. Copara does not claim exports are certified, court-approved, or guaranteed admissible.`}
-          visual={<ExportsMockup variant="desktop" />}
-        />
-      </Section>
+      <PageHero
+        eyebrow="Records and exports"
+        title="Organized records you can verify, not just print"
+        description={`${SITE.name} exports are tamper-evident records suitable for review by legal professionals. Each export includes server timestamps and a hash-chain verification digest. Copara does not claim exports are certified, court-approved, or guaranteed admissible.`}
+        visual={<ExportsMockup variant="desktop" />}
+      />
       <Section variant="cream">
         <SectionHeader title="What you can export" align="left" />
         <ul className="grid gap-4 sm:grid-cols-2">
@@ -65,9 +63,7 @@ export default function RecordsPage() {
           </Link>
         </p>
       </Section>
-      <Section variant="mist" className="pb-20">
-        <CtaBand title="Export with confidence with a free trial" />
-      </Section>
+      <CtaBand className="pb-20" title="Export with confidence with a free trial" />
     </>
   );
 }

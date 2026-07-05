@@ -416,15 +416,11 @@
   box-shadow: 0 8px 24px -20px oklch(0.24 0.03 252 / 0.35);
 }
 
-.marketing .page-hero-panel {
-  border: 1px solid var(--marketing-border);
-  border-radius: 1rem;
-  padding: 1.5rem;
-}
-
-.marketing .page-hero-panel--dark {
-  border-color: oklch(1 0 0 / 0.1);
-  background: var(--marketing-navy);
+.marketing .marketing-page-hero {
+  background:
+    radial-gradient(ellipse 70% 55% at 20% 0%, oklch(0.58 0.09 195 / 0.2), transparent 50%),
+    radial-gradient(ellipse 80% 60% at 80% 20%, oklch(0.35 0.06 245 / 0.35), transparent 55%),
+    linear-gradient(180deg, var(--marketing-navy) 0%, oklch(0.19 0.038 252) 100%);
   color: white;
 }
 

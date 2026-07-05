@@ -15,14 +15,12 @@ export const metadata = pageMetadata({
 export default function CalendarFeaturePage() {
   return (
     <>
-      <Section className="pt-12 md:pt-16">
-        <PageHero
-          eyebrow="Calendar"
-          title="One schedule both parents can see"
-          description={`Stop negotiating pickup times only in message threads. ${SITE.name} keeps parenting-time blocks, appointments, and change requests in a shared calendar with a clear approval trail.`}
-          visual={<CalendarMockup variant="desktop" />}
-        />
-      </Section>
+      <PageHero
+        eyebrow="Calendar"
+        title="One schedule both parents can see"
+        description={`Stop negotiating pickup times only in message threads. ${SITE.name} keeps parenting-time blocks, appointments, and change requests in a shared calendar with a clear approval trail.`}
+        visual={<CalendarMockup variant="desktop" />}
+      />
       <Section variant="cream">
         <SectionHeader title="Calendar capabilities" />
         <div className="grid gap-5 sm:grid-cols-2">
@@ -51,9 +49,7 @@ export default function CalendarFeaturePage() {
           ))}
         </div>
       </Section>
-      <Section className="pb-20">
-        <CtaBand title="Coordinate schedules with a free trial" />
-      </Section>
+      <CtaBand className="pb-20" title="Coordinate schedules with a free trial" />
     </>
   );
 }

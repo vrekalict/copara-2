@@ -40,14 +40,12 @@ const CAPABILITIES = [
 export default function JournalFeaturePage() {
   return (
     <>
-      <Section className="pt-12 md:pt-16">
-        <PageHero
-          eyebrow="Journal"
-          title="Stay connected to everyday family moments"
-          description="The journal is your circle's shared space for family updates. Share news, photos, videos, and those funny quotes from your children. Both parents stay in the loop, even when you are in different homes."
-          visual={<JournalMockup variant="desktop" />}
-        />
-      </Section>
+      <PageHero
+        eyebrow="Journal"
+        title="Stay connected to everyday family moments"
+        description="The journal is your circle's shared space for family updates. Share news, photos, videos, and those funny quotes from your children. Both parents stay in the loop, even when you are in different homes."
+        visual={<JournalMockup variant="desktop" />}
+      />
       <Section variant="cream">
         <div className="mx-auto max-w-3xl space-y-6 text-sm leading-relaxed text-muted-foreground">
           <p>
@@ -60,9 +58,7 @@ export default function JournalFeaturePage() {
           <FeatureCapabilityGrid items={CAPABILITIES} />
         </div>
       </Section>
-      <Section className="pb-20">
-        <CtaBand title="Try the journal with a free trial" primaryLabel="Get started" />
-      </Section>
+      <CtaBand className="pb-20" title="Try the journal with a free trial" primaryLabel="Get started" />
     </>
   );
 }

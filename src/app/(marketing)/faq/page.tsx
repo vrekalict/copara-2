@@ -33,13 +33,11 @@ export default function FaqPage() {
   return (
     <>
       <JsonLd data={faqSchema(FAQ_ALL)} />
-      <Section className="pt-12 md:pt-16">
-        <PageHero
-          eyebrow="Help centre"
-          title="Frequently asked questions"
-          description="Clear answers about Copara for parents and professionals. Not legal advice."
-        />
-      </Section>
+      <PageHero
+        eyebrow="Help centre"
+        title="Frequently asked questions"
+        description="Clear answers about Copara for parents and professionals. Not legal advice."
+      />
       <Section variant="cream" className="pt-0 md:pb-20">
         <div className="mx-auto max-w-3xl">
           <FaqGroup title="General" items={FAQ_GENERAL} />

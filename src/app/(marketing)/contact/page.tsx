@@ -16,13 +16,11 @@ export default function ContactPage() {
   return (
     <>
       <JsonLd data={contactPageSchema()} />
-      <Section className="pt-12 md:pt-16">
-        <PageHero
-          eyebrow="Contact"
-          title="Get in touch"
-          description="Questions about Sign up, privacy, or the design partner program? Send a message or email us directly."
-        />
-      </Section>
+      <PageHero
+        eyebrow="Contact"
+        title="Get in touch"
+        description="Questions about Sign up, privacy, or the design partner program? Send a message or email us directly."
+      />
       <Section variant="cream" className="pt-0 md:pb-20">
         <div className="grid gap-12 lg:grid-cols-2">
           <div>

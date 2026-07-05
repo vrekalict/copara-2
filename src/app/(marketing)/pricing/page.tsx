@@ -18,15 +18,13 @@ export default function PricingPage() {
   return (
     <>
       <JsonLd data={[pricingProductSchema(), faqSchema(FAQ_PRICING_PAGE)]} />
-      <Section className="pt-12 md:pt-16">
-        <PageHero
-          eyebrow="Pricing"
-          title="Simple plans in Canadian dollars"
-          description="Co-parenting tools should not cost hundreds per year. Copara is intentionally affordable, priced below many established co-parenting tools, with exports included ."
-        />
-        <div className="mt-10">
-          <PricingPlans />
-        </div>
+      <PageHero
+        eyebrow="Pricing"
+        title="Simple plans in Canadian dollars"
+        description="Co-parenting tools should not cost hundreds per year. Copara is intentionally affordable, priced below many established co-parenting tools, with exports included ."
+      />
+      <Section className="pt-10 md:pt-14">
+        <PricingPlans />
       </Section>
       <Section variant="cream" className="pb-20">
         <SectionHeader title="Pricing questions" align="left" />

@@ -24,17 +24,15 @@ export const metadata = pageMetadata({
 export default function FeaturesPage() {
   return (
     <>
-      <Section className="pt-12 md:pt-16">
-        <PageHero
-          eyebrow="Product"
-          title="Tools built for the work co-parents actually do"
-          description="Copara focuses on communication, coordination, records, and professional access. No social feed, no in-app money movement, no hidden location tracking."
-          primaryHref="/sign-up"
-          primaryLabel="Start free trial"
-          secondaryHref="/pricing"
-          secondaryLabel="See pricing"
-        />
-      </Section>
+      <PageHero
+        eyebrow="Product"
+        title="Tools built for the work co-parents actually do"
+        description="Copara focuses on communication, coordination, records, and professional access. No social feed, no in-app money movement, no hidden location tracking."
+        primaryHref="/sign-up"
+        primaryLabel="Start free trial"
+        secondaryHref="/pricing"
+        secondaryLabel="See pricing"
+      />
 
       <FeatureShowcaseBand variant="warm">
         <FeatureShowcase
@@ -107,9 +105,7 @@ export default function FeaturesPage() {
         />
       </FeatureShowcaseBand>
 
-      <Section variant="cream">
-        <ProSegmentBanner />
-      </Section>
+      <ProSegmentBanner />
 
       <Section variant="mist" className="pb-20">
         <div className="text-center">
@@ -120,10 +116,9 @@ export default function FeaturesPage() {
             Visit the blog
           </Link>
         </div>
-        <div className="mt-12">
-          <CtaBand title="Start free trial" dark={false} />
-        </div>
       </Section>
+
+      <CtaBand title="Start free trial" dark={false} className="pb-20" />
     </>
   );
 }

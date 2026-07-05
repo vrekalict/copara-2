@@ -1,6 +1,5 @@
 import { CtaBand } from "@/components/marketing/cta-band";
 import { ExpensesShowcaseSection } from "@/components/marketing/expenses-showcase-section";
-import { Section } from "@/components/marketing/section";
 import { pageMetadata } from "@/lib/marketing/metadata";
 
 export const metadata = pageMetadata({
@@ -14,9 +13,7 @@ export default function ExpensesFeaturePage() {
   return (
     <>
       <ExpensesShowcaseSection />
-      <Section className="pb-20">
-        <CtaBand title="Track expenses with a free trial" />
-      </Section>
+      <CtaBand className="pb-20" title="Track expenses with a free trial" />
     </>
   );
 }

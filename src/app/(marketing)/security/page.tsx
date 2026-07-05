@@ -24,13 +24,11 @@ export default function SecurityPage() {
           "Copara security overview for messages, exports, and location verification.",
         )}
       />
-      <Section className="pt-12 md:pt-16">
-        <PageHero
-          eyebrow="Security"
-          title="Built for sensitive family records"
-          description={`${SITE.name} handles co-parenting information with clear limits on tracking, sharing, and export claims.`}
-        />
-      </Section>
+      <PageHero
+        eyebrow="Security"
+        title="Built for sensitive family records"
+        description={`${SITE.name} handles co-parenting information with clear limits on tracking, sharing, and export claims.`}
+      />
       <Section variant="cream" className="pt-0">
         <div className="grid gap-5 md:grid-cols-2">
           <article className="routine-panel">
@@ -77,16 +75,15 @@ export default function SecurityPage() {
           </article>
         </div>
       </Section>
-      <Section className="pb-20">
-        <CtaBand
-          title="Questions about security?"
-          description="Read our FAQ or contact us directly."
-          primaryHref="/faq"
-          primaryLabel="View FAQ"
-          secondaryHref="/contact"
-          secondaryLabel="Contact us"
-        />
-      </Section>
+      <CtaBand
+        className="pb-20"
+        title="Questions about security?"
+        description="Read our FAQ or contact us directly."
+        primaryHref="/faq"
+        primaryLabel="View FAQ"
+        secondaryHref="/contact"
+        secondaryLabel="Contact us"
+      />
     </>
   );
 }
