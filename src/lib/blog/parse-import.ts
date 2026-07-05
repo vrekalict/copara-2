@@ -1,4 +1,5 @@
 import { BLOG_CATEGORIES } from "./constants";
+import { normalizeBlogBody } from "./normalize-body";
 import type { BlogCategory, BlogPostInput, BlogPostStatus } from "./types";
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -70,7 +71,7 @@ function parseOnePost(raw: unknown, index: number): BlogPostInput | ImportRowErr
     slug,
     title,
     excerpt,
-    body,
+    body: normalizeBlogBody(body),
     category,
     author,
     seoDescription,

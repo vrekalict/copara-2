@@ -532,6 +532,29 @@
   }
 }
 
+.marketing .blog-content {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #334155;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.marketing .blog-content * {
+  font-family: inherit;
+}
+
+.marketing .blog-content a {
+  overflow-wrap: break-word;
+}
+
+.marketing .blog-content pre,
+.marketing .blog-content code {
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
 .marketing .blog-prose {
   color: var(--marketing-slate-muted);
   font-size: 1.0625rem;

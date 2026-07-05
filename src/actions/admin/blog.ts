@@ -12,6 +12,7 @@ import {
 } from "@/lib/blog/repository";
 import type { BlogCategory, BlogPostInput, BlogPostStatus } from "@/lib/blog/types";
 import { parseBlogPostsJson } from "@/lib/blog/parse-import";
+import { normalizeBlogBody } from "@/lib/blog/normalize-body";
 import { getStaticPostsForImport } from "@/lib/blog";
 import { createServiceClient } from "@/lib/supabase/service";
 
@@ -27,7 +28,7 @@ function parseBlogInput(formData: FormData): BlogPostInput | { error: string } {
   const slug = String(formData.get("slug") ?? "").trim();
   const title = String(formData.get("title") ?? "").trim();
   const excerpt = String(formData.get("excerpt") ?? "").trim();
-  const body = String(formData.get("body") ?? "").trim();
+  const body = normalizeBlogBody(String(formData.get("body") ?? "").trim());
   const category = String(formData.get("category") ?? "") as BlogCategory;
   const author = String(formData.get("author") ?? "Copara Editorial").trim();
   const seoDescription = String(formData.get("seoDescription") ?? "").trim();
