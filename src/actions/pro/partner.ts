@@ -10,7 +10,7 @@ import { brandEmailFrom } from "@/lib/brand";
 import { SITE } from "@/lib/marketing/site";
 import { isAdminEmail } from "@/lib/pro/partner";
 import { getStaffBasePath, staffPath } from "@/lib/admin/staff-path";
-import { getReferralCodeForUser } from "@/lib/pro/referrals";
+import { getReferralSlugForUser } from "@/lib/pro/referrals";
 
 export type PartnerApplication = {
   id: string;
@@ -381,12 +381,19 @@ export async function activatePartnerAccount(token: string) {
   const service = createServiceClient();
   const now = new Date().toISOString();
 
+  const { data: application } = await service
+    .from("professional_partner_applications")
+    .select("practice")
+    .eq("id", activation.applicationId)
+    .maybeSingle();
+
   const { error: profileError } = await service
     .from("profiles")
     .update({
       partner_approved_at: now,
       partner_application_id: activation.applicationId,
       role_default: "professional",
+      practice_name: (application?.practice as string | undefined)?.trim() || null,
     })
     .eq("id", user.id);
 
@@ -405,7 +412,7 @@ export async function activatePartnerAccount(token: string) {
     .eq("id", activation.applicationId);
 
   try {
-    await getReferralCodeForUser(service, user.id);
+    await getReferralSlugForUser(service, user.id);
   } catch (err) {
     console.warn("[partner] referral code generation failed:", err);
   }

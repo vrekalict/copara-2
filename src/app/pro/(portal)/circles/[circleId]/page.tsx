@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Download } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { ExportWizard } from "@/components/exports/export-wizard";
@@ -62,6 +63,7 @@ export default async function ProCirclePage({
   const caseLink = `/join/case/${circleId}`;
   const origin = process.env.NEXT_PUBLIC_SITE_URL ?? "https://copara.ca";
   const fullCaseLink = `${origin.replace(/\/$/, "")}${caseLink}`;
+  const clientHandoutHref = `/pro/materials/client-handout?circleId=${encodeURIComponent(circleId)}`;
 
   return (
     <ProPortalShell
@@ -85,14 +87,25 @@ export default async function ProCirclePage({
             <code className="mt-4 block break-all rounded-lg border border-[var(--marketing-border)] bg-[var(--marketing-mist)]/50 p-3 text-xs">
               {fullCaseLink}
             </code>
-            <Link
-              href={fullCaseLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(buttonVariants({ variant: "outline" }), "mt-4 min-h-10 inline-flex")}
-            >
-              Open invite link
-            </Link>
+            <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+              <Link
+                href={fullCaseLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(buttonVariants({ variant: "outline" }), "min-h-10 inline-flex")}
+              >
+                {t("openInviteLink")}
+              </Link>
+              <Link
+                href={clientHandoutHref}
+                download
+                className={cn(buttonVariants({ variant: "outline" }), "min-h-10 inline-flex gap-2")}
+              >
+                <Download className="size-4" aria-hidden />
+                {t("downloadClientHandout")}
+              </Link>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">{t("clientHandoutHint")}</p>
           </ProPortalCard>
 
           <ProPortalCard>

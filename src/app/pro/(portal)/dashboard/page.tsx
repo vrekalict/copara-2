@@ -135,7 +135,23 @@ export default async function ProDashboardPage({
 
         <section>
           <ProSectionHeading title={t("referralProgram")} description={t("referralProgramHint")} />
-          <ProReferralDashboard {...referral} compact={isEmpty} />
+          <ProReferralDashboard
+            {...referral}
+            slugLabels={{
+              title: t("referralSlug.title"),
+              description: t("referralSlug.description"),
+              slugLabel: t("referralSlug.slugLabel"),
+              slugHint: t("referralSlug.slugHint"),
+              previewLabel: t("referralSlug.previewLabel"),
+              save: t("referralSlug.save"),
+              saving: t("referralSlug.saving"),
+              saved: t("referralSlug.saved"),
+              available: t("referralSlug.available"),
+              unavailable: t("referralSlug.unavailable"),
+              checking: t("referralSlug.checking"),
+            }}
+            compact={isEmpty}
+          />
         </section>
       </div>
     </ProPortalShell>

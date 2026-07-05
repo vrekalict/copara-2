@@ -16,10 +16,6 @@ const MATERIAL_LABELS: Record<
   PartnerMaterialId,
   { titleKey: string; descriptionKey: string }
 > = {
-  "client-handout": {
-    titleKey: "items.clientHandout.title",
-    descriptionKey: "items.clientHandout.description",
-  },
   "referral-handout": {
     titleKey: "items.referralHandout.title",
     descriptionKey: "items.referralHandout.description",

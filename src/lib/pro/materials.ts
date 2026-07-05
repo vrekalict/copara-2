@@ -4,7 +4,6 @@ import path from "path";
 export type PartnerMaterialKind = "pdf" | "zip";
 
 export type PartnerMaterialId =
-  | "client-handout"
   | "referral-handout"
   | "partner-one-pager"
   | "brand-guidelines"
@@ -19,12 +18,6 @@ type PartnerMaterialDef = {
 };
 
 export const PARTNER_MATERIALS: PartnerMaterialDef[] = [
-  {
-    id: "client-handout",
-    filename: "client-handout.pdf",
-    kind: "pdf",
-    folder: "locale",
-  },
   {
     id: "referral-handout",
     filename: "referral-handout.pdf",

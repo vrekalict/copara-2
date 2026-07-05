@@ -1,34 +1,65 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { Resend } from "resend";
 import { createServiceClient } from "@/lib/supabase/service";
 import { createClient } from "@/lib/supabase/server";
 import { BRAND, brandEmailFrom } from "@/lib/brand";
 import {
   buildReferralUrl,
-  findProfessionalByReferralCode,
+  findProfessionalByReferralRef,
   getProfessionalReferrals,
-  getReferralCodeForUser,
+  getReferralSlugForUser,
   recordProfessionalReferral,
   referralStats,
+  checkReferralSlugAvailability,
+  updatePartnerReferralSlug,
 } from "@/lib/pro/referrals";
 import { PRO_REFERRAL_BONUS } from "@/lib/pro/config";
 import { SITE } from "@/lib/marketing/site";
 
 export async function getProReferralDashboard(userId: string) {
   const supabase = await createClient();
-  const code = await getReferralCodeForUser(supabase, userId);
+  const slug = await getReferralSlugForUser(supabase, userId);
   const referrals = await getProfessionalReferrals(supabase, userId);
   const stats = referralStats(referrals);
 
   return {
-    referralCode: code,
-    referralUrl: buildReferralUrl(SITE.url, code),
+    referralSlug: slug,
+    referralCode: slug,
+    referralUrl: buildReferralUrl(SITE.url, slug),
     bonusPercent: PRO_REFERRAL_BONUS.firstInvoicePercent,
     currency: PRO_REFERRAL_BONUS.currency,
     stats,
     referrals,
   };
+}
+
+export async function checkPartnerReferralSlug(slug: string) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { available: false, error: "Sign in required." };
+
+  return checkReferralSlugAvailability(supabase, slug, user.id);
+}
+
+export async function savePartnerReferralSlug(
+  _prev: { error?: string; success?: boolean } | null,
+  formData: FormData,
+) {
+  const slug = String(formData.get("slug") ?? "").trim();
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Sign in required." };
+
+  const result = await updatePartnerReferralSlug(supabase, user.id, slug);
+  if ("error" in result && result.error) return { error: result.error };
+  revalidatePath("/pro/dashboard");
+  return { success: true };
 }
 
 export async function captureReferralLead(input: {
@@ -38,12 +69,12 @@ export async function captureReferralLead(input: {
   source?: string;
 }) {
   const supabase = createServiceClient();
-  const professional = await findProfessionalByReferralCode(supabase, input.referralCode);
+  const professional = await findProfessionalByReferralRef(supabase, input.referralCode);
   if (!professional) return { error: "Invalid referral code." };
 
   return recordProfessionalReferral(supabase, {
     professionalId: professional.id,
-    referralCode: professional.referralCode,
+    referralCode: professional.referralSlug,
     referredEmail: input.email,
     referredName: input.name,
     source: input.source ?? "referral_link",

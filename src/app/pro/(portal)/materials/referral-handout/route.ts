@@ -6,7 +6,7 @@ import { requireApprovedPartner } from "@/lib/pro/partner";
 import { getReferralHandoutCopy } from "@/lib/pro/referral-handout-copy";
 import { ReferralHandoutDocument } from "@/lib/pro/referral-handout-pdf";
 import { referralQrDataUrl } from "@/lib/pro/referral-qr";
-import { getReferralCodeForUser, buildReferralUrl } from "@/lib/pro/referrals";
+import { getReferralSlugForUser, buildReferralUrl } from "@/lib/pro/referrals";
 import { SITE } from "@/lib/marketing/site";
 
 export const runtime = "nodejs";
@@ -28,7 +28,7 @@ export async function GET() {
 
   let referralUrl: string;
   try {
-    const code = await getReferralCodeForUser(supabase, user.id);
+    const code = await getReferralSlugForUser(supabase, user.id);
     referralUrl = buildReferralUrl(SITE.url, code);
   } catch {
     return NextResponse.json({ error: "Could not load referral link." }, { status: 500 });

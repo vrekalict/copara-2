@@ -296,7 +296,20 @@
     "yourCasesHint": "Sélectionnez un dossier pour voir les membres, partager le lien d'invitation et générer des exportations.",
     "noCasesHint": "Vous n'avez pas encore créé de dossier.",
     "referralProgram": "Programme de référencement",
-    "referralProgramHint": "Distinct des invitations de dossier. Partagez ce lien lorsqu'une famille s'inscrit seule — vous recevez un bonus lorsqu'elle s'abonne.",
+    "referralProgramHint": "Distinct des invitations de dossier. Partagez votre lien /r/ lorsqu'une famille s'inscrit seule — vous recevez un bonus lorsqu'elle s'abonne.",
+    "referralSlug": {
+      "title": "Votre lien de parrainage",
+      "description": "Choisissez un chemin court et mémorable pour votre pratique. Les familles qui s'inscrivent via ce lien vous sont attribuées pour le suivi des bonus.",
+      "slugLabel": "Chemin du lien",
+      "slugHint": "Lettres, chiffres et tirets seulement (3 à 48 caractères).",
+      "previewLabel": "Aperçu",
+      "save": "Enregistrer",
+      "saving": "Enregistrement…",
+      "saved": "Enregistré",
+      "available": "Ce lien est disponible.",
+      "unavailable": "Ce lien est déjà pris.",
+      "checking": "Vérification…"
+    },
     "newCaseDescription": "Invitez les deux parents avec un seul lien. Chacun se connecte avec le courriel qui a reçu l'invitation.",
     "casePageDescription": "Partagez le lien d'invitation avec les deux parents, puis générez des exportations organisées lorsqu'ils auront rejoint.",
     "caseName": "Nom du dossier",
@@ -310,6 +323,9 @@
     "case": "Dossier",
     "dualInviteLink": "Lien d'invitation pour les deux parents",
     "dualInviteHint": "Partagez ce lien unique. Chaque parent se connecte avec le courriel qui a reçu l'invitation.",
+    "openInviteLink": "Ouvrir le lien d'invitation",
+    "downloadClientHandout": "Télécharger la fiche client",
+    "clientHandoutHint": "PDF avec le lien d'invitation de ce dossier et un code QR — à remettre aux clients après la création du dossier.",
     "members": "Membres",
     "invalidCase": "Ce lien de dossier n'est plus valide.",
     "goHome": "Accueil",
@@ -325,7 +341,7 @@
       "downloadsIntro": "PDF et ressources de marque pour votre pratique. Les fichiers marqués Bientôt disponible seront activés automatiquement lors de la publication.",
       "download": "Télécharger",
       "comingSoon": "Bientôt disponible",
-      "personalized": "Personnalisé avec votre lien de parrainage",
+      "personalized": "Personnalisé avec votre lien /r/",
       "englishFallback": "Version anglaise (PDF français pas encore disponible).",
       "copy": "Copier",
       "copied": "Copié",
@@ -344,7 +360,7 @@
         },
         "referralHandout": {
           "title": "Fiche parrainage",
-          "description": "PDF d'une page pour la salle d'attente ou l'accueil — généré avec votre lien de parrainage unique."
+          "description": "PDF d'une page pour la salle d'attente ou l'accueil — généré avec votre lien /r/ unique et un code QR."
         },
         "partnerOnePager": {
           "title": "Aperçu partenaire",

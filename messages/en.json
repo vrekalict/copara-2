@@ -296,7 +296,20 @@
     "yourCasesHint": "Select a case to view members, share the invite link, and run exports.",
     "noCasesHint": "You haven't created a case yet.",
     "referralProgram": "Referral program",
-    "referralProgramHint": "Separate from case invites. Share this link when a family signs up on their own — you earn a bonus when they subscribe.",
+    "referralProgramHint": "Separate from case invites. Share your /r/ link when a family signs up on their own — you earn a bonus when they subscribe.",
+    "referralSlug": {
+      "title": "Your referral link",
+      "description": "Choose a short, memorable path for your practice. Families who sign up through this link are attributed to you for bonus tracking.",
+      "slugLabel": "Link path",
+      "slugHint": "Letters, numbers, and hyphens only (3–48 characters).",
+      "previewLabel": "Preview",
+      "save": "Save link",
+      "saving": "Saving…",
+      "saved": "Saved",
+      "available": "This link is available.",
+      "unavailable": "This link is already taken.",
+      "checking": "Checking availability…"
+    },
     "newCaseDescription": "Invite both parents with one dual-parent link. Each signs in with the email that received the invite.",
     "casePageDescription": "Share the invite link with both parents, then generate organized exports when they join.",
     "caseName": "Case name",
@@ -310,6 +323,9 @@
     "case": "Case",
     "dualInviteLink": "Dual-parent invite link",
     "dualInviteHint": "Share this single link with both parents. Each signs in with the email that received the invite.",
+    "openInviteLink": "Open invite link",
+    "downloadClientHandout": "Download client handout",
+    "clientHandoutHint": "PDF with this case invite link and QR code — give to clients after creating the case.",
     "members": "Members",
     "invalidCase": "This case link is no longer valid.",
     "goHome": "Go home",
@@ -325,7 +341,7 @@
       "downloadsIntro": "PDFs and brand assets for your practice. Files marked Coming soon will unlock automatically when published.",
       "download": "Download",
       "comingSoon": "Coming soon",
-      "personalized": "Personalized with your referral link",
+      "personalized": "Personalized with your /r/ referral link",
       "englishFallback": "English version (French PDF not yet available).",
       "copy": "Copy to clipboard",
       "copied": "Copied",
@@ -340,11 +356,11 @@
       "items": {
         "clientHandout": {
           "title": "Client handout (case invite)",
-          "description": "PDF for clients after you create a case — invite flow, trial, and signup."
+          "description": "Download from each case page — PDF includes that case's invite link and QR code."
         },
         "referralHandout": {
           "title": "Referral handout",
-          "description": "One-page PDF for your waiting room or intake — generated with your unique referral link."
+          "description": "One-page PDF for your waiting room or intake — generated with your unique /r/ referral link and QR code."
         },
         "partnerOnePager": {
           "title": "Partner one-pager",

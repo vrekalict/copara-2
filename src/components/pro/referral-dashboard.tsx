@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Eye, FileText, Gift, Users } from "lucide-react";
 import type { ProfessionalReferral } from "@/lib/pro/referrals";
+import { ProReferralSlugEditor } from "@/components/pro/pro-referral-slug-editor";
 import { ProPortalCard, ProPortalStat } from "@/components/pro/pro-portal-shell";
 import { Button } from "@/components/ui/button";
 
@@ -59,14 +60,17 @@ export function ProBenefitGrid({
 
 export function ProReferralDashboard({
   referralUrl,
+  referralSlug,
   referralCode,
   bonusPercent,
   currency,
   stats,
   referrals,
+  slugLabels,
   compact = false,
 }: {
   referralUrl: string;
+  referralSlug: string;
   referralCode: string;
   bonusPercent: number;
   currency: string;
@@ -80,6 +84,19 @@ export function ProReferralDashboard({
     total: number;
   };
   referrals: ProfessionalReferral[];
+  slugLabels: {
+    title: string;
+    description: string;
+    slugLabel: string;
+    slugHint: string;
+    previewLabel: string;
+    save: string;
+    saving: string;
+    saved: string;
+    available: string;
+    unavailable: string;
+    checking: string;
+  };
   compact?: boolean;
 }) {
   const [copied, setCopied] = useState(false);
@@ -92,6 +109,8 @@ export function ProReferralDashboard({
 
   return (
     <div className="flex flex-col gap-6">
+      <ProReferralSlugEditor currentSlug={referralSlug} labels={slugLabels} />
+
       <ProPortalCard>
         <p className="text-sm font-semibold text-[var(--marketing-slate)]">Your referral link</p>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">

@@ -1,6 +1,12 @@
-import { randomBytes } from "crypto";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { isApprovedPartner } from "@/lib/pro/partner";
+import {
+  generateUniqueReferralSlug,
+  isLegacyReferralCode,
+  isReferralSlugAvailable,
+  slugifyReferralSource,
+  validateReferralSlug,
+} from "@/lib/pro/referral-slug";
 
 export type ReferralStatus = "pending" | "signed_up" | "subscribed" | "ineligible";
 export type BonusStatus = "pending" | "eligible" | "paid" | "ineligible";
@@ -19,21 +25,51 @@ export type ProfessionalReferral = {
   subscribedAt: string | null;
 };
 
-function normalizeCode(code: string) {
-  return code.trim().toLowerCase();
+function normalizeRef(ref: string) {
+  return ref.trim().toLowerCase();
 }
 
-function generateReferralCode() {
-  return randomBytes(4).toString("hex");
+async function getPracticeNameForUser(
+  supabase: SupabaseClient,
+  userId: string,
+  profile: {
+    practice_name?: string | null;
+    partner_application_id?: string | null;
+    display_name?: string | null;
+  },
+): Promise<string> {
+  if (profile.practice_name?.trim()) {
+    return profile.practice_name.trim();
+  }
+
+  if (profile.partner_application_id) {
+    const { data: app } = await supabase
+      .from("professional_partner_applications")
+      .select("practice")
+      .eq("id", profile.partner_application_id)
+      .maybeSingle();
+
+    if (app?.practice) {
+      return app.practice as string;
+    }
+  }
+
+  if (profile.display_name?.trim()) {
+    return profile.display_name.trim();
+  }
+
+  return `partner-${userId.slice(0, 8)}`;
 }
 
-export async function getReferralCodeForUser(
+export async function ensureReferralSlugForUser(
   supabase: SupabaseClient,
   userId: string,
 ): Promise<string> {
   const { data: profile } = await supabase
     .from("profiles")
-    .select("referral_code, partner_approved_at")
+    .select(
+      "referral_slug, referral_code, practice_name, partner_application_id, partner_approved_at, display_name",
+    )
     .eq("id", userId)
     .maybeSingle();
 
@@ -41,46 +77,129 @@ export async function getReferralCodeForUser(
     throw new Error("Partner access is not approved.");
   }
 
-  if (profile?.referral_code) {
-    return profile.referral_code as string;
+  if (profile?.referral_slug) {
+    return profile.referral_slug as string;
   }
 
-  for (let attempt = 0; attempt < 8; attempt++) {
-    const code = generateReferralCode();
-    const { error } = await supabase
-      .from("profiles")
-      .update({ referral_code: code })
-      .eq("id", userId);
+  const practiceName = await getPracticeNameForUser(supabase, userId, profile ?? {});
+  const slug = await generateUniqueReferralSlug(supabase, practiceName, userId);
 
-    if (!error) return code;
-  }
-
-  const { data: refreshed } = await supabase
+  const { error } = await supabase
     .from("profiles")
-    .select("referral_code")
-    .eq("id", userId)
+    .update({ referral_slug: slug, referral_code: slug })
+    .eq("id", userId);
+
+  if (error) {
+    throw new Error("Could not assign referral slug.");
+  }
+
+  return slug;
+}
+
+/** @deprecated Use getReferralSlugForUser */
+export async function getReferralCodeForUser(
+  supabase: SupabaseClient,
+  userId: string,
+): Promise<string> {
+  return ensureReferralSlugForUser(supabase, userId);
+}
+
+export async function getReferralSlugForUser(
+  supabase: SupabaseClient,
+  userId: string,
+): Promise<string> {
+  return ensureReferralSlugForUser(supabase, userId);
+}
+
+export async function findProfessionalByReferralRef(
+  supabase: SupabaseClient,
+  ref: string,
+): Promise<{ id: string; referralSlug: string } | null> {
+  const normalized = normalizeRef(ref);
+
+  const { data: bySlug } = await supabase
+    .from("profiles")
+    .select("id, referral_slug, partner_approved_at")
+    .eq("referral_slug", normalized)
     .maybeSingle();
 
-  if (refreshed?.referral_code) {
-    return refreshed.referral_code as string;
+  if (bySlug?.partner_approved_at && bySlug.referral_slug) {
+    return { id: bySlug.id as string, referralSlug: bySlug.referral_slug as string };
   }
 
-  throw new Error("Could not generate referral code.");
+  const { data: byCode } = await supabase
+    .from("profiles")
+    .select("id, referral_code, referral_slug, partner_approved_at")
+    .eq("referral_code", normalized)
+    .maybeSingle();
+
+  if (!byCode?.partner_approved_at) return null;
+
+  const slug =
+    (byCode.referral_slug as string | null) ??
+    (isLegacyReferralCode(normalized) ? null : normalized);
+
+  if (!slug && byCode.referral_code) {
+    return {
+      id: byCode.id as string,
+      referralSlug: byCode.referral_code as string,
+    };
+  }
+
+  if (slug) {
+    return { id: byCode.id as string, referralSlug: slug };
+  }
+
+  return null;
 }
 
 export async function findProfessionalByReferralCode(
   supabase: SupabaseClient,
   code: string,
 ): Promise<{ id: string; referralCode: string } | null> {
-  const normalized = normalizeCode(code);
-  const { data } = await supabase
-    .from("profiles")
-    .select("id, referral_code, partner_approved_at")
-    .eq("referral_code", normalized)
-    .maybeSingle();
+  const professional = await findProfessionalByReferralRef(supabase, code);
+  if (!professional) return null;
+  return { id: professional.id, referralCode: professional.referralSlug };
+}
 
-  if (!data?.referral_code || !data.partner_approved_at) return null;
-  return { id: data.id as string, referralCode: data.referral_code as string };
+export async function checkReferralSlugAvailability(
+  supabase: SupabaseClient,
+  slug: string,
+  userId: string,
+): Promise<{ available: boolean; error?: string }> {
+  const validation = validateReferralSlug(slug);
+  if (validation) return { available: false, error: validation };
+
+  const available = await isReferralSlugAvailable(supabase, slug, userId);
+  if (!available) {
+    return { available: false, error: "This link is already taken. Try another." };
+  }
+
+  return { available: true };
+}
+
+export async function updatePartnerReferralSlug(
+  supabase: SupabaseClient,
+  userId: string,
+  slugInput: string,
+): Promise<{ success: true; slug: string } | { error: string }> {
+  const slug = slugifyReferralSource(slugInput);
+  const check = await checkReferralSlugAvailability(supabase, slug, userId);
+  if (!check.available) {
+    return { error: check.error ?? "This link is unavailable." };
+  }
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ referral_slug: slug, referral_code: slug })
+    .eq("id", userId);
+
+  if (error) {
+    console.error("[referrals] slug update failed:", error.message);
+    return { error: "Could not update your referral link." };
+  }
+
+  return { success: true, slug };
 }
 
 export async function recordProfessionalReferral(
@@ -121,7 +240,7 @@ export async function recordProfessionalReferral(
     .from("professional_referrals")
     .insert({
       professional_id: input.professionalId,
-      referral_code: normalizeCode(input.referralCode),
+      referral_code: normalizeRef(input.referralCode),
       referred_email: email,
       referred_name: input.referredName?.trim() || null,
       source: input.source ?? "referral_link",
@@ -185,7 +304,13 @@ export function referralStats(referrals: ProfessionalReferral[]) {
   return { pending, signedUp, subscribed, bonusEligible, bonusPaid, potentialBonus, total: referrals.length };
 }
 
-export function buildReferralUrl(siteUrl: string, code: string) {
+export function buildReferralUrl(siteUrl: string, slug: string) {
   const base = siteUrl.replace(/\/$/, "");
-  return `${base}/sign-up?ref=${encodeURIComponent(code)}`;
+  const normalized = slugifyReferralSource(slug);
+  return `${base}/r/${encodeURIComponent(normalized)}`;
+}
+
+export function buildLegacyReferralSignupUrl(siteUrl: string, ref: string) {
+  const base = siteUrl.replace(/\/$/, "");
+  return `${base}/sign-up?ref=${encodeURIComponent(ref.trim().toLowerCase())}`;
 }

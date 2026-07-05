@@ -7,7 +7,7 @@ import {
   subscriptionRowFromStripe,
   upsertSubscription,
 } from "@/lib/stripe/sync";
-import { findProfessionalByReferralCode } from "@/lib/pro/referrals";
+import { findProfessionalByReferralRef } from "@/lib/pro/referrals";
 import { linkReferralToUser, processReferralFirstInvoice } from "@/lib/pro/referral-bonus";
 
 export const runtime = "nodejs";
@@ -20,7 +20,7 @@ async function markReferralSignedUp(
   if (!referralCode) return;
 
   const supabase = createServiceClient();
-  const professional = await findProfessionalByReferralCode(supabase, referralCode);
+  const professional = await findProfessionalByReferralRef(supabase, referralCode);
   if (!professional) return;
 
   const normalizedEmail = email.trim().toLowerCase();
@@ -49,7 +49,7 @@ async function markReferralSignedUp(
 
   await supabase.from("professional_referrals").insert({
     professional_id: professional.id,
-    referral_code: referralCode.trim().toLowerCase(),
+    referral_code: professional.referralSlug,
     referred_email: normalizedEmail,
     referred_user_id: userId ?? null,
     status: "signed_up",
