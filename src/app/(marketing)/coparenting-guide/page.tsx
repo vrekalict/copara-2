@@ -1,9 +1,11 @@
-import { CoparentingGuideContent } from "@/components/marketing/coparenting-guide-content";
+import { CoparentingGuidePageContent } from "@/components/marketing/coparenting-guide-content";
 import { JsonLd } from "@/components/marketing/json-ld";
-import { Section } from "@/components/marketing/section";
 import {
   GUIDE_CLOSING,
+  GUIDE_HIGHLIGHTS,
   GUIDE_INTRO,
+  GUIDE_MISTAKES,
+  GUIDE_QUICK_WINS,
   GUIDE_SECTIONS,
 } from "@/content/marketing/coparenting-guide.en";
 import { pageMetadata } from "@/lib/marketing/metadata";
@@ -12,7 +14,7 @@ import { webPageSchema } from "@/lib/marketing/schema";
 export const metadata = pageMetadata({
   title: "Co-parenting guide",
   description:
-    "How Canadian separated parents reduce co-parenting conflict with shared calendars, documented messages, expense records, and organized child information.",
+    "Practical guide for Canadian separated parents: shared calendars, documented messages, expense records, document vaults, exports, and habits that keep children out of conflict.",
   path: "/coparenting-guide",
 });
 
@@ -23,19 +25,22 @@ export default function CoparentingGuidePage() {
         data={webPageSchema(
           "Co-parenting guide",
           "/coparenting-guide",
-          "Organized co-parenting guide for separated parents in Canada.",
+          "Practical co-parenting guide for separated parents in Canada.",
         )}
       />
-      <Section className="pt-12 md:pb-20 md:pt-16">
-        <div className="mx-auto max-w-4xl px-1">
-          <CoparentingGuideContent
-            intro={GUIDE_INTRO}
-            sections={GUIDE_SECTIONS}
-            closing={GUIDE_CLOSING}
-            langSwitch={{ label: "Version française", href: "/fr/guide-coparentalite" }}
-          />
-        </div>
-      </Section>
+      <CoparentingGuidePageContent
+        intro={GUIDE_INTRO}
+        highlights={GUIDE_HIGHLIGHTS}
+        quickWins={GUIDE_QUICK_WINS}
+        sections={GUIDE_SECTIONS}
+        mistakes={GUIDE_MISTAKES}
+        closing={GUIDE_CLOSING}
+        langSwitch={{ label: "Version française", href: "/fr/guide-coparentalite" }}
+        quickWinsTitle="Start here: five quick wins"
+        mistakesTitle="Common mistakes to avoid"
+        tocTitle="In this guide"
+        checklistTitle="What to do"
+      />
     </>
   );
 }
