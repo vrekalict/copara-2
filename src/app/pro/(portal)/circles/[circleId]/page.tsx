@@ -3,7 +3,9 @@ import { redirect } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { ExportWizard } from "@/components/exports/export-wizard";
+import { ProCaseBillingNote } from "@/components/pro/pro-partner-guide";
 import { ProPortalCard, ProPortalShell } from "@/components/pro/pro-portal-shell";
+import { STRIPE_TRIAL_DAYS } from "@/lib/stripe/config";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -71,6 +73,11 @@ export default async function ProCirclePage({
       maxWidth="6xl"
     >
       <div className="flex flex-col gap-6">
+        <ProCaseBillingNote
+          title={t("caseBillingTitle")}
+          body={t("caseBillingBody", { trialDays: STRIPE_TRIAL_DAYS })}
+        />
+
         <div className="grid gap-4 lg:grid-cols-2">
           <ProPortalCard>
             <p className="font-semibold text-[var(--marketing-slate)]">{t("dualInviteLink")}</p>
@@ -90,6 +97,7 @@ export default async function ProCirclePage({
 
           <ProPortalCard>
             <p className="font-semibold text-[var(--marketing-slate)]">{t("members")}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{t("memberStatusHint")}</p>
             <ul className="mt-3 flex flex-col gap-2 text-sm">
               {(members ?? []).map((m) => {
                 const profile = Array.isArray(m.profiles) ? m.profiles[0] : m.profiles;
