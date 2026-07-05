@@ -5,12 +5,12 @@ import { headers } from "next/headers";
 import { recordLegalAcceptance } from "@/actions/legal/acceptance";
 import { captureReferralLead } from "@/actions/pro/referrals";
 import { parseLegalFromForm, validateLegalForm } from "@/lib/auth/legal-form";
-import { authCallbackUrl, resolveAuthRedirect } from "@/lib/auth/redirect";
+import { authCallbackUrl, resolveAuthRedirect, safeRedirectPath } from "@/lib/auth/redirect";
 import { createClient } from "@/lib/supabase/server";
 
 function nextPath(formData: FormData) {
   const value = String(formData.get("next") ?? "");
-  return value.startsWith("/") ? value : "/onboarding/circle";
+  return safeRedirectPath(value, "/onboarding/circle");
 }
 
 export async function signUpWithPassword(formData: FormData) {
@@ -120,4 +120,11 @@ export async function signOut() {
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect("/");
+}
+
+export async function signOutTo(formData: FormData) {
+  const next = safeRedirectPath(String(formData.get("next") ?? ""), "/sign-in");
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  redirect(next);
 }

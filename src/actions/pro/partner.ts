@@ -321,7 +321,20 @@ export async function getPartnerActivation(token: string) {
     .eq("approval_token", token.trim())
     .maybeSingle();
 
-  if (!data || data.status !== "approved") return null;
+  if (!data) return null;
+
+  if (data.status === "activated") {
+    return {
+      expired: false as const,
+      alreadyActivated: true as const,
+      applicationId: data.id as string,
+      email: data.email as string,
+      firstName: data.first_name as string,
+      lastName: data.last_name as string,
+    };
+  }
+
+  if (data.status !== "approved") return null;
 
   if (
     data.approval_token_expires_at &&
@@ -355,6 +368,10 @@ export async function activatePartnerAccount(token: string) {
     return { error: "This activation link is invalid or expired." };
   }
 
+  if ("alreadyActivated" in activation && activation.alreadyActivated) {
+    redirect("/pro/dashboard");
+  }
+
   if (user.email.trim().toLowerCase() !== activation.email.trim().toLowerCase()) {
     return {
       error: `Sign in with ${activation.email} — the email on your approved application.`,
@@ -383,7 +400,6 @@ export async function activatePartnerAccount(token: string) {
     .update({
       status: "activated",
       user_id: user.id,
-      approval_token: null,
       approval_token_expires_at: null,
     })
     .eq("id", activation.applicationId);

@@ -3,9 +3,10 @@
 import { useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { signOutTo } from "@/actions/auth";
 import { activatePartnerAccount } from "@/actions/pro/partner";
 import { SignInForm } from "@/components/auth/sign-in-form";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export function PartnerActivatePanel({
@@ -22,6 +23,8 @@ export function PartnerActivatePanel({
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const next = `/pro/activate?token=${encodeURIComponent(token)}`;
+  const signUpNext = `/pro/activate/sign-up?token=${encodeURIComponent(token)}`;
+  const signInNext = `/pro/activate?token=${encodeURIComponent(token)}&sign-in=1`;
 
   if (mode === "wrong-account") {
     return (
@@ -30,18 +33,18 @@ export function PartnerActivatePanel({
           You are signed in with a different email than <strong>{email}</strong>. Sign out, then
           create or sign in with the email from your approved application.
         </p>
-        <Link
-          href={`/pro/activate/sign-up?token=${encodeURIComponent(token)}`}
-          className={cn(buttonVariants(), "min-h-11 justify-center")}
-        >
-          Create partner account
-        </Link>
-        <Link
-          href={`/pro/activate?token=${encodeURIComponent(token)}&sign-in=1`}
-          className={cn(buttonVariants({ variant: "outline" }), "min-h-11 justify-center")}
-        >
-          Sign in with {email}
-        </Link>
+        <form action={signOutTo}>
+          <input type="hidden" name="next" value={signUpNext} />
+          <Button type="submit" className="min-h-11 w-full">
+            Sign out and create partner account
+          </Button>
+        </form>
+        <form action={signOutTo}>
+          <input type="hidden" name="next" value={signInNext} />
+          <Button type="submit" variant="outline" className="min-h-11 w-full">
+            Sign out and sign in with {email}
+          </Button>
+        </form>
       </div>
     );
   }

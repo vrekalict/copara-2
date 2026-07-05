@@ -20,9 +20,11 @@ export default async function SubscribePage({
   } = await supabase.auth.getUser();
 
   if (!user) {
-    const next = plan ? `/subscribe?plan=${encodeURIComponent(plan)}` : "/subscribe";
-    const refParam = ref ? `&ref=${encodeURIComponent(ref)}` : "";
-    redirect(`/sign-in?next=${encodeURIComponent(`${next}${refParam}`)}`);
+    const params = new URLSearchParams();
+    if (plan) params.set("plan", plan);
+    if (ref) params.set("ref", ref);
+    const next = params.size > 0 ? `/subscribe?${params.toString()}` : "/subscribe";
+    redirect(`/sign-in?next=${encodeURIComponent(next)}`);
   }
 
   const access = await getAppAccess(supabase, user.id);

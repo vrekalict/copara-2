@@ -215,3 +215,99 @@ export function buildStoredParams(data: ExportData): ExportParams {
     message_hashes: data.chainRecords.map((r) => r.hash),
   };
 }
+
+/** Re-query live rows and recompute chain hashes for tamper verification. */
+export async function fetchLiveChainRecords(
+  supabase: SupabaseClient,
+  kind: ExportKind,
+  storedIds: string[],
+): Promise<ChainRecord[]> {
+  if (storedIds.length === 0) return [];
+
+  if (kind === "messages") {
+    const { data: messages } = await supabase
+      .from("messages")
+      .select("id, hash")
+      .in("id", storedIds)
+      .order("created_at", { ascending: true });
+
+    const liveMap = new Map(
+      (messages ?? []).map((m) => [m.id as string, m.hash as string]),
+    );
+
+    return storedIds.map((id) => ({
+      id,
+      hash: liveMap.get(id) ?? "__missing__",
+    }));
+  }
+
+  if (kind === "expenses") {
+    const { data: expenses } = await supabase
+      .from("expenses")
+      .select("id, amount_cents, created_at")
+      .in("id", storedIds)
+      .order("created_at", { ascending: true });
+
+    const liveMap = new Map(
+      (expenses ?? []).map((e) => [
+        e.id as string,
+        computeChainDigest([
+          { id: e.id as string, hash: `${e.amount_cents}:${e.created_at}` },
+        ]),
+      ]),
+    );
+
+    return storedIds.map((id) => ({
+      id,
+      hash: liveMap.get(id) ?? "__missing__",
+    }));
+  }
+
+  if (kind === "schedule") {
+    const [{ data: events }, { data: checkins }] = await Promise.all([
+      supabase.from("events").select("id, starts_at").in("id", storedIds),
+      supabase.from("checkins").select("id, checked_at").in("id", storedIds),
+    ]);
+
+    const eventMap = new Map(
+      (events ?? []).map((e) => [e.id as string, e.starts_at as string]),
+    );
+    const checkinMap = new Map(
+      (checkins ?? []).map((c) => [c.id as string, c.checked_at as string]),
+    );
+
+    return storedIds.map((id) => {
+      const startsAt = eventMap.get(id);
+      if (startsAt !== undefined) {
+        return { id, hash: id + startsAt };
+      }
+      const checkedAt = checkinMap.get(id);
+      if (checkedAt !== undefined) {
+        return { id, hash: id + checkedAt };
+      }
+      return { id, hash: "__missing__" };
+    });
+  }
+
+  if (kind === "change_requests") {
+    const { data: changeRequests } = await supabase
+      .from("change_requests")
+      .select("id, status, created_at")
+      .in("id", storedIds)
+      .order("created_at", { ascending: true });
+
+    const liveMap = new Map(
+      (changeRequests ?? []).map((c) => [
+        c.id as string,
+        (c.id as string) + (c.status as string) + (c.created_at as string),
+      ]),
+    );
+
+    return storedIds.map((id) => ({
+      id,
+      hash: liveMap.get(id) ?? "__missing__",
+    }));
+  }
+
+  return storedIds.map((id) => ({ id, hash: "__missing__" }));
+}

@@ -92,8 +92,18 @@ export default async function ProActivatePage({
     <AuthShell
       variant="partner"
       eyebrow="Partner access"
-      title={panelMode === "sign-in" ? "Sign in to activate" : "Activate partner access"}
-      description={`Welcome, ${activation.firstName}. Complete activation for your Copara partner dashboard.`}
+      title={
+        panelMode === "sign-in"
+          ? "Sign in to activate"
+          : panelMode === "wrong-account"
+            ? "Wrong account signed in"
+            : "Activate partner access"
+      }
+      description={
+        panelMode === "wrong-account"
+          ? `You're signed in with a different email than ${activation.email}. Sign out to continue with the email from your approved application.`
+          : `Welcome, ${activation.firstName}. Complete activation for your Copara partner dashboard.`
+      }
     >
       <PartnerActivatePanel
         token={token}

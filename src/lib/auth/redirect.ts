@@ -1,5 +1,21 @@
 import { isPlanKey } from "@/lib/stripe/config";
 
+/** Reject protocol-relative and off-site redirect targets in `next` params. */
+export function isSafeRedirectPath(path: string): boolean {
+  const trimmed = path.trim();
+  if (!trimmed.startsWith("/")) return false;
+  if (trimmed.startsWith("//")) return false;
+  if (trimmed.includes("\\")) return false;
+  if (trimmed.includes("://")) return false;
+  return true;
+}
+
+/** Returns path when safe, otherwise the fallback. */
+export function safeRedirectPath(path: string | null | undefined, fallback: string): string {
+  const trimmed = path?.trim() ?? "";
+  return isSafeRedirectPath(trimmed) ? trimmed : fallback;
+}
+
 function subscribePath(plan: string, ref: string) {
   const params = new URLSearchParams({ plan });
   if (ref) params.set("ref", ref);
@@ -19,9 +35,9 @@ export function resolveAuthRedirect(options: {
   const ref = options.ref?.trim() ?? "";
   const fallback = options.fallback ?? "/app";
 
-  if (next.startsWith("/join/")) return next;
+  if (next.startsWith("/join/") && isSafeRedirectPath(next)) return next;
   if (plan && isPlanKey(plan)) return subscribePath(plan, ref);
-  if (next.startsWith("/")) return next;
+  if (isSafeRedirectPath(next)) return next;
   return fallback;
 }
 

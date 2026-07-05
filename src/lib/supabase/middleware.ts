@@ -8,6 +8,7 @@ import {
   staffPathToInternal,
 } from "@/lib/admin/staff-path";
 import { pathRequiresLegalAcceptance, userHasLegalAcceptance } from "@/lib/auth/legal-gate";
+import { safeRedirectPath } from "@/lib/auth/redirect";
 
 function redirectWwwToCanonicalHost(request: NextRequest): NextResponse | null {
   const host = request.headers.get("host");
@@ -88,7 +89,7 @@ export async function updateSession(request: NextRequest) {
     const hasLegal = await userHasLegalAcceptance(supabase, user.id);
     if (hasLegal) {
       const next = request.nextUrl.searchParams.get("next");
-      const destination = next?.startsWith("/") ? next : "/app";
+      const destination = safeRedirectPath(next, "/app");
       return NextResponse.redirect(new URL(destination, request.url));
     }
   }

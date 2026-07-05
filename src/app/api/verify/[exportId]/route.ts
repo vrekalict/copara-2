@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { computeChainDigest, verifyChainDigest } from "@/lib/exports/chain";
+import { fetchLiveChainRecords } from "@/lib/exports/fetch-data";
 import type { ExportKind, ExportParams } from "@/lib/exports/types";
 import { BRAND } from "@/lib/brand";
 
@@ -30,67 +31,36 @@ export async function GET(
   const storedIds = params.message_ids ?? [];
   const storedHashes = params.message_hashes ?? [];
 
-  let liveRecords: { id: string; hash: string }[] = [];
+  const storedRecords = storedIds.map((id, i) => ({
+    id,
+    hash: storedHashes[i] ?? "",
+  }));
 
-  if (kind === "messages" && storedIds.length > 0) {
-    const { data: messages } = await service
-      .from("messages")
-      .select("id, hash")
-      .in("id", storedIds)
-      .order("created_at", { ascending: true });
-
-    liveRecords = (messages ?? []).map((m) => ({
-      id: m.id as string,
-      hash: m.hash as string,
-    }));
-  } else if (storedIds.length > 0 && storedHashes.length === storedIds.length) {
-    liveRecords = storedIds.map((id, i) => ({
-      id,
-      hash: storedHashes[i]!,
-    }));
-
-    if (kind === "messages") {
-      const { data: messages } = await service
-        .from("messages")
-        .select("id, hash")
-        .in("id", storedIds);
-
-      const liveMap = new Map(
-        (messages ?? []).map((m) => [m.id as string, m.hash as string]),
-      );
-
-      liveRecords = storedIds.map((id) => ({
-        id,
-        hash: liveMap.get(id) ?? "__missing__",
-      }));
-    }
-  }
-
-  const recomputedDigest =
-    kind === "messages" && liveRecords.every((r) => r.hash !== "__missing__")
-      ? computeChainDigest(liveRecords)
-      : computeChainDigest(
-          storedIds.map((id, i) => ({ id, hash: storedHashes[i] ?? "" })),
-        );
+  const liveRecords =
+    storedIds.length > 0
+      ? await fetchLiveChainRecords(service, kind, storedIds)
+      : [];
 
   const hashMatch =
-    kind === "messages"
-      ? storedIds.every((id, i) => {
-          const live = liveRecords.find((r) => r.id === id);
-          return live?.hash === storedHashes[i];
-        })
-      : true;
+    storedIds.length > 0 &&
+    storedIds.every((id, i) => {
+      const live = liveRecords.find((r) => r.id === id);
+      return live?.hash === storedHashes[i];
+    });
 
-  const digestMatch = verifyChainDigest(
-    storedIds.map((id, i) => ({ id, hash: storedHashes[i] ?? "" })),
-    exportRow.chain_digest as string,
-  );
+  const digestMatch = verifyChainDigest(storedRecords, exportRow.chain_digest as string);
 
   const liveDigestMatch =
     liveRecords.length > 0 &&
+    liveRecords.every((r) => r.hash !== "__missing__") &&
     verifyChainDigest(liveRecords, exportRow.chain_digest as string);
 
-  const verified = digestMatch && hashMatch && (kind !== "messages" || liveDigestMatch);
+  const verified = digestMatch && hashMatch && liveDigestMatch;
+
+  const recomputedDigest =
+    liveRecords.length > 0 && liveRecords.every((r) => r.hash !== "__missing__")
+      ? computeChainDigest(liveRecords)
+      : null;
 
   const circles = exportRow.circles as { name: string } | { name: string }[] | null;
   const circle = Array.isArray(circles) ? circles[0] : circles;
