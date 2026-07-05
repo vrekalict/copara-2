@@ -9,6 +9,7 @@ import { ProCaseList } from "@/components/pro/pro-case-list";
 import { ProGuideCollapsible } from "@/components/pro/pro-guide-collapsible";
 import { ProPartnerGuide } from "@/components/pro/pro-partner-guide";
 import { ProPortalCard, ProPortalShell, ProSectionHeading } from "@/components/pro/pro-portal-shell";
+import { ProPartnerMaterials } from "@/components/pro/pro-partner-materials";
 import { ProReferralDashboard } from "@/components/pro/referral-dashboard";
 import { STRIPE_TRIAL_DAYS } from "@/lib/stripe/config";
 import { buttonVariants } from "@/components/ui/button";
@@ -123,6 +124,14 @@ export default async function ProDashboardPage({
             />
           </section>
         )}
+
+        <section>
+          <ProSectionHeading
+            title={t("materials.sectionTitle")}
+            description={t("materials.sectionDescription")}
+          />
+          <ProPartnerMaterials referralUrl={referral.referralUrl} />
+        </section>
 
         <section>
           <ProSectionHeading title={t("referralProgram")} description={t("referralProgramHint")} />

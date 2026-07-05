@@ -282,7 +282,7 @@
     "benefitFollowUpTitle": "Suivi client simplifié",
     "benefitFollowUpBody": "Gérez les dossiers depuis un tableau de bord. Suivez le statut des membres et l'activité des clients.",
     "benefitMaterialsTitle": "Matériel professionnel",
-    "benefitMaterialsBody": "Demandez des dépliants Copara et du matériel d'intégration pour votre salle d'attente ou votre processus d'accueil.",
+    "benefitMaterialsBody": "Téléchargez dépliants, modèles de courriel et ressources de marque depuis la section Matériel marketing de votre tableau de bord.",
     "benefitReferralTitle": "Récompenses de parrainage",
     "benefitReferralBody": "Partagez votre lien de parrainage et recevez un bonus lorsque les familles parrainées s'abonnent. Suivez le statut dans votre tableau de bord.",
     "caseBillingTitle": "Les parents s'abonnent après avoir rejoint",
@@ -318,7 +318,47 @@
     "allAccepted": "Les deux parents ont déjà rejoint ce dossier.",
     "signUpToAccept": "Créer un compte pour accepter",
     "acceptCase": "Accepter l'invitation",
-    "accepting": "Acceptation…"
+    "accepting": "Acceptation…",
+    "materials": {
+      "sectionTitle": "Matériel marketing",
+      "sectionDescription": "Téléchargez des dépliants numériques et copiez des modèles de courriel pour vos clients. Les PDF apparaîtront ici une fois ajoutés au kit partenaire.",
+      "downloadsIntro": "PDF et ressources de marque pour votre pratique. Les fichiers marqués Bientôt disponible seront activés automatiquement lors de la publication.",
+      "download": "Télécharger",
+      "comingSoon": "Bientôt disponible",
+      "englishFallback": "Version anglaise (PDF français pas encore disponible).",
+      "copy": "Copier",
+      "copied": "Copié",
+      "emailTemplatesTitle": "Modèles de courriel",
+      "emailTemplatesIntro": "Copiez et personnalisez avant l'envoi. Les invitations de dossier sont aussi envoyées automatiquement lors de la création d'un dossier.",
+      "emailCaseTitle": "Après la création d'un dossier",
+      "emailCaseDescription": "Suivi optionnel si un parent n'a pas reçu l'invitation automatique.",
+      "emailCaseBody": "Objet : Votre invitation Copara\n\nBonjour,\n\nJ'ai configuré un dossier de coparentalité pour nous sur Copara — un espace partagé pour les messages, le calendrier, les dépenses et des dossiers organisés.\n\nVous devriez recevoir un courriel de Copara avec un lien pour rejoindre. Connectez-vous avec cette adresse courriel (essai gratuit de {trialDays} jours, puis abonnement).\n\nSi vous ne voyez pas le courriel, vérifiez les indésirables ou avisez-moi — je peux renvoyer le lien depuis mon tableau de bord partenaire.\n\nCordialement,",
+      "emailReferralTitle": "Courriel de parrainage",
+      "emailReferralDescription": "Pour les familles qui s'inscrivent seules — sans dossier que vous avez créé.",
+      "emailReferralBody": "Objet : Copara pour la coparentalité\n\nBonjour,\n\nJ'utilise Copara avec des familles clientes pour une communication plus sereine et des dossiers organisés. Pour l'essayer :\n\n{referralUrl}\n\nLes deux parents peuvent partager un abonnement Cercle familial après un essai de {trialDays} jours.\n\nCordialement,",
+      "items": {
+        "clientHandout": {
+          "title": "Fiche client (invitation de dossier)",
+          "description": "PDF pour les clients après la création d'un dossier — invitation, essai et inscription."
+        },
+        "referralHandout": {
+          "title": "Fiche parrainage",
+          "description": "PDF pour la salle d'attente ou l'accueil — aperçu de Copara et votre lien de parrainage."
+        },
+        "partnerOnePager": {
+          "title": "Aperçu partenaire",
+          "description": "Programme : accès lecture seule, dossiers, exportations et bonus de parrainage."
+        },
+        "brandGuidelines": {
+          "title": "Guide de marque",
+          "description": "Utilisation du logo, couleurs et co-marque."
+        },
+        "logoPack": {
+          "title": "Pack logos (ZIP)",
+          "description": "Logos et marques Copara pour présentations et sites web."
+        }
+      }
+    }
   },
   "more": {
     "title": "Plus",

@@ -282,7 +282,7 @@
     "benefitFollowUpTitle": "Easy client follow-up",
     "benefitFollowUpBody": "Manage cases from one dashboard. Track membership status and stay current on client activity.",
     "benefitMaterialsTitle": "Professional materials",
-    "benefitMaterialsBody": "Request Copara leaflets and onboarding materials for your waiting room or client intake process.",
+    "benefitMaterialsBody": "Download handouts, email templates, and brand assets from the Marketing materials section on your dashboard.",
     "benefitReferralTitle": "Referral rewards",
     "benefitReferralBody": "Share your referral link and earn a bonus when referred families subscribe. Track status in your dashboard.",
     "caseBillingTitle": "Parents subscribe after joining",
@@ -318,7 +318,47 @@
     "allAccepted": "Both parents have already joined this case.",
     "signUpToAccept": "Create account to accept",
     "acceptCase": "Accept invite",
-    "accepting": "Accepting…"
+    "accepting": "Accepting…",
+    "materials": {
+      "sectionTitle": "Marketing materials",
+      "sectionDescription": "Download digital handouts and copy email templates to share with clients. PDFs appear here once added to the partner kit.",
+      "downloadsIntro": "PDFs and brand assets for your practice. Files marked Coming soon will unlock automatically when published.",
+      "download": "Download",
+      "comingSoon": "Coming soon",
+      "englishFallback": "English version (French PDF not yet available).",
+      "copy": "Copy to clipboard",
+      "copied": "Copied",
+      "emailTemplatesTitle": "Email templates",
+      "emailTemplatesIntro": "Copy and personalize before sending. Case invites are also sent automatically when you create a case.",
+      "emailCaseTitle": "After creating a case",
+      "emailCaseDescription": "Optional follow-up if a parent did not receive the automatic invite.",
+      "emailCaseBody": "Subject: Your Copara case invite\n\nHi,\n\nI've set up a co-parenting case for us on Copara — a shared space for messages, calendar, expenses, and organized records.\n\nYou should receive an email from Copara with a link to join. Please sign in with this email address ({trialDays}-day free trial, then a subscription).\n\nIf you don't see the email, check spam or let me know and I can resend the invite link from my partner dashboard.\n\nBest,",
+      "emailReferralTitle": "Referral outreach",
+      "emailReferralDescription": "For families signing up on their own — not tied to a case you created.",
+      "emailReferralBody": "Subject: Copara for co-parenting\n\nHi,\n\nI use Copara with client families for calmer co-parenting communication and organized records. If you'd like to try it, you can sign up here:\n\n{referralUrl}\n\nBoth parents can share one Family Circle subscription after a {trialDays}-day free trial.\n\nBest,",
+      "items": {
+        "clientHandout": {
+          "title": "Client handout (case invite)",
+          "description": "PDF for clients after you create a case — invite flow, trial, and signup."
+        },
+        "referralHandout": {
+          "title": "Referral handout",
+          "description": "PDF for your waiting room or intake — Copara overview plus your referral link."
+        },
+        "partnerOnePager": {
+          "title": "Partner one-pager",
+          "description": "Program overview: read-only access, cases, exports, and referral bonuses."
+        },
+        "brandGuidelines": {
+          "title": "Brand guidelines",
+          "description": "Logo usage, colours, and co-branding guidance."
+        },
+        "logoPack": {
+          "title": "Logo pack (ZIP)",
+          "description": "Copara logos and marks for slide decks and websites."
+        }
+      }
+    }
   },
   "more": {
     "title": "More",

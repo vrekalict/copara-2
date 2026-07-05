@@ -29,7 +29,7 @@ export const PRO_PARTNER_BENEFITS = [
   {
     title: "Professional materials",
     description:
-      "Request Copara leaflets and onboarding materials for your waiting room or client intake process.",
+      "Download handouts, email templates, and brand assets from your partner dashboard.",
     icon: "file",
   },
   {
