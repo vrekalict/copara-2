@@ -105,7 +105,7 @@ function RecordsPage({ data }: { data: ExportData }) {
                 Check-in {c.checked_at} · {data.profiles[c.user_id] ?? c.user_id}
               </Text>
               <Text style={styles.body}>
-                Location verified: {c.location_verified ? "yes" : "no"}
+                GPS included: {c.location_verified ? "yes" : "no"}
               </Text>
             </View>
           ))}

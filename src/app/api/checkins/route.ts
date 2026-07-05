@@ -12,8 +12,8 @@ function isValidCoord(value: unknown): value is number {
   return typeof value === "number" && Number.isFinite(value);
 }
 
-/** Server-side GPS check: coords are verified then discarded; only boolean is stored. */
-function verifyLocation(lat: number, lng: number) {
+/** True when latitude/longitude are valid global GPS coordinates (not proximity to event). */
+function hasValidGpsCoordinates(lat: number, lng: number) {
   return lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180;
 }
 
@@ -54,8 +54,8 @@ export async function POST(request: Request) {
 
   const hasCoords =
     isValidCoord(body.latitude) && isValidCoord(body.longitude);
-  const locationVerified = hasCoords
-    ? verifyLocation(body.latitude!, body.longitude!)
+  const gpsProvided = hasCoords
+    ? hasValidGpsCoordinates(body.latitude!, body.longitude!)
     : false;
 
   const { data: checkin, error } = await supabase
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
       circle_id: circleId,
       event_id: eventId,
       user_id: user.id,
-      location_verified: locationVerified,
+      location_verified: gpsProvided,
     })
     .select("id, checked_at, location_verified")
     .single();

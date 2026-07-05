@@ -16,6 +16,8 @@ export const metadata = pageMetadata({
   description:
     "Conditions d'utilisation de Copara : compte, dossiers de coparentalité, fonctionnalités d'IA, abonnements et droits des consommateurs québécois.",
   path: "/fr/conditions",
+  locale: "fr",
+  languageAlternates: { en: "/terms", fr: "/fr/conditions" },
 });
 
 export default function FrenchTermsPage() {

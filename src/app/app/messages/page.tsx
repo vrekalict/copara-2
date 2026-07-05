@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -18,10 +19,12 @@ export default async function MessagesPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
+  if (!user) redirect("/sign-in");
+
   const { data: membership } = await supabase
     .from("circle_members")
     .select("circle_id")
-    .eq("user_id", user!.id)
+    .eq("user_id", user.id)
     .eq("status", "active")
     .limit(1)
     .maybeSingle();

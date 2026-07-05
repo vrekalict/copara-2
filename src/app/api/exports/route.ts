@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { renderToBuffer } from "@react-pdf/renderer";
 import { createClient } from "@/lib/supabase/server";
+import { requireActiveCircleMember } from "@/lib/circles/membership";
 import { computeChainDigest } from "@/lib/exports/chain";
 import {
   buildStoredParams,
@@ -191,6 +192,11 @@ export async function GET(request: Request) {
 
   if (!circleId) {
     return NextResponse.json({ error: "Missing circle_id." }, { status: 400 });
+  }
+
+  const membership = await requireActiveCircleMember(supabase, user.id, circleId);
+  if (!membership.ok) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const { data: exports, error } = await supabase

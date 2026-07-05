@@ -16,6 +16,7 @@ export const metadata = pageMetadata({
   description:
     "Practical guide for Canadian separated parents: shared calendars, documented messages, expense records, document vaults, exports, and habits that keep children out of conflict.",
   path: "/coparenting-guide",
+  languageAlternates: { en: "/coparenting-guide", fr: "/fr/guide-coparentalite" },
 });
 
 export default function CoparentingGuidePage() {

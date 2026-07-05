@@ -10,6 +10,8 @@ export const metadata = pageMetadata({
   description:
     "Copara aide les parents séparés au Canada à communiquer de façon neutre, gérer les horaires de garde, suivre les dépenses partagées et conserver des dossiers organisés.",
   path: "/fr",
+  locale: "fr",
+  languageAlternates: { en: "/", fr: "/fr" },
   ogTitle: "Coparentalité plus calme et plus claire",
   ogDescription:
     "Plateforme canadienne de coparentalité: messagerie neutre, calendrier partagé, dépenses et dossiers inviolables pour examen par des professionnels du droit.",

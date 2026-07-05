@@ -16,6 +16,8 @@ export const metadata = pageMetadata({
   description:
     "Guide pratique pour parents séparés au Canada : calendriers partagés, messages documentés, dépenses, coffre-fort documentaire, exportations et habitudes qui protègent les enfants.",
   path: "/fr/guide-coparentalite",
+  locale: "fr",
+  languageAlternates: { en: "/coparenting-guide", fr: "/fr/guide-coparentalite" },
 });
 
 export default function FrenchCoparentingGuidePage() {

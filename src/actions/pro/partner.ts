@@ -451,6 +451,12 @@ export async function signUpPartnerWithPassword(formData: FormData) {
 
   if (error) return { error: error.message };
 
+  if (data.user?.identities?.length === 0) {
+    return {
+      error: "An account with this email already exists. Use Sign in instead below.",
+    };
+  }
+
   const { recordLegalAcceptance } = await import("@/actions/legal/acceptance");
   await recordLegalAcceptance({
     email,

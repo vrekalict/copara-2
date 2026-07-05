@@ -15,6 +15,7 @@ export const metadata = pageMetadata({
   description:
     "Copara Privacy Policy: personal information, AI processing, Law 25 rights, cross-border transfers, and security for Canadian co-parenting users.",
   path: "/privacy",
+  languageAlternates: { en: "/privacy", fr: "/fr/confidentialite" },
 });
 
 export default function PrivacyPage() {

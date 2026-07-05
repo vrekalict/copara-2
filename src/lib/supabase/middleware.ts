@@ -9,6 +9,7 @@ import {
 } from "@/lib/admin/staff-path";
 import { pathRequiresLegalAcceptance, userHasLegalAcceptance } from "@/lib/auth/legal-gate";
 import { safeRedirectPath } from "@/lib/auth/redirect";
+import { localeCookieName } from "@/i18n/request";
 
 function redirectWwwToCanonicalHost(request: NextRequest): NextResponse | null {
   const host = request.headers.get("host");
@@ -111,6 +112,14 @@ export async function updateSession(request: NextRequest) {
       rewriteResponse.cookies.set(cookie);
     }
     return rewriteResponse;
+  }
+
+  if (pathname === "/fr" || pathname.startsWith("/fr/")) {
+    response.cookies.set(localeCookieName, "fr", {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: "lax",
+    });
   }
 
   return response;

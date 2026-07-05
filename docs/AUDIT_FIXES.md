@@ -12,19 +12,64 @@ Source: [`app-review-findings.md`](../app-review-findings.md) (2026-07-05). Trac
 | 8 | "Already activated" message unreachable | **Done** | `src/actions/pro/partner.ts` (`getPartnerActivation`, `activatePartnerAccount`) |
 | 9 | Malformed subscribe URL when `ref` without `plan` | **Done** | `src/app/(auth)/subscribe/page.tsx` |
 
-## Batch 2 — Pending
+## Batch 2 — Complete
+
+| # | Finding | Status | Files changed |
+|---|---------|--------|---------------|
+| 2 | `addChild` no explicit ownership check | **Done** | `src/lib/circles/membership.ts`, `src/actions/children.ts` |
+| 3 | `inviteCoParent` no circle-ownership check | **Done** | `src/actions/circles.ts` |
+| 4 | Paywall not enforced in server actions | **Done** | `src/actions/children.ts`, `src/actions/circles.ts` (`requirePaidAccess`) |
+| 6 | Check-in `location_verified` misleading | **Done** | `src/app/api/checkins/route.ts`, `src/lib/exports/generate-pdf.tsx` (label: "GPS included") |
+| 10 | Referral params dropped on professional early-access | **Done** | `src/app/(marketing)/early-access/page.tsx` |
+| 11 | Partner sign-up for existing accounts | **Done** | `src/actions/pro/partner.ts` (detect empty identities) |
+| 12 | Messages page missing auth guard | **Done** | `src/app/app/messages/page.tsx` |
+| 13 | Exports GET missing membership check | **Done** | `src/app/api/exports/route.ts` |
+| 14 | `<html lang>` wrong on `/fr/*` | **Done** | `src/lib/supabase/middleware.ts` (sets `ACCORD_LOCALE` cookie) |
+| 15 | Open Graph locale hardcoded English | **Done** | `src/lib/marketing/metadata.ts` (`locale` param → `og:locale`) |
+| 16 | No hreflang between locale pairs | **Done** | `src/lib/marketing/metadata.ts` + paired EN/FR marketing pages |
+| 17 | Wrong-account title misleading | **Done** | Batch 1 (`src/app/pro/activate/page.tsx`) |
+
+## Batch 3 — Pending
 
 | # | Finding | Status | Notes |
 |---|---------|--------|-------|
-| 2 | `addChild` no explicit ownership check | Pending | RLS mitigates; add membership guard |
-| 3 | `inviteCoParent` no circle-ownership check | Pending | RLS mitigates; add membership guard |
-| 4 | Paywall not enforced in server actions | Pending | Call `getAppAccess` in onboarding actions |
-| 6 | Check-in `location_verified` misleading | Pending | Rename field or drop proximity claim |
-| 10 | Referral params dropped on professional early-access | Pending | |
-| 11 | Partner sign-up for existing accounts | Pending | Product decision |
-| 12–17 | Lower severity / SEO | Pending | |
+| — | Rename DB column `location_verified` → `gps_provided` | Optional | Avoids migration; UI/PDF labels updated instead |
+| — | N+1 in digest cron | Optional | Performance, not correctness |
+| — | llms.ts route list incomplete | Optional | Docs/discovery only |
 
 ## Change log
+
+### 2026-07-05 — Batch 2
+
+**#2–4 Server-action guards**
+
+- Added `requireActiveCircleParent()` and `requireActiveCircleMember()` in `src/lib/circles/membership.ts`.
+- `addChild` and `inviteCoParent` verify active parent membership before mutating.
+- `createCircle`, `inviteCoParent`, and `addChild` call `requirePaidAccess()` when billing is enforced.
+
+**#6 Check-in GPS labeling**
+
+- Renamed internal helper to `hasValidGpsCoordinates`; DB column unchanged.
+- Export PDF label changed from "Location verified" to "GPS included".
+
+**#10 Early-access referral**
+
+- Professional redirect preserves `ref` as query param: `/professionals?ref=…#apply`.
+
+**#11 Existing partner account**
+
+- `signUpPartnerWithPassword` returns a clear error when Supabase reports an existing email (`identities.length === 0`).
+
+**#12–13 Defense in depth**
+
+- Messages page redirects unauthenticated users to sign-in.
+- Exports GET handler checks circle membership like POST.
+
+**#14–16 French SEO**
+
+- Middleware sets `ACCORD_LOCALE=fr` cookie on `/fr` routes → correct `<html lang>`.
+- `pageMetadata()` accepts `locale` and `languageAlternates` for `og:locale` and hreflang.
+- Paired pages: `/`↔`/fr`, `/terms`↔`/fr/conditions`, `/privacy`↔`/fr/confidentialite`, `/coparenting-guide`↔`/fr/guide-coparentalite`.
 
 ### 2026-07-05 — Batch 1
 

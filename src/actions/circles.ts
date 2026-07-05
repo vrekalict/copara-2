@@ -4,8 +4,9 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
-import { getAppAccess } from "@/lib/stripe/access";
 import { attachFamilySubscriptionToCircle } from "@/lib/stripe/sync";
+import { requireActiveCircleParent } from "@/lib/circles/membership";
+import { requirePaidAccess } from "@/lib/stripe/guard";
 import { BRAND, brandEmailFrom } from "@/lib/brand";
 import { Resend } from "resend";
 
@@ -18,6 +19,9 @@ export async function createCircle(formData: FormData) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/sign-in");
+
+  const paid = await requirePaidAccess(supabase, user.id);
+  if (!paid.ok) redirect(paid.redirectTo);
 
   const { data: circle, error } = await supabase
     .from("circles")
@@ -58,6 +62,12 @@ export async function inviteCoParent(formData: FormData) {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) redirect("/sign-in");
+
+  const paid = await requirePaidAccess(supabase, user.id);
+  if (!paid.ok) redirect(paid.redirectTo);
+
+  const membership = await requireActiveCircleParent(supabase, user.id, circleId);
+  if (!membership.ok) return { error: membership.error };
 
   const { data: circle } = await supabase
     .from("circles")

@@ -35,6 +35,7 @@ export const metadata = pageMetadata({
   title: "Co-parenting records for separated Canadian families",
   description: SITE.description,
   path: "/",
+  languageAlternates: { en: "/", fr: "/fr" },
 });
 
 export default async function HomePage() {

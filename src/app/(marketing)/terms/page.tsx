@@ -15,6 +15,7 @@ export const metadata = pageMetadata({
   description:
     "Copara Terms and Conditions: account use, co-parenting records, AI limitations, subscriptions, Quebec language rights, and disclaimers.",
   path: "/terms",
+  languageAlternates: { en: "/terms", fr: "/fr/conditions" },
 });
 
 export default function TermsPage() {

@@ -16,6 +16,8 @@ export const metadata = pageMetadata({
   description:
     "Politique de confidentialité de Copara : renseignements personnels, traitement par IA, droits en vertu de la Loi 25 et sécurité pour les utilisateurs canadiens.",
   path: "/fr/confidentialite",
+  locale: "fr",
+  languageAlternates: { en: "/privacy", fr: "/fr/confidentialite" },
 });
 
 export default function FrenchPrivacyPage() {
