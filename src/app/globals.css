@@ -78,18 +78,16 @@
     oklch(0.78 0.14 55 / 0.08) 70%,
     oklch(0.72 0.12 210 / 0.1) 100%
   );
-  /* Auth shell + homepage hero — navy base with mesh overlay */
+  /* Auth shell + homepage hero — navy base with mesh overlay.
+     Violet/blue carry the field; pink/amber stay as small localized glows so
+     warm hues never wash over navy (which reads as muddy brown). */
   --marketing-brand-mesh:
-    linear-gradient(
-      135deg,
-      rgb(99 91 255 / 0.42) 0%,
-      rgb(168 85 247 / 0.32) 28%,
-      rgb(255 107 157 / 0.28) 52%,
-      rgb(255 178 36 / 0.22) 72%,
-      rgb(34 211 238 / 0.26) 100%
-    ),
-    radial-gradient(ellipse 55% 48% at 8% 0%, rgb(99 91 255 / 0.55), transparent 58%),
-    linear-gradient(180deg, var(--marketing-navy) 0%, var(--marketing-navy-soft) 100%);
+    radial-gradient(ellipse 52% 44% at 10% -4%, rgb(99 91 255 / 0.62), transparent 62%),
+    radial-gradient(ellipse 44% 40% at 78% -6%, rgb(168 85 247 / 0.45), transparent 60%),
+    radial-gradient(ellipse 30% 26% at 96% 20%, rgb(255 107 157 / 0.35), transparent 68%),
+    radial-gradient(ellipse 24% 20% at 88% 96%, rgb(255 178 36 / 0.2), transparent 70%),
+    radial-gradient(ellipse 36% 30% at 4% 92%, rgb(34 211 238 / 0.22), transparent 66%),
+    linear-gradient(160deg, #14183f 0%, var(--marketing-navy) 45%, var(--marketing-navy-soft) 100%);
 
   /* shadcn / app shell tokens (aligned to brand) */
   --background: var(--marketing-lilac);
@@ -219,7 +217,9 @@
 
 .marketing-header__main {
   border-bottom: 1px solid var(--marketing-border);
-  background: var(--marketing-lilac);
+  background: rgb(248 248 249 / 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .marketing-footer {
@@ -234,16 +234,10 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(
-      135deg,
-      rgb(99 91 255 / 0.35) 0%,
-      rgb(168 85 247 / 0.25) 30%,
-      rgb(255 107 157 / 0.2) 55%,
-      rgb(255 178 36 / 0.15) 75%,
-      rgb(34 211 238 / 0.18) 100%
-    ),
-    radial-gradient(ellipse 60% 50% at 15% 0%, rgb(99 91 255 / 0.45), transparent 55%),
-    radial-gradient(ellipse 50% 45% at 85% 100%, rgb(255 178 36 / 0.25), transparent 50%);
+    radial-gradient(ellipse 55% 48% at 12% -6%, rgb(99 91 255 / 0.5), transparent 60%),
+    radial-gradient(ellipse 40% 36% at 88% 0%, rgb(168 85 247 / 0.3), transparent 62%),
+    radial-gradient(ellipse 28% 26% at 92% 100%, rgb(255 178 36 / 0.16), transparent 68%),
+    radial-gradient(ellipse 32% 28% at 30% 100%, rgb(34 211 238 / 0.16), transparent 64%);
   pointer-events: none;
 }
 
@@ -292,23 +286,36 @@
 }
 
 .audience-path {
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--marketing-border);
   background: white;
   border-radius: 1rem;
   padding: 1.75rem;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
 .audience-path:hover {
   border-color: oklch(0.58 0.22 285 / 0.35);
-  box-shadow: 0 20px 50px -32px oklch(0.17 0.04 280 / 0.18);
+  box-shadow: 0 24px 56px -30px oklch(0.17 0.04 280 / 0.28);
+  transform: translateY(-2px);
 }
 
 .audience-path--featured {
   border-color: oklch(0.58 0.22 285 / 0.25);
   background: linear-gradient(180deg, white, var(--marketing-cream));
+}
+
+.audience-path--featured::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--marketing-gradient);
 }
 
 .feature-list {
@@ -352,6 +359,7 @@
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--marketing-slate);
+  text-wrap: balance;
 }
 
 .marketing .display--light {
@@ -481,19 +489,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(
-      135deg,
-      rgb(99 91 255 / 0.42) 0%,
-      rgb(168 85 247 / 0.32) 28%,
-      rgb(255 107 157 / 0.28) 52%,
-      rgb(255 178 36 / 0.22) 72%,
-      rgb(34 211 238 / 0.26) 100%
-    ),
-    radial-gradient(ellipse 55% 48% at 8% 0%, rgb(99 91 255 / 0.55), transparent 58%),
-    radial-gradient(ellipse 50% 44% at 92% 18%, rgb(255 107 157 / 0.4), transparent 54%),
-    radial-gradient(ellipse 46% 40% at 75% 100%, rgb(255 178 36 / 0.32), transparent 50%),
-    radial-gradient(ellipse 42% 38% at 40% 55%, rgb(34 211 238 / 0.22), transparent 52%);
+  background: var(--marketing-brand-mesh);
   pointer-events: none;
 }
 
@@ -506,20 +502,27 @@
   border: 0;
   background: var(--marketing-navy);
   color: white;
+  box-shadow: 0 4px 14px -6px oklch(0.17 0.04 280 / 0.4);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
 .marketing .btn-marketing-primary:hover {
   background: var(--marketing-navy-soft);
+  box-shadow: 0 8px 22px -8px oklch(0.17 0.04 280 / 0.5);
+  transform: translateY(-1px);
 }
 
 .marketing .btn-marketing-primary-on-dark {
   border: 0;
   background: var(--marketing-lilac);
   color: var(--marketing-navy);
+  box-shadow: 0 6px 20px -8px oklch(0 0 0 / 0.5);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
 .marketing .btn-marketing-primary-on-dark:hover {
   background: white;
+  transform: translateY(-1px);
 }
 
 @media (max-width: 640px) {

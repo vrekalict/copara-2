@@ -15,7 +15,7 @@ export function Section({
     <section
       id={id}
       className={cn(
-        "py-20 md:py-28",
+        "py-16 md:py-24",
         variant === "cream" && "bg-cream",
         variant === "mist" && "bg-mist",
         variant === "dark" && "bg-[var(--marketing-navy)] text-white",
