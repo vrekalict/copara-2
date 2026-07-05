@@ -23,8 +23,9 @@ export function MarketingHeader() {
 
       <div className="marketing-header__main">
         <div className="mx-auto flex h-[4.25rem] max-w-6xl items-center justify-between gap-4 px-5 sm:px-6">
-          <Link href="/" aria-label="Copara home">
-            <CoparaLogo />
+          <Link href="/" aria-label="Copara home" className="inline-flex shrink-0 items-center">
+            <CoparaLogo variant="dark" layout="desktop" className="hidden sm:inline-flex" priority />
+            <CoparaLogo variant="dark" layout="mobile" className="sm:hidden" priority />
           </Link>
 
           <nav className="hidden items-center gap-0.5 md:flex" aria-label="Main">

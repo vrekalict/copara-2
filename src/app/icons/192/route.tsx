@@ -1,9 +1,8 @@
-import { ImageResponse } from "next/og";
-import { AppIconMark } from "@/lib/app-icon";
+import { BRAND_ASSETS } from "@/lib/brand/assets";
+import { serveBrandIcon } from "@/lib/brand/serve-icon";
+
+export const runtime = "nodejs";
 
 export async function GET() {
-  return new ImageResponse(<AppIconMark size={192} />, {
-    width: 192,
-    height: 192,
-  });
+  return serveBrandIcon(BRAND_ASSETS.icons.pwa192, 192);
 }

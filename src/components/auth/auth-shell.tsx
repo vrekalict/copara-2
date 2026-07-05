@@ -29,7 +29,8 @@ export function AuthShell({
       <aside className="auth-shell__brand relative overflow-hidden px-6 py-10 sm:px-10 lg:px-12 lg:py-14">
         <div className="relative z-10 flex h-full flex-col">
           <Link href="/" className="w-fit" aria-label="Copara home">
-            <CoparaLogo variant="light" />
+            <CoparaLogo variant="light" layout="desktop" className="hidden sm:inline-flex" />
+            <CoparaLogo variant="light" layout="mobile" className="sm:hidden" />
           </Link>
 
           <div className="mt-10 max-w-md lg:mt-auto lg:pb-4">

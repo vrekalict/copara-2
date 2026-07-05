@@ -7,7 +7,8 @@ export function MarketingFooter() {
     <footer className="marketing-footer">
       <div className="mx-auto grid max-w-6xl gap-10 px-5 py-16 sm:px-6 md:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-2">
-          <CoparaLogo variant="light" />
+          <CoparaLogo variant="light" layout="desktop" className="hidden sm:inline-flex" />
+          <CoparaLogo variant="light" layout="mobile" className="sm:hidden" />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/70">
             Calmer co-parenting communication for Canadian families. English and
             French. Tamper-evident records suitable for review by legal

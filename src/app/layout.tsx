@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
 import { SwProvider } from "@/components/sw-provider";
 import { SITE } from "@/lib/marketing/site";
+import { BRAND_ASSETS } from "@/lib/brand/assets";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -28,6 +29,10 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "default",
     title: "Copara",
+  },
+  icons: {
+    icon: [{ url: BRAND_ASSETS.icons.favicon32, sizes: "32x32", type: "image/png" }],
+    apple: [{ url: BRAND_ASSETS.icons.apple180, sizes: "180x180", type: "image/png" }],
   },
 };
 
