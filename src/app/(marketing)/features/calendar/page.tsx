@@ -16,7 +16,6 @@ export default function CalendarFeaturePage() {
   return (
     <>
       <PageHero
-        eyebrow="Calendar"
         title="One schedule both parents can see"
         description={`Stop negotiating pickup times only in message threads. ${SITE.name} keeps parenting-time blocks, appointments, and change requests in a shared calendar with a clear approval trail.`}
         visual={<CalendarMockup variant="desktop" />}

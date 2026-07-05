@@ -34,7 +34,6 @@ export default function FaqPage() {
     <>
       <JsonLd data={faqSchema(FAQ_ALL)} />
       <PageHero
-        eyebrow="Help centre"
         title="Frequently asked questions"
         description="Clear answers about Copara for parents and professionals. Not legal advice."
       />

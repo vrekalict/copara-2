@@ -17,7 +17,7 @@ export function PageHero({
   leading,
   className,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   description: string;
   primaryHref?: string;
@@ -51,8 +51,12 @@ export function PageHero({
           )}
         >
           <div className={isDark ? "border-l-[3px] border-[var(--marketing-accent-light)] pl-5" : "accent-rule"}>
-            <p className={cn("eyebrow", isDark && "eyebrow--light")}>{eyebrow}</p>
-            <h1 className={cn("display mt-4", isDark && "display--light")}>{title}</h1>
+            {eyebrow ? (
+              <p className={cn("eyebrow", isDark && "eyebrow--light")}>{eyebrow}</p>
+            ) : null}
+            <h1 className={cn("display", eyebrow ? "mt-4" : undefined, isDark && "display--light")}>
+              {title}
+            </h1>
             <p className={cn("lead mt-5 max-w-2xl", isDark && "lead--light")}>{description}</p>
             {(primaryHref || secondaryHref) && (
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -105,8 +109,7 @@ export function ProSegmentBanner() {
         )}
       >
         <div>
-          <p className="eyebrow eyebrow--light">For professionals</p>
-          <p className="mt-2 text-lg font-semibold">
+          <p className="text-lg font-semibold">
             Mediators, family lawyers, and parenting coordinators
           </p>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/75">

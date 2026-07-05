@@ -25,7 +25,6 @@ export default function SecurityPage() {
         )}
       />
       <PageHero
-        eyebrow="Security"
         title="Built for sensitive family records"
         description={`${SITE.name} handles co-parenting information with clear limits on tracking, sharing, and export claims.`}
       />

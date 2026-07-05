@@ -18,7 +18,6 @@ export default function SteadySendPage() {
   return (
     <>
       <PageHero
-        eyebrow="Steady Send"
         title="Pause before you send something you might regret"
         description={`When a draft might escalate tension, ${SITE.name} offers optional rewrite suggestions that preserve what you need to say. You choose whether to use a suggestion, edit it, or send your original message.`}
         visual={<MessagesMockup variant="desktop" />}

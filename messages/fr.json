@@ -480,6 +480,9 @@
     "dismiss": "Fermer",
     "enableNotifications": "Activer les notifications",
     "iosStep1": "Appuyez sur Partager dans Safari",
-    "iosStep2": "Appuyez sur Sur l'écran d'accueil"
+    "iosStep2": "Appuyez sur Sur l'écran d'accueil",
+    "updateTitle": "Une nouvelle version est disponible — actualiser",
+    "updateRefresh": "Actualiser",
+    "updateDismiss": "Fermer"
   }
 }

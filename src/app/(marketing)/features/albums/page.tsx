@@ -41,7 +41,6 @@ export default function AlbumsFeaturePage() {
   return (
     <>
       <PageHero
-        eyebrow="Albums"
         title="Private photo albums for your circle"
         description="Albums let you share and download photos at full resolution in a closed, secure environment. Keep school events, milestones, and everyday memories where both parents can see them."
         visual={<AlbumsMockup variant="desktop" />}

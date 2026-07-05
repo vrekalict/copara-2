@@ -480,6 +480,9 @@
     "dismiss": "Dismiss",
     "enableNotifications": "Enable notifications",
     "iosStep1": "Tap Share in Safari",
-    "iosStep2": "Tap Add to Home Screen"
+    "iosStep2": "Tap Add to Home Screen",
+    "updateTitle": "A new version is available — refresh",
+    "updateRefresh": "Refresh",
+    "updateDismiss": "Dismiss"
   }
 }

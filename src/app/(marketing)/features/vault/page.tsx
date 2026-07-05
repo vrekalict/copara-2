@@ -15,7 +15,6 @@ export default function VaultFeaturePage() {
   return (
     <>
       <PageHero
-        eyebrow="Info Vault"
         title="Organized child information both parents can trust"
         description="The vault keeps medical, school, and emergency information per child, plus documents you choose to upload. Everything stays inside your circle with sharing controls for professionals."
       />

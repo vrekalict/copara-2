@@ -25,7 +25,6 @@ export default function FeaturesPage() {
   return (
     <>
       <PageHero
-        eyebrow="Product"
         title="Tools built for the work co-parents actually do"
         description="Copara focuses on communication, coordination, records, and professional access. No social feed, no in-app money movement, no hidden location tracking."
         primaryHref="/sign-up"

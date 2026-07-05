@@ -17,7 +17,6 @@ export default function RecordsPage() {
   return (
     <>
       <PageHero
-        eyebrow="Records and exports"
         title="Organized records you can verify, not just print"
         description={`${SITE.name} exports are tamper-evident records suitable for review by legal professionals. Each export includes server timestamps and a hash-chain verification digest. Copara does not claim exports are certified, court-approved, or guaranteed admissible.`}
         visual={<ExportsMockup variant="desktop" />}

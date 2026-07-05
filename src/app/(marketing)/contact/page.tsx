@@ -17,7 +17,6 @@ export default function ContactPage() {
     <>
       <JsonLd data={contactPageSchema()} />
       <PageHero
-        eyebrow="Contact"
         title="Get in touch"
         description="Questions about Sign up, privacy, or the design partner program? Send a message or email us directly."
       />

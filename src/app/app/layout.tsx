@@ -5,6 +5,7 @@ import { TopBar } from "@/components/app-shell/top-bar";
 import { BottomNav } from "@/components/app-shell/bottom-nav";
 import { SkipLink } from "@/components/app-shell/skip-link";
 import { InstallPrompt } from "@/components/pwa/install-prompt";
+import { SwUpdatePrompt } from "@/components/pwa/sw-update-prompt";
 import { OfflineMessageFlusher } from "@/components/messages/offline-message-flusher";
 
 async function getEngagement(userId: string) {
@@ -87,6 +88,7 @@ export default async function AppLayout({
       <SkipLink />
       <OfflineMessageFlusher />
       <TopBar displayName={displayName} />
+      <SwUpdatePrompt />
       <main id="main-content" className="flex-1 overflow-y-auto pb-16">{children}</main>
       <BottomNav />
       <InstallPrompt engaged={engaged} snoozedUntil={snoozedUntil} />

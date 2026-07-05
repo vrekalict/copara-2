@@ -22,13 +22,12 @@ export function MarketingHeader() {
       </div>
 
       <div className="marketing-header__main">
-        <div className="mx-auto flex h-[4.25rem] max-w-6xl items-center justify-between gap-4 px-5 sm:px-6">
+        <div className="mx-auto grid h-[4.25rem] max-w-6xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-5 sm:px-6">
           <Link href="/" aria-label="Copara home" className="inline-flex shrink-0 items-center">
-            <CoparaLogo variant="dark" layout="desktop" className="hidden sm:inline-flex" priority />
-            <CoparaLogo variant="dark" layout="mobile" className="sm:hidden" priority />
+            <CoparaLogo variant="dark" layout="desktop" priority />
           </Link>
 
-          <nav className="hidden items-center gap-0.5 md:flex" aria-label="Main">
+          <nav className="hidden items-center justify-center gap-0.5 md:flex" aria-label="Main">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
@@ -43,20 +42,23 @@ export function MarketingHeader() {
                 {link.label}
               </Link>
             ))}
+          </nav>
+
+          <div className="hidden items-center justify-end md:flex">
             <Link
               href="/sign-up"
               className={cn(
                 buttonVariants(),
-                "btn-marketing-primary ml-3 min-h-10 px-5 text-sm font-semibold",
+                "btn-marketing-primary min-h-10 px-5 text-sm font-semibold",
               )}
             >
               Start free trial
             </Link>
-          </nav>
+          </div>
 
           <button
             type="button"
-            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-[var(--marketing-border)] text-[var(--marketing-navy)] md:hidden"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center justify-self-end rounded-lg border border-[var(--marketing-border)] text-[var(--marketing-navy)] md:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}

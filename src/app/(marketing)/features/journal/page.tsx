@@ -41,7 +41,6 @@ export default function JournalFeaturePage() {
   return (
     <>
       <PageHero
-        eyebrow="Journal"
         title="Stay connected to everyday family moments"
         description="The journal is your circle's shared space for family updates. Share news, photos, videos, and those funny quotes from your children. Both parents stay in the loop, even when you are in different homes."
         visual={<JournalMockup variant="desktop" />}

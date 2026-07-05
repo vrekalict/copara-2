@@ -18,8 +18,7 @@ export function MarketingHero() {
     <section className="marketing-hero">
       <div className="marketing-hero__grid mx-auto max-w-6xl px-5 pb-16 pt-14 sm:px-6 md:pb-24 md:pt-18">
         <div className="marketing-hero__copy">
-          <p className="eyebrow eyebrow--light">Canadian co-parenting</p>
-          <h1 className="display display--light mt-5">{SITE.tagline}</h1>
+          <h1 className="display display--light">{SITE.tagline}</h1>
           <p className="lead lead--light mt-6 max-w-xl">
             {SITE.name} gives you one calm place for messages, parenting schedules,
             shared expenses, child information, and tamper-evident records suitable

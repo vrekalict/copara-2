@@ -19,7 +19,6 @@ export default function PricingPage() {
     <>
       <JsonLd data={[pricingProductSchema(), faqSchema(FAQ_PRICING_PAGE)]} />
       <PageHero
-        eyebrow="Pricing"
         title="Simple plans in Canadian dollars"
         description="Co-parenting tools should not cost hundreds per year. Copara is intentionally affordable, priced below many established co-parenting tools, with exports included ."
       />
