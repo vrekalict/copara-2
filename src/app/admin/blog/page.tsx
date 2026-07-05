@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BlogJsonImport } from "@/components/admin/blog-json-import";
 import { BlogPostsPanel } from "@/components/admin/blog-posts-panel";
 import {
   AdminBanner,
@@ -99,6 +100,8 @@ export default async function AdminBlogPage({
             <li>Use <strong className="font-medium text-foreground">Featured</strong> to highlight one article on the blog homepage.</li>
           </ol>
         </AdminInfoBox>
+
+        <BlogJsonImport />
 
         <BlogPostsPanel posts={posts} showImport={posts.length === 0} paths={paths} />
       </div>

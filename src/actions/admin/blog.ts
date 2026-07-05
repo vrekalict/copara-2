@@ -6,10 +6,12 @@ import { requireAdmin } from "@/lib/admin/require-admin";
 import { staffPath } from "@/lib/admin/staff-path";
 import {
   deleteBlogPostFromDb,
+  importBlogPostsToDb,
   importStaticPostsToDb,
   upsertBlogPostInDb,
 } from "@/lib/blog/repository";
 import type { BlogCategory, BlogPostInput, BlogPostStatus } from "@/lib/blog/types";
+import { parseBlogPostsJson } from "@/lib/blog/parse-import";
 import { getStaticPostsForImport } from "@/lib/blog";
 import { createServiceClient } from "@/lib/supabase/service";
 
@@ -130,4 +132,29 @@ export async function importLegacyBlogPosts() {
   revalidatePath("/blog");
   revalidatePath(staffPath("/blog"));
   return result;
+}
+
+export type BlogJsonImportResult =
+  | { ok: true; imported: number; skipped: number; failed: { slug: string; error: string }[] }
+  | { ok: false; error: string };
+
+export async function importBlogPostsFromJson(json: string): Promise<BlogJsonImportResult> {
+  const auth = await requireAdmin("/blog");
+  if (!auth.ok) return { ok: false, error: "Access denied." };
+
+  const trimmed = json.trim();
+  if (!trimmed) return { ok: false, error: "Paste JSON or upload a .json file." };
+
+  const parsed = parseBlogPostsJson(trimmed);
+  if (!parsed.ok) return { ok: false, error: parsed.error };
+
+  const result = await importBlogPostsToDb(auth.user.id, parsed.posts);
+
+  revalidatePath("/blog");
+  revalidatePath(staffPath("/blog"));
+  revalidatePath("/");
+  revalidatePath("/sitemap.xml");
+  revalidatePath("/llms.txt");
+
+  return { ok: true, ...result };
 }

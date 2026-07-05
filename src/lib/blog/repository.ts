@@ -157,13 +157,35 @@ export async function deleteBlogPostFromDb(id: string): Promise<{ ok: boolean; e
 export async function importStaticPostsToDb(
   userId: string,
   posts: BlogPost[],
-): Promise<{ imported: number; skipped: number }> {
+): Promise<{ imported: number; skipped: number; failed: { slug: string; error: string }[] }> {
+  const inputs: BlogPostInput[] = posts.map((post) => ({
+    slug: post.slug,
+    title: post.title,
+    excerpt: post.excerpt,
+    body: post.body,
+    category: post.category,
+    author: post.author,
+    seoDescription: post.seoDescription,
+    featured: post.featured ?? false,
+    status: "published",
+    publishedAt: post.publishedAt,
+    coverImagePath: null,
+  }));
+
+  return importBlogPostsToDb(userId, inputs);
+}
+
+export async function importBlogPostsToDb(
+  userId: string,
+  posts: BlogPostInput[],
+): Promise<{ imported: number; skipped: number; failed: { slug: string; error: string }[] }> {
   const service = createServiceClient();
   const { data: existing } = await service.from("blog_posts").select("slug");
   const existingSlugs = new Set((existing ?? []).map((r) => r.slug as string));
 
   let imported = 0;
   let skipped = 0;
+  const failed: { slug: string; error: string }[] = [];
 
   for (const post of posts) {
     if (existingSlugs.has(post.slug)) {
@@ -171,25 +193,15 @@ export async function importStaticPostsToDb(
       continue;
     }
 
-    const result = await upsertBlogPostInDb(
-      {
-        slug: post.slug,
-        title: post.title,
-        excerpt: post.excerpt,
-        body: post.body,
-        category: post.category,
-        author: post.author,
-        seoDescription: post.seoDescription,
-        featured: post.featured ?? false,
-        status: "published",
-        publishedAt: post.publishedAt,
-        coverImagePath: null,
-      },
-      userId,
-    );
+    const result = await upsertBlogPostInDb(post, userId);
 
-    if (result.ok) imported++;
+    if (result.ok) {
+      imported++;
+      existingSlugs.add(post.slug);
+    } else {
+      failed.push({ slug: post.slug, error: result.error });
+    }
   }
 
-  return { imported, skipped };
+  return { imported, skipped, failed };
 }
