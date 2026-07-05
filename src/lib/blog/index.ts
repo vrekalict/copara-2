@@ -2,7 +2,7 @@ import type { BlogCategory, BlogPost } from "./types";
 import { getStaticPosts, STATIC_BLOG_POSTS } from "./static-posts";
 
 export { BLOG_CATEGORIES } from "./constants";
-export { formatBlogDate, readingTimeMinutes } from "./utils";
+export { formatBlogDate, postThumbnailUrl, readingTimeMinutes } from "./utils";
 
 async function resolvePublishedPosts(): Promise<BlogPost[]> {
   const { fetchPublishedPostsFromDb } = await import("./repository");

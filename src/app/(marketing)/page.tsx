@@ -17,9 +17,9 @@ import {
 import { PricingPlans } from "@/components/marketing/pricing-plans";
 import { ProSegmentBanner } from "@/components/marketing/page-hero";
 import { Section, SectionHeader } from "@/components/marketing/section";
-import { BlogCard } from "@/components/blog/blog-card";
+import { BlogPostsScroll } from "@/components/blog/blog-posts-scroll";
 import { HOME_FAQ } from "@/content/marketing/faq";
-import { getFeaturedPosts } from "@/lib/blog";
+import { getAllPosts } from "@/lib/blog";
 import { pageMetadata } from "@/lib/marketing/metadata";
 import {
   faqSchema,
@@ -38,7 +38,7 @@ export const metadata = pageMetadata({
 });
 
 export default async function HomePage() {
-  const featuredPosts = (await getFeaturedPosts()).slice(0, 3);
+  const blogPosts = await getAllPosts();
 
   return (
     <>
@@ -196,16 +196,14 @@ export default async function HomePage() {
           title="Making co-parenting life a little easier"
           description="Practical guides on communication, schedules, expenses, and records."
         />
-        <div className="grid gap-6 md:grid-cols-3">
-          {featuredPosts.map((post) => (
-            <BlogCard key={post.slug} post={post} />
-          ))}
-        </div>
-        <p className="mt-10 text-center">
-          <Link href="/blog" className={cn(buttonVariants({ variant: "outline" }), "min-h-11")}>
-            Read all articles
-          </Link>
-        </p>
+        <BlogPostsScroll posts={blogPosts} />
+        {blogPosts.length > 0 && (
+          <p className="mt-10 text-center">
+            <Link href="/blog" className={cn(buttonVariants({ variant: "outline" }), "min-h-11")}>
+              View all posts
+            </Link>
+          </p>
+        )}
       </Section>
 
       <Section variant="cream" className="pb-20">
