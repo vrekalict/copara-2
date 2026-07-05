@@ -8,11 +8,13 @@ import { BRAND, brandEmailFrom } from "@/lib/brand";
 import {
   buildReferralUrl,
   findProfessionalByReferralRef,
+  getPartnerPracticeNameForDisplay,
   getProfessionalReferrals,
   getReferralSlugForUser,
   recordProfessionalReferral,
   referralStats,
   checkReferralSlugAvailability,
+  updatePartnerPracticeProfile,
   updatePartnerReferralSlug,
 } from "@/lib/pro/referrals";
 import { PRO_REFERRAL_BONUS } from "@/lib/pro/config";
@@ -20,11 +22,13 @@ import { SITE } from "@/lib/marketing/site";
 
 export async function getProReferralDashboard(userId: string) {
   const supabase = await createClient();
+  const practiceName = await getPartnerPracticeNameForDisplay(supabase, userId);
   const slug = await getReferralSlugForUser(supabase, userId);
   const referrals = await getProfessionalReferrals(supabase, userId);
   const stats = referralStats(referrals);
 
   return {
+    practiceName,
     referralSlug: slug,
     referralCode: slug,
     referralUrl: buildReferralUrl(SITE.url, slug),
@@ -43,6 +47,27 @@ export async function checkPartnerReferralSlug(slug: string) {
   if (!user) return { available: false, error: "Sign in required." };
 
   return checkReferralSlugAvailability(supabase, slug, user.id);
+}
+
+export async function savePartnerProfile(
+  _prev: { error?: string; success?: boolean } | null,
+  formData: FormData,
+) {
+  const practiceName = String(formData.get("practiceName") ?? "").trim();
+  const slug = String(formData.get("slug") ?? "").trim();
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Sign in required." };
+
+  const result = await updatePartnerPracticeProfile(supabase, user.id, {
+    practiceName,
+    slug,
+  });
+  if ("error" in result && result.error) return { error: result.error };
+  revalidatePath("/pro/dashboard");
+  return { success: true };
 }
 
 export async function savePartnerReferralSlug(

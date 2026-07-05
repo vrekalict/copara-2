@@ -1,11 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { Eye, FileText, Gift, Users } from "lucide-react";
 import type { ProfessionalReferral } from "@/lib/pro/referrals";
-import { ProReferralSlugEditor } from "@/components/pro/pro-referral-slug-editor";
 import { ProPortalCard, ProPortalStat } from "@/components/pro/pro-portal-shell";
-import { Button } from "@/components/ui/button";
 
 const STATUS_LABELS: Record<string, string> = {
   pending: "Pending",
@@ -59,19 +56,12 @@ export function ProBenefitGrid({
 }
 
 export function ProReferralDashboard({
-  referralUrl,
-  referralSlug,
-  referralCode,
   bonusPercent,
   currency,
   stats,
   referrals,
-  slugLabels,
   compact = false,
 }: {
-  referralUrl: string;
-  referralSlug: string;
-  referralCode: string;
   bonusPercent: number;
   currency: string;
   stats: {
@@ -84,48 +74,15 @@ export function ProReferralDashboard({
     total: number;
   };
   referrals: ProfessionalReferral[];
-  slugLabels: {
-    title: string;
-    description: string;
-    slugLabel: string;
-    slugHint: string;
-    previewLabel: string;
-    save: string;
-    saving: string;
-    saved: string;
-    available: string;
-    unavailable: string;
-    checking: string;
-  };
   compact?: boolean;
 }) {
-  const [copied, setCopied] = useState(false);
-
-  async function copyLink() {
-    await navigator.clipboard.writeText(referralUrl);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 2000);
-  }
-
   return (
     <div className="flex flex-col gap-6">
-      <ProReferralSlugEditor currentSlug={referralSlug} labels={slugLabels} />
-
       <ProPortalCard>
-        <p className="text-sm font-semibold text-[var(--marketing-slate)]">Your referral link</p>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          Share with client families. Earn {bonusPercent}% of their first paid invoice — one bonus per
-          household.
+        <p className="text-sm leading-relaxed text-muted-foreground">
+          Earn {bonusPercent}% of each referred family&apos;s first paid invoice — one bonus per
+          household. Share your /r/ link from the top of this page.
         </p>
-        <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <code className="flex-1 rounded-lg border border-[var(--marketing-border)] bg-[var(--marketing-mist)]/50 px-3 py-2.5 text-sm break-all">
-            {referralUrl}
-          </code>
-          <Button type="button" variant="outline" onClick={copyLink} className="min-h-11 shrink-0">
-            {copied ? "Copied" : "Copy link"}
-          </Button>
-        </div>
-        <p className="mt-2 text-xs text-muted-foreground">Partner code: {referralCode}</p>
       </ProPortalCard>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">

@@ -10,6 +10,7 @@ import { ProGuideCollapsible } from "@/components/pro/pro-guide-collapsible";
 import { ProPartnerGuide } from "@/components/pro/pro-partner-guide";
 import { ProPortalCard, ProPortalShell, ProSectionHeading } from "@/components/pro/pro-portal-shell";
 import { ProPartnerMaterials } from "@/components/pro/pro-partner-materials";
+import { ProPartnerProfileCard } from "@/components/pro/pro-partner-profile-card";
 import { ProReferralDashboard } from "@/components/pro/referral-dashboard";
 import { STRIPE_TRIAL_DAYS } from "@/lib/stripe/config";
 import { buttonVariants } from "@/components/ui/button";
@@ -94,6 +95,30 @@ export default async function ProDashboardPage({
       maxWidth="4xl"
     >
       <div className="flex flex-col gap-10">
+        <ProPartnerProfileCard
+          practiceName={referral.practiceName}
+          referralSlug={referral.referralSlug}
+          referralUrl={referral.referralUrl}
+          labels={{
+            title: t("partnerProfile.title"),
+            description: t("partnerProfile.description"),
+            companyLabel: t("partnerProfile.companyLabel"),
+            companyPlaceholder: t("partnerProfile.companyPlaceholder"),
+            companyHint: t("partnerProfile.companyHint"),
+            slugLabel: t("partnerProfile.slugLabel"),
+            slugHint: t("partnerProfile.slugHint"),
+            previewLabel: t("partnerProfile.previewLabel"),
+            save: t("partnerProfile.save"),
+            saving: t("partnerProfile.saving"),
+            saved: t("partnerProfile.saved"),
+            copyLink: t("partnerProfile.copyLink"),
+            copied: t("partnerProfile.copied"),
+            available: t("partnerProfile.available"),
+            unavailable: t("partnerProfile.unavailable"),
+            checking: t("partnerProfile.checking"),
+          }}
+        />
+
         <ProGuideCollapsible title={t("guideTitle")} defaultOpen={isEmpty}>
           <ProPartnerGuide content={guideContent} />
         </ProGuideCollapsible>
@@ -135,23 +160,7 @@ export default async function ProDashboardPage({
 
         <section>
           <ProSectionHeading title={t("referralProgram")} description={t("referralProgramHint")} />
-          <ProReferralDashboard
-            {...referral}
-            slugLabels={{
-              title: t("referralSlug.title"),
-              description: t("referralSlug.description"),
-              slugLabel: t("referralSlug.slugLabel"),
-              slugHint: t("referralSlug.slugHint"),
-              previewLabel: t("referralSlug.previewLabel"),
-              save: t("referralSlug.save"),
-              saving: t("referralSlug.saving"),
-              saved: t("referralSlug.saved"),
-              available: t("referralSlug.available"),
-              unavailable: t("referralSlug.unavailable"),
-              checking: t("referralSlug.checking"),
-            }}
-            compact={isEmpty}
-          />
+          <ProReferralDashboard {...referral} compact={isEmpty} />
         </section>
       </div>
     </ProPortalShell>

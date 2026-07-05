@@ -61,6 +61,77 @@ async function getPracticeNameForUser(
   return `partner-${userId.slice(0, 8)}`;
 }
 
+/** Practice name for dashboard form — empty when unset (no generated fallback). */
+export async function getPartnerPracticeNameForDisplay(
+  supabase: SupabaseClient,
+  userId: string,
+): Promise<string> {
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("practice_name, partner_application_id")
+    .eq("id", userId)
+    .maybeSingle();
+
+  if (profile?.practice_name?.trim()) {
+    return profile.practice_name.trim();
+  }
+
+  if (profile?.partner_application_id) {
+    const { data: app } = await supabase
+      .from("professional_partner_applications")
+      .select("practice")
+      .eq("id", profile.partner_application_id)
+      .maybeSingle();
+
+    if (app?.practice) {
+      return app.practice as string;
+    }
+  }
+
+  return "";
+}
+
+export async function updatePartnerPracticeProfile(
+  supabase: SupabaseClient,
+  userId: string,
+  input: { practiceName: string; slug: string },
+): Promise<{ success: true; slug: string } | { error: string }> {
+  const practiceName = input.practiceName.trim();
+  if (!practiceName) {
+    return { error: "Company name is required." };
+  }
+
+  let slug = slugifyReferralSource(input.slug);
+  if (!slug || slug.length < 3) {
+    try {
+      slug = await generateUniqueReferralSlug(supabase, practiceName, userId);
+    } catch {
+      return { error: "Could not generate a referral link from your company name." };
+    }
+  } else {
+    const check = await checkReferralSlugAvailability(supabase, slug, userId);
+    if (!check.available) {
+      return { error: check.error ?? "This link is unavailable." };
+    }
+  }
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({
+      practice_name: practiceName,
+      referral_slug: slug,
+      referral_code: slug,
+    })
+    .eq("id", userId);
+
+  if (error) {
+    console.error("[referrals] practice profile update failed:", error.message);
+    return { error: "Could not save your profile." };
+  }
+
+  return { success: true, slug };
+}
+
 export async function ensureReferralSlugForUser(
   supabase: SupabaseClient,
   userId: string,
