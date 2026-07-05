@@ -14,7 +14,7 @@ type ExchangeEvent = {
 type Checkin = {
   event_id: string;
   checked_at: string;
-  location_verified: boolean;
+  gps_provided: boolean;
 };
 
 export type ViolationKind = "late" | "missed" | "unlogged" | "on_time";

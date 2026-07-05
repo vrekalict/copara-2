@@ -19,7 +19,7 @@ Source: [`app-review-findings.md`](../app-review-findings.md) (2026-07-05). Trac
 | 2 | `addChild` no explicit ownership check | **Done** | `src/lib/circles/membership.ts`, `src/actions/children.ts` |
 | 3 | `inviteCoParent` no circle-ownership check | **Done** | `src/actions/circles.ts` |
 | 4 | Paywall not enforced in server actions | **Done** | `src/actions/children.ts`, `src/actions/circles.ts` (`requirePaidAccess`) |
-| 6 | Check-in `location_verified` misleading | **Done** | `src/app/api/checkins/route.ts`, `src/lib/exports/generate-pdf.tsx` (label: "GPS included") |
+| 6 | Check-in `location_verified` misleading | **Done** | Renamed column + labels (see Batch 3) |
 | 10 | Referral params dropped on professional early-access | **Done** | `src/app/(marketing)/early-access/page.tsx` |
 | 11 | Partner sign-up for existing accounts | **Done** | `src/actions/pro/partner.ts` (detect empty identities) |
 | 12 | Messages page missing auth guard | **Done** | `src/app/app/messages/page.tsx` |
@@ -29,15 +29,32 @@ Source: [`app-review-findings.md`](../app-review-findings.md) (2026-07-05). Trac
 | 16 | No hreflang between locale pairs | **Done** | `src/lib/marketing/metadata.ts` + paired EN/FR marketing pages |
 | 17 | Wrong-account title misleading | **Done** | Batch 1 (`src/app/pro/activate/page.tsx`) |
 
-## Batch 3 — Pending
+## Batch 3 — Complete
 
-| # | Finding | Status | Notes |
-|---|---------|--------|-------|
-| — | Rename DB column `location_verified` → `gps_provided` | Optional | Avoids migration; UI/PDF labels updated instead |
-| — | N+1 in digest cron | Optional | Performance, not correctness |
-| — | llms.ts route list incomplete | Optional | Docs/discovery only |
+| # | Finding | Status | Files changed |
+|---|---------|--------|---------------|
+| — | Rename DB column `location_verified` → `gps_provided` | **Done** | `supabase/migrations/20260705170000_checkins_gps_provided.sql` + app code |
+| — | N+1 in digest cron | **Done** | `src/app/api/cron/digests/route.ts`, `src/lib/cron/member-emails.ts` |
+| — | `llms.ts` route list incomplete | **Done** | `src/lib/marketing/llms.ts` (all `MARKETING_ROUTES` indexed) |
 
 ## Change log
+
+### 2026-07-05 — Batch 3
+
+**Column rename `gps_provided`**
+
+- Migration renames `checkins.location_verified` → `gps_provided`.
+- Updated check-in API, exports, violations types, and digest cron selects.
+
+**Digest cron performance**
+
+- Bulk-fetch past/upcoming events, members, and checkins instead of per-circle queries.
+- `fetchMemberEmailsByUserId()` resolves auth emails in parallel chunks (25 at a time) once per run.
+
+**LLM index completeness**
+
+- `buildLlmsTxt()` lists all marketing routes from `MARKETING_ROUTES` (feature subpages, coparenting guide, FR legal/guide).
+- `getMarketingPageDocs()` adds stub entries for routes without long-form body content.
 
 ### 2026-07-05 — Batch 2
 
@@ -49,8 +66,8 @@ Source: [`app-review-findings.md`](../app-review-findings.md) (2026-07-05). Trac
 
 **#6 Check-in GPS labeling**
 
-- Renamed internal helper to `hasValidGpsCoordinates`; DB column unchanged.
-- Export PDF label changed from "Location verified" to "GPS included".
+- Renamed internal helper to `hasValidGpsCoordinates`; DB column renamed in Batch 3.
+- Export PDF label: "GPS included".
 
 **#10 Early-access referral**
 
@@ -98,3 +115,17 @@ Source: [`app-review-findings.md`](../app-review-findings.md) (2026-07-05). Trac
 **#9 Subscribe URL**
 
 - Unauthenticated subscribe redirect built with `URLSearchParams` so `ref` works with or without `plan`.
+
+## Deploy notes
+
+Run pending Supabase migrations on production:
+
+```bash
+# Includes partner email tracking (Batch 0) and gps_provided rename (Batch 3)
+supabase db push
+```
+
+Or apply manually:
+
+- `supabase/migrations/20260705160000_partner_approval_email_tracking.sql`
+- `supabase/migrations/20260705170000_checkins_gps_provided.sql`

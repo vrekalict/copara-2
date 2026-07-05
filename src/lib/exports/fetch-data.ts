@@ -37,7 +37,7 @@ export type CheckinRow = {
   event_id: string;
   user_id: string;
   checked_at: string;
-  location_verified: boolean;
+  gps_provided: boolean;
 };
 
 export type ChangeRequestRow = {
@@ -138,7 +138,7 @@ export async function fetchExportData(
     if (eventIds.length > 0) {
       const { data: checkinData, error: checkinsError } = await supabase
         .from("checkins")
-        .select("id, event_id, user_id, checked_at, location_verified")
+        .select("id, event_id, user_id, checked_at, gps_provided")
         .in("event_id", eventIds)
         .order("checked_at", { ascending: true });
 

@@ -64,9 +64,9 @@ export async function POST(request: Request) {
       circle_id: circleId,
       event_id: eventId,
       user_id: user.id,
-      location_verified: gpsProvided,
+      gps_provided: gpsProvided,
     })
-    .select("id, checked_at, location_verified")
+    .select("id, checked_at, gps_provided")
     .single();
 
   if (error) {
