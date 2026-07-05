@@ -17,13 +17,19 @@ export function getStaffBasePath(): string | null {
   return path;
 }
 
-export function staffPath(suffix = ""): string {
+export function buildStaffPath(suffix = ""): string | null {
   const base = getStaffBasePath();
-  if (!base) {
-    throw new Error("COPARA_STAFF_PATH is not configured.");
-  }
+  if (!base) return null;
   if (!suffix) return base;
   return `${base}${suffix.startsWith("/") ? suffix : `/${suffix}`}`;
+}
+
+export function staffPath(suffix = ""): string {
+  const path = buildStaffPath(suffix);
+  if (!path) {
+    throw new Error("COPARA_STAFF_PATH is not configured.");
+  }
+  return path;
 }
 
 export function isStaffRequestPath(pathname: string): boolean {

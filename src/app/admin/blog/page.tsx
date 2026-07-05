@@ -40,7 +40,12 @@ export default async function AdminBlogPage({
   }
 
   const paths = getStaffBlogPaths();
-  const posts = await getAllPostsForAdmin();
+  let posts: Awaited<ReturnType<typeof getAllPostsForAdmin>> = [];
+  try {
+    posts = await getAllPostsForAdmin();
+  } catch (error) {
+    console.error("[admin/blog] failed to load posts:", error);
+  }
 
   return (
     <main className="mx-auto max-w-4xl p-6">

@@ -1,6 +1,10 @@
 import { redirect } from "next/navigation";
-import { staffPath } from "@/lib/admin/staff-path";
+import { buildStaffPath } from "@/lib/admin/staff-path";
 
 export default function AdminIndexPage() {
-  redirect(staffPath("/blog"));
+  const blogPath = buildStaffPath("/blog");
+  if (!blogPath) {
+    redirect("/sign-in");
+  }
+  redirect(blogPath);
 }

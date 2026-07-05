@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { isAdminEmail } from "@/lib/pro/partner";
-import { getStaffBasePath, staffPath } from "@/lib/admin/staff-path";
+import { buildStaffPath, getStaffBasePath } from "@/lib/admin/staff-path";
 
 export async function requireAdmin(nextSuffix = "/blog") {
   if (!getStaffBasePath()) {
@@ -13,7 +13,10 @@ export async function requireAdmin(nextSuffix = "/blog") {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const nextPath = staffPath(nextSuffix);
+  const nextPath = buildStaffPath(nextSuffix);
+  if (!nextPath) {
+    notFound();
+  }
 
   if (!user) {
     redirect(`/sign-in?next=${encodeURIComponent(nextPath)}`);

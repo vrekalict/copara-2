@@ -1,11 +1,14 @@
 import Link from "next/link";
-import { staffPath } from "@/lib/admin/staff-path";
+import { buildStaffPath, getStaffBasePath } from "@/lib/admin/staff-path";
 import { cn } from "@/lib/utils";
 
 export function AdminNav({ active }: { active: "blog" | "partners" }) {
+  const base = getStaffBasePath();
+  if (!base) return null;
+
   const links = [
-    { href: staffPath("/blog"), label: "Blog", key: "blog" as const },
-    { href: staffPath("/partners"), label: "Partners", key: "partners" as const },
+    { href: buildStaffPath("/blog")!, label: "Blog", key: "blog" as const },
+    { href: buildStaffPath("/partners")!, label: "Partners", key: "partners" as const },
   ];
 
   return (
@@ -29,9 +32,15 @@ export function AdminNav({ active }: { active: "blog" | "partners" }) {
 }
 
 export function getStaffBlogPaths() {
+  const index = buildStaffPath("/blog");
+  const newPost = buildStaffPath("/blog/new");
+  if (!index || !newPost) {
+    throw new Error("COPARA_STAFF_PATH is not configured.");
+  }
+
   return {
-    index: staffPath("/blog"),
-    new: staffPath("/blog/new"),
-    edit: (id: string) => staffPath(`/blog/${id}/edit`),
+    index,
+    new: newPost,
+    edit: (id: string) => buildStaffPath(`/blog/${id}/edit`) ?? index,
   };
 }

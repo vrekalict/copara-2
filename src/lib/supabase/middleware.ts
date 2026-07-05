@@ -1,13 +1,37 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import {
+  buildStaffPath,
   getStaffBasePath,
   isInternalStaffPath,
   isStaffRequestPath,
   staffPathToInternal,
 } from "@/lib/admin/staff-path";
 
+function redirectWwwToCanonicalHost(request: NextRequest): NextResponse | null {
+  const host = request.headers.get("host");
+  if (!host?.startsWith("www.")) return null;
+
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://copara.ca";
+  let canonicalHost: string;
+  try {
+    canonicalHost = new URL(siteUrl).host;
+  } catch {
+    return null;
+  }
+
+  if (host !== `www.${canonicalHost}`) return null;
+
+  const url = request.nextUrl.clone();
+  url.host = canonicalHost;
+  url.protocol = "https:";
+  return NextResponse.redirect(url, 308);
+}
+
 export async function updateSession(request: NextRequest) {
+  const wwwRedirect = redirectWwwToCanonicalHost(request);
+  if (wwwRedirect) return wwwRedirect;
+
   const pathname = request.nextUrl.pathname;
 
   // Never expose internal /admin URLs — staff tools use COPARA_STAFF_PATH only.
@@ -62,9 +86,9 @@ export async function updateSession(request: NextRequest) {
     const rewriteUrl = request.nextUrl.clone();
     rewriteUrl.pathname = internalPath;
     const rewriteResponse = NextResponse.rewrite(rewriteUrl);
-    response.cookies.getAll().forEach((cookie) => {
-      rewriteResponse.cookies.set(cookie.name, cookie.value);
-    });
+    for (const cookie of response.cookies.getAll()) {
+      rewriteResponse.cookies.set(cookie);
+    }
     return rewriteResponse;
   }
 
