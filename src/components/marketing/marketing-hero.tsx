@@ -30,7 +30,7 @@ export function MarketingHero() {
               href="/sign-up"
               className={cn(
                 buttonVariants({ size: "lg" }),
-                "btn-marketing-gradient min-h-12 px-8 text-base font-semibold hover:opacity-90",
+                "btn-marketing-primary min-h-12 px-8 text-base font-semibold",
               )}
             >
               Get started
@@ -39,7 +39,7 @@ export function MarketingHero() {
               href="/professionals"
               className={cn(
                 buttonVariants({ variant: "outline", size: "lg" }),
-                "min-h-12 border-2 border-[var(--marketing-navy)]/15 bg-white px-8 text-base font-medium text-[var(--marketing-navy)] hover:bg-white/80",
+                "min-h-12 border-2 border-[var(--marketing-navy)]/15 bg-[var(--marketing-lilac)] px-8 text-base font-medium text-[var(--marketing-navy)] hover:bg-white",
               )}
             >
               For mediators & lawyers

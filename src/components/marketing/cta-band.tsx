@@ -53,7 +53,7 @@ export function CtaBand({
             className={cn(
               buttonVariants({ size: "lg" }),
               "min-h-12 w-full px-8 text-base font-semibold sm:w-auto",
-              dark && "btn-marketing-gradient border-0 hover:opacity-90",
+              dark ? "btn-marketing-primary-on-dark hover:bg-white" : "btn-marketing-primary",
             )}
           >
             {primaryLabel}
@@ -64,7 +64,7 @@ export function CtaBand({
               className={cn(
                 buttonVariants({ variant: "outline", size: "lg" }),
                 "min-h-11 w-full sm:w-auto",
-                dark && "border-white/30 bg-transparent text-white hover:bg-white/10",
+                dark && "border-[var(--marketing-lilac)]/40 bg-transparent text-[var(--marketing-lilac)] hover:bg-[var(--marketing-lilac)]/10",
               )}
             >
               {secondaryLabel}

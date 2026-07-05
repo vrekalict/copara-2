@@ -7,12 +7,7 @@ import {
 } from "@/components/blog/blog-category-nav";
 import { LegalDisclaimer } from "@/components/marketing/page-hero";
 import { Section, SectionHeader } from "@/components/marketing/section";
-import {
-  BLOG_CATEGORIES,
-  getFeaturedPosts,
-  getPostsByCategory,
-  type BlogCategory,
-} from "@/lib/blog";
+import { BLOG_CATEGORIES, getPostsByCategory, type BlogCategory, type BlogPost } from "@/lib/blog";
 import { pageMetadata } from "@/lib/marketing/metadata";
 
 export const metadata = pageMetadata({
@@ -30,6 +25,13 @@ function parseCategory(value: string | undefined): BlogCategory | typeof BLOG_CA
   return BLOG_CATEGORY_ALL;
 }
 
+function sortBlogPosts(posts: BlogPost[]): BlogPost[] {
+  return [...posts].sort((a, b) => {
+    if (a.featured !== b.featured) return a.featured ? -1 : 1;
+    return new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime();
+  });
+}
+
 export default async function BlogIndexPage({
   searchParams,
 }: {
@@ -37,10 +39,7 @@ export default async function BlogIndexPage({
 }) {
   const { category: raw } = await searchParams;
   const category = parseCategory(raw);
-  const featured = category === BLOG_CATEGORY_ALL ? await getFeaturedPosts() : [];
-  const posts = (await getPostsByCategory(category)).filter(
-    (p) => !featured.some((f) => f.slug === p.slug),
-  );
+  const posts = sortBlogPosts(await getPostsByCategory(category));
 
   return (
     <>
@@ -56,26 +55,13 @@ export default async function BlogIndexPage({
         </Suspense>
       </Section>
 
-      {featured.length > 0 && (
-        <Section variant="cream" className="pt-0">
-          <h2 className="mb-6 text-sm font-bold uppercase tracking-widest text-primary">
-            Featured
-          </h2>
-          <div className="grid gap-5 lg:grid-cols-2">
-            {featured.map((post) => (
-              <BlogCard key={post.slug} post={post} featured />
-            ))}
-          </div>
-        </Section>
-      )}
-
-      <Section className={featured.length > 0 ? "pt-0" : undefined}>
+      <Section className="pt-0 pb-20">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
             <BlogCard key={post.slug} post={post} />
           ))}
         </div>
-        {posts.length === 0 && featured.length === 0 && (
+        {posts.length === 0 && (
           <p className="text-muted-foreground">No articles in this category yet.</p>
         )}
       </Section>

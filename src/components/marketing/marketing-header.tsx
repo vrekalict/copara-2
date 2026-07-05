@@ -46,7 +46,7 @@ export function MarketingHeader() {
               href="/sign-up"
               className={cn(
                 buttonVariants(),
-                "btn-marketing-gradient ml-3 min-h-10 px-5 text-sm font-semibold hover:opacity-90",
+                "btn-marketing-primary ml-3 min-h-10 px-5 text-sm font-semibold",
               )}
             >
               Start free trial
@@ -89,7 +89,7 @@ export function MarketingHeader() {
                 href="/sign-up"
                 className={cn(
                   buttonVariants(),
-                  "btn-marketing-gradient flex min-h-11 w-full justify-center hover:opacity-90",
+                  "btn-marketing-primary flex min-h-11 w-full justify-center",
                 )}
                 onClick={() => setOpen(false)}
               >

@@ -224,8 +224,16 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 15% 0%, oklch(0.55 0.22 285 / 0.35), transparent 55%),
-    radial-gradient(ellipse 50% 45% at 85% 100%, oklch(0.72 0.14 55 / 0.2), transparent 50%);
+    linear-gradient(
+      135deg,
+      rgb(99 91 255 / 0.35) 0%,
+      rgb(168 85 247 / 0.25) 30%,
+      rgb(255 107 157 / 0.2) 55%,
+      rgb(255 178 36 / 0.15) 75%,
+      rgb(34 211 238 / 0.18) 100%
+    ),
+    radial-gradient(ellipse 60% 50% at 15% 0%, rgb(99 91 255 / 0.45), transparent 55%),
+    radial-gradient(ellipse 50% 45% at 85% 100%, rgb(255 178 36 / 0.25), transparent 50%);
   pointer-events: none;
 }
 
@@ -244,16 +252,24 @@
 .marketing-hero::before {
   content: "";
   position: absolute;
-  top: -15%;
-  right: -8%;
-  width: min(72vw, 52rem);
-  height: 130%;
+  top: -20%;
+  right: -12%;
+  width: min(80vw, 56rem);
+  height: 140%;
   background:
-    radial-gradient(ellipse 55% 48% at 35% 28%, oklch(0.58 0.24 285 / 0.55), transparent 68%),
-    radial-gradient(ellipse 48% 42% at 62% 52%, oklch(0.72 0.2 330 / 0.42), transparent 65%),
-    radial-gradient(ellipse 44% 38% at 50% 78%, oklch(0.78 0.18 55 / 0.38), transparent 62%),
-    radial-gradient(ellipse 40% 36% at 78% 40%, oklch(0.72 0.14 210 / 0.32), transparent 60%);
+    linear-gradient(
+      135deg,
+      rgb(99 91 255 / 0.55) 0%,
+      rgb(168 85 247 / 0.45) 28%,
+      rgb(255 107 157 / 0.4) 52%,
+      rgb(255 178 36 / 0.38) 72%,
+      rgb(34 211 238 / 0.35) 100%
+    ),
+    radial-gradient(ellipse 50% 46% at 58% 38%, rgb(99 91 255 / 0.65), transparent 62%),
+    radial-gradient(ellipse 44% 40% at 72% 62%, rgb(255 107 157 / 0.5), transparent 58%),
+    radial-gradient(ellipse 40% 36% at 48% 78%, rgb(255 178 36 / 0.45), transparent 55%);
   pointer-events: none;
+  filter: blur(1px);
 }
 
 .marketing-hero__grid {
@@ -485,9 +501,18 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 55% 45% at 10% 0%, oklch(0.58 0.24 285 / 0.45), transparent 55%),
-    radial-gradient(ellipse 50% 42% at 90% 20%, oklch(0.72 0.18 330 / 0.3), transparent 52%),
-    radial-gradient(ellipse 45% 40% at 70% 100%, oklch(0.72 0.14 55 / 0.22), transparent 50%);
+    linear-gradient(
+      135deg,
+      rgb(99 91 255 / 0.42) 0%,
+      rgb(168 85 247 / 0.32) 28%,
+      rgb(255 107 157 / 0.28) 52%,
+      rgb(255 178 36 / 0.22) 72%,
+      rgb(34 211 238 / 0.26) 100%
+    ),
+    radial-gradient(ellipse 55% 48% at 8% 0%, rgb(99 91 255 / 0.55), transparent 58%),
+    radial-gradient(ellipse 50% 44% at 92% 18%, rgb(255 107 157 / 0.4), transparent 54%),
+    radial-gradient(ellipse 46% 40% at 75% 100%, rgb(255 178 36 / 0.32), transparent 50%),
+    radial-gradient(ellipse 42% 38% at 40% 55%, rgb(34 211 238 / 0.22), transparent 52%);
   pointer-events: none;
 }
 
@@ -496,14 +521,24 @@
   z-index: 1;
 }
 
-.marketing .btn-marketing-gradient {
+.marketing .btn-marketing-primary {
   border: 0;
-  background: var(--marketing-gradient);
+  background: var(--marketing-navy);
   color: white;
 }
 
-.marketing .btn-marketing-gradient:hover {
-  opacity: 0.92;
+.marketing .btn-marketing-primary:hover {
+  background: var(--marketing-navy-soft);
+}
+
+.marketing .btn-marketing-primary-on-dark {
+  border: 0;
+  background: var(--marketing-lilac);
+  color: var(--marketing-navy);
+}
+
+.marketing .btn-marketing-primary-on-dark:hover {
+  background: white;
 }
 
 @media (max-width: 640px) {
@@ -582,8 +617,15 @@
 .auth-shell__brand {
   background-color: var(--marketing-navy);
   background:
-    radial-gradient(ellipse 55% 45% at 10% 0%, oklch(0.58 0.24 285 / 0.45), transparent 55%),
-    radial-gradient(ellipse 50% 42% at 90% 20%, oklch(0.72 0.18 330 / 0.3), transparent 52%),
+    linear-gradient(
+      135deg,
+      rgb(99 91 255 / 0.42) 0%,
+      rgb(168 85 247 / 0.32) 28%,
+      rgb(255 107 157 / 0.28) 52%,
+      rgb(255 178 36 / 0.22) 72%,
+      rgb(34 211 238 / 0.26) 100%
+    ),
+    radial-gradient(ellipse 55% 48% at 8% 0%, rgb(99 91 255 / 0.55), transparent 58%),
     linear-gradient(180deg, var(--marketing-navy) 0%, var(--marketing-navy-soft) 100%);
   color: white;
 }

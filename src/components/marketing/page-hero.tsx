@@ -62,8 +62,9 @@ export function PageHero({
                     className={cn(
                       buttonVariants({ size: "lg" }),
                       "min-h-12 px-8 font-semibold",
-                    isDark &&
-                      "btn-marketing-gradient border-0 hover:opacity-90",
+                      isDark
+                        ? "btn-marketing-primary-on-dark hover:bg-white"
+                        : "btn-marketing-primary",
                     )}
                   >
                     {primaryLabel}
@@ -76,7 +77,7 @@ export function PageHero({
                       buttonVariants({ variant: "outline", size: "lg" }),
                       "min-h-12 border-2 px-8",
                       isDark &&
-                        "border-white/35 bg-transparent text-white hover:bg-white/10",
+                        "border-[var(--marketing-lilac)]/40 bg-transparent text-[var(--marketing-lilac)] hover:bg-[var(--marketing-lilac)]/10",
                     )}
                   >
                     {secondaryLabel}
@@ -117,7 +118,7 @@ export function ProSegmentBanner() {
           href="/professionals"
           className={cn(
             buttonVariants(),
-            "btn-marketing-gradient min-h-11 shrink-0 border-0 px-6 hover:opacity-90",
+            "btn-marketing-primary-on-dark min-h-11 shrink-0 border-0 px-6 hover:bg-white",
           )}
         >
           Learn more
