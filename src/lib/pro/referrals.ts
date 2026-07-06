@@ -23,6 +23,7 @@ export type ProfessionalReferral = {
   createdAt: string;
   signedUpAt: string | null;
   subscribedAt: string | null;
+  bonusPaidAt: string | null;
 };
 
 function normalizeRef(ref: string) {
@@ -337,7 +338,7 @@ export async function getProfessionalReferrals(
   const { data, error } = await supabase
     .from("professional_referrals")
     .select(
-      "id, referred_email, referred_name, status, bonus_amount_cad, bonus_status, bonus_ineligible_reason, source, created_at, signed_up_at, subscribed_at",
+      "id, referred_email, referred_name, status, bonus_amount_cad, bonus_status, bonus_ineligible_reason, source, created_at, signed_up_at, subscribed_at, bonus_paid_at",
     )
     .eq("professional_id", userId)
     .order("created_at", { ascending: false });
@@ -359,6 +360,7 @@ export async function getProfessionalReferrals(
     createdAt: row.created_at as string,
     signedUpAt: (row.signed_up_at as string | null) ?? null,
     subscribedAt: (row.subscribed_at as string | null) ?? null,
+    bonusPaidAt: (row.bonus_paid_at as string | null) ?? null,
   }));
 }
 
@@ -371,8 +373,20 @@ export function referralStats(referrals: ProfessionalReferral[]) {
   const potentialBonus = referrals
     .filter((r) => r.bonusStatus === "eligible")
     .reduce((sum, r) => sum + (r.bonusAmountCad ?? 0), 0);
+  const paidBonusTotal = referrals
+    .filter((r) => r.bonusStatus === "paid")
+    .reduce((sum, r) => sum + (r.bonusAmountCad ?? 0), 0);
 
-  return { pending, signedUp, subscribed, bonusEligible, bonusPaid, potentialBonus, total: referrals.length };
+  return {
+    pending,
+    signedUp,
+    subscribed,
+    bonusEligible,
+    bonusPaid,
+    potentialBonus,
+    paidBonusTotal,
+    total: referrals.length,
+  };
 }
 
 export function buildReferralUrl(siteUrl: string, slug: string) {

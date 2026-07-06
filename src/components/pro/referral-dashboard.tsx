@@ -4,20 +4,6 @@ import { Eye, FileText, Gift, Users } from "lucide-react";
 import type { ProfessionalReferral } from "@/lib/pro/referrals";
 import { ProPortalCard, ProPortalStat } from "@/components/pro/pro-portal-shell";
 
-const STATUS_LABELS: Record<string, string> = {
-  pending: "Pending",
-  signed_up: "Signed up",
-  subscribed: "Subscribed",
-  ineligible: "Ineligible",
-};
-
-const BONUS_LABELS: Record<string, string> = {
-  pending: "Pending",
-  eligible: "Eligible",
-  paid: "Paid",
-  ineligible: "Ineligible",
-};
-
 function BenefitIcon({ icon }: { icon: string }) {
   const className = "size-5 text-[var(--marketing-teal)]";
   switch (icon) {
@@ -55,11 +41,16 @@ export function ProBenefitGrid({
   );
 }
 
+function formatMoney(amount: number, currency: string) {
+  return `${amount.toFixed(2)} ${currency}`;
+}
+
 export function ProReferralDashboard({
   bonusPercent,
   currency,
   stats,
   referrals,
+  labels,
   compact = false,
 }: {
   bonusPercent: number;
@@ -71,75 +62,112 @@ export function ProReferralDashboard({
     bonusEligible: number;
     bonusPaid: number;
     potentialBonus: number;
+    paidBonusTotal: number;
     total: number;
   };
   referrals: ProfessionalReferral[];
+  labels: {
+    intro: string;
+    statTotal: string;
+    statOwed: string;
+    statPaid: string;
+    statSubscribed: string;
+    owedHint: string;
+    paidHint: string;
+    activityTitle: string;
+    emptyActivity: string;
+    colClient: string;
+    colStatus: string;
+    colBonus: string;
+    colDate: string;
+    statusLabels: Record<string, string>;
+    bonusLabels: Record<string, string>;
+    pendingFirstInvoice: string;
+  };
   compact?: boolean;
 }) {
+  const showActivity = !compact || referrals.length > 0;
+
   return (
     <div className="flex flex-col gap-6">
       <ProPortalCard>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Earn {bonusPercent}% of each referred family&apos;s first paid invoice — one bonus per
-          household. Share your /r/ link from the top of this page.
+          {labels.intro.replace("{percent}", String(bonusPercent))}
         </p>
       </ProPortalCard>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <ProPortalStat label="Total referrals" value={stats.total} />
-        <ProPortalStat label="Pending" value={stats.pending} />
-        <ProPortalStat label="Subscribed" value={stats.subscribed} />
-        <ProPortalStat label="Bonus eligible" value={stats.bonusEligible} />
+        <ProPortalStat label={labels.statTotal} value={stats.total} />
+        <ProPortalStat
+          label={labels.statOwed}
+          value={formatMoney(stats.potentialBonus, currency)}
+          hint={labels.owedHint.replace("{count}", String(stats.bonusEligible))}
+        />
+        <ProPortalStat
+          label={labels.statPaid}
+          value={formatMoney(stats.paidBonusTotal, currency)}
+          hint={labels.paidHint.replace("{count}", String(stats.bonusPaid))}
+        />
+        <ProPortalStat label={labels.statSubscribed} value={stats.subscribed} />
       </div>
 
-      {!compact && (
+      {showActivity && (
         <ProPortalCard className="overflow-hidden p-0">
           <div className="border-b border-[var(--marketing-border)] px-6 py-4">
-            <h3 className="font-semibold text-[var(--marketing-slate)]">Referral activity</h3>
+            <h3 className="font-semibold text-[var(--marketing-slate)]">{labels.activityTitle}</h3>
           </div>
           {referrals.length === 0 ? (
-            <p className="px-6 py-8 text-sm text-muted-foreground">
-              No referrals yet. Share your partner link with clients to start tracking bonuses.
-            </p>
+            <p className="px-6 py-8 text-sm text-muted-foreground">{labels.emptyActivity}</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
                 <thead className="bg-[var(--marketing-mist)]/40 text-left text-muted-foreground">
                   <tr>
-                    <th className="px-6 py-3 font-medium">Client</th>
-                    <th className="px-6 py-3 font-medium">Status</th>
-                    <th className="px-6 py-3 font-medium">Bonus</th>
-                    <th className="px-6 py-3 font-medium">Date</th>
+                    <th className="px-6 py-3 font-medium">{labels.colClient}</th>
+                    <th className="px-6 py-3 font-medium">{labels.colStatus}</th>
+                    <th className="px-6 py-3 font-medium">{labels.colBonus}</th>
+                    <th className="px-6 py-3 font-medium">{labels.colDate}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {referrals.map((referral) => (
-                    <tr key={referral.id} className="border-t border-[var(--marketing-border)]">
-                      <td className="px-6 py-3">
-                        <p>{referral.referredName ?? referral.referredEmail}</p>
-                        {referral.referredName && (
-                          <p className="text-xs text-muted-foreground">{referral.referredEmail}</p>
-                        )}
-                      </td>
-                      <td className="px-6 py-3">
-                        {STATUS_LABELS[referral.status] ?? referral.status}
-                      </td>
-                      <td className="px-6 py-3">
-                        {referral.bonusStatus === "ineligible" && referral.bonusIneligibleReason ? (
-                          <span className="text-muted-foreground">{referral.bonusIneligibleReason}</span>
-                        ) : referral.bonusAmountCad != null ? (
-                          `${referral.bonusAmountCad.toFixed(2)} ${currency} · ${BONUS_LABELS[referral.bonusStatus] ?? referral.bonusStatus}`
-                        ) : referral.status === "subscribed" || referral.status === "signed_up" ? (
-                          `Pending first invoice · ${BONUS_LABELS[referral.bonusStatus] ?? referral.bonusStatus}`
-                        ) : (
-                          "—"
-                        )}
-                      </td>
-                      <td className="px-6 py-3 text-muted-foreground">
-                        {new Date(referral.createdAt).toLocaleDateString()}
-                      </td>
-                    </tr>
-                  ))}
+                  {referrals.map((referral) => {
+                    const dateValue =
+                      referral.bonusStatus === "paid" && referral.bonusPaidAt
+                        ? referral.bonusPaidAt
+                        : referral.subscribedAt ?? referral.createdAt;
+                    const dateLabel =
+                      referral.bonusStatus === "paid" && referral.bonusPaidAt
+                        ? new Date(referral.bonusPaidAt).toLocaleDateString()
+                        : new Date(dateValue).toLocaleDateString();
+
+                    return (
+                      <tr key={referral.id} className="border-t border-[var(--marketing-border)]">
+                        <td className="px-6 py-3">
+                          <p>{referral.referredName ?? referral.referredEmail}</p>
+                          {referral.referredName && (
+                            <p className="text-xs text-muted-foreground">{referral.referredEmail}</p>
+                          )}
+                        </td>
+                        <td className="px-6 py-3">
+                          {labels.statusLabels[referral.status] ?? referral.status}
+                        </td>
+                        <td className="px-6 py-3">
+                          {referral.bonusStatus === "ineligible" && referral.bonusIneligibleReason ? (
+                            <span className="text-muted-foreground">
+                              {referral.bonusIneligibleReason}
+                            </span>
+                          ) : referral.bonusAmountCad != null ? (
+                            `${formatMoney(referral.bonusAmountCad, currency)} · ${labels.bonusLabels[referral.bonusStatus] ?? referral.bonusStatus}`
+                          ) : referral.status === "subscribed" || referral.status === "signed_up" ? (
+                            `${labels.pendingFirstInvoice} · ${labels.bonusLabels[referral.bonusStatus] ?? referral.bonusStatus}`
+                          ) : (
+                            "—"
+                          )}
+                        </td>
+                        <td className="px-6 py-3 text-muted-foreground">{dateLabel}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

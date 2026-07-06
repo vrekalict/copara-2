@@ -142,10 +142,12 @@ export function ProPortalCard({
 export function ProPortalStat({
   label,
   value,
+  hint,
   icon: Icon,
 }: {
   label: string;
   value: number | string;
+  hint?: string;
   icon?: typeof Briefcase;
 }) {
   return (
@@ -155,6 +157,7 @@ export function ProPortalStat({
         {Icon && <Icon className="size-4 text-[var(--marketing-teal)]" aria-hidden />}
       </div>
       <p className="mt-1 text-2xl font-semibold tabular-nums text-[var(--marketing-slate)]">{value}</p>
+      {hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}
     </div>
   );
 }

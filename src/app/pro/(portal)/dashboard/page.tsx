@@ -160,7 +160,38 @@ export default async function ProDashboardPage({
 
         <section>
           <ProSectionHeading title={t("referralProgram")} description={t("referralProgramHint")} />
-          <ProReferralDashboard {...referral} compact={isEmpty} />
+          <ProReferralDashboard
+            {...referral}
+            labels={{
+              intro: t("referralDashboard.intro"),
+              statTotal: t("referralDashboard.statTotal"),
+              statOwed: t("referralDashboard.statOwed"),
+              statPaid: t("referralDashboard.statPaid"),
+              statSubscribed: t("referralDashboard.statSubscribed"),
+              owedHint: t("referralDashboard.owedHint"),
+              paidHint: t("referralDashboard.paidHint"),
+              activityTitle: t("referralDashboard.activityTitle"),
+              emptyActivity: t("referralDashboard.emptyActivity"),
+              colClient: t("referralDashboard.colClient"),
+              colStatus: t("referralDashboard.colStatus"),
+              colBonus: t("referralDashboard.colBonus"),
+              colDate: t("referralDashboard.colDate"),
+              pendingFirstInvoice: t("referralDashboard.pendingFirstInvoice"),
+              statusLabels: {
+                pending: t("referralDashboard.statusPending"),
+                signed_up: t("referralDashboard.statusSignedUp"),
+                subscribed: t("referralDashboard.statusSubscribed"),
+                ineligible: t("referralDashboard.statusIneligible"),
+              },
+              bonusLabels: {
+                pending: t("referralDashboard.bonusPending"),
+                eligible: t("referralDashboard.bonusEligible"),
+                paid: t("referralDashboard.bonusPaid"),
+                ineligible: t("referralDashboard.bonusIneligible"),
+              },
+            }}
+            compact={isEmpty}
+          />
         </section>
       </div>
     </ProPortalShell>
