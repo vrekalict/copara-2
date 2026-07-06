@@ -34,7 +34,7 @@ export default async function ProDashboardPage({
     redirect(`/pro/circles/${params.case}`);
   }
 
-  const referral = await getProReferralDashboard(user.id);
+  const referral = await getProReferralDashboard(user.id, user.email);
   const circles = await getProCircles(user.id);
   const isEmpty = circles.length === 0;
 
@@ -97,6 +97,8 @@ export default async function ProDashboardPage({
       <div className="flex flex-col gap-10">
         <ProPartnerProfileCard
           practiceName={referral.practiceName}
+          payoutEmail={referral.payoutEmail}
+          payoutEmailSuggested={referral.payoutEmailSuggested}
           referralSlug={referral.referralSlug}
           referralUrl={referral.referralUrl}
           labels={{
@@ -105,6 +107,9 @@ export default async function ProDashboardPage({
             companyLabel: t("partnerProfile.companyLabel"),
             companyPlaceholder: t("partnerProfile.companyPlaceholder"),
             companyHint: t("partnerProfile.companyHint"),
+            payoutEmailLabel: t("partnerProfile.payoutEmailLabel"),
+            payoutEmailPlaceholder: t("partnerProfile.payoutEmailPlaceholder"),
+            payoutEmailHint: t("partnerProfile.payoutEmailHint"),
             slugLabel: t("partnerProfile.slugLabel"),
             slugHint: t("partnerProfile.slugHint"),
             previewLabel: t("partnerProfile.previewLabel"),

@@ -8,7 +8,7 @@ import { BRAND, brandEmailFrom } from "@/lib/brand";
 import {
   buildReferralUrl,
   findProfessionalByReferralRef,
-  getPartnerPracticeNameForDisplay,
+  getPartnerDashboardProfile,
   getProfessionalReferrals,
   getReferralSlugForUser,
   recordProfessionalReferral,
@@ -20,15 +20,17 @@ import {
 import { PRO_REFERRAL_BONUS } from "@/lib/pro/config";
 import { SITE } from "@/lib/marketing/site";
 
-export async function getProReferralDashboard(userId: string) {
+export async function getProReferralDashboard(userId: string, signInEmail?: string | null) {
   const supabase = await createClient();
-  const practiceName = await getPartnerPracticeNameForDisplay(supabase, userId);
+  const profile = await getPartnerDashboardProfile(supabase, userId, signInEmail);
   const slug = await getReferralSlugForUser(supabase, userId);
   const referrals = await getProfessionalReferrals(supabase, userId);
   const stats = referralStats(referrals);
 
   return {
-    practiceName,
+    practiceName: profile.practiceName,
+    payoutEmail: profile.payoutEmail,
+    payoutEmailSuggested: profile.payoutEmailSuggested,
     referralSlug: slug,
     referralCode: slug,
     referralUrl: buildReferralUrl(SITE.url, slug),
@@ -55,6 +57,7 @@ export async function savePartnerProfile(
 ) {
   const practiceName = String(formData.get("practiceName") ?? "").trim();
   const slug = String(formData.get("slug") ?? "").trim();
+  const payoutEmail = String(formData.get("payoutEmail") ?? "").trim();
   const supabase = await createClient();
   const {
     data: { user },
@@ -64,6 +67,7 @@ export async function savePartnerProfile(
   const result = await updatePartnerPracticeProfile(supabase, user.id, {
     practiceName,
     slug,
+    payoutEmail,
   });
   if ("error" in result && result.error) return { error: result.error };
   revalidatePath("/pro/dashboard");

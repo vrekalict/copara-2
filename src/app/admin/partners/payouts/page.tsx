@@ -66,8 +66,8 @@ export default async function AdminPartnerPayoutsPage({
             invoice (25% of that invoice).
           </li>
           <li>
-            Mark <strong>paid</strong> after you send the partner their bonus — add e-transfer or
-            payment reference in notes.
+            Mark <strong>paid</strong> after you send the partner their bonus — use the{" "}
+            <strong>E-transfer</strong> email shown on each row (partners set this in their dashboard).
           </li>
           <li>
             Use <strong>Revert to owed</strong> if a payout was marked paid by mistake.

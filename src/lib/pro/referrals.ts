@@ -67,40 +67,84 @@ export async function getPartnerPracticeNameForDisplay(
   supabase: SupabaseClient,
   userId: string,
 ): Promise<string> {
+  const profile = await getPartnerProfileRow(supabase, userId);
+  return profile.practiceName;
+}
+
+export type PartnerDashboardProfile = {
+  practiceName: string;
+  payoutEmail: string;
+  /** Shown as placeholder when payout email is unset (application or sign-in email). */
+  payoutEmailSuggested: string;
+};
+
+async function getPartnerProfileRow(supabase: SupabaseClient, userId: string) {
   const { data: profile } = await supabase
     .from("profiles")
-    .select("practice_name, partner_application_id")
+    .select("practice_name, payout_email, partner_application_id")
     .eq("id", userId)
     .maybeSingle();
 
-  if (profile?.practice_name?.trim()) {
-    return profile.practice_name.trim();
-  }
+  let practiceName = profile?.practice_name?.trim() ?? "";
+  let suggestedEmail = "";
 
   if (profile?.partner_application_id) {
     const { data: app } = await supabase
       .from("professional_partner_applications")
-      .select("practice")
+      .select("practice, email")
       .eq("id", profile.partner_application_id)
       .maybeSingle();
 
-    if (app?.practice) {
-      return app.practice as string;
+    if (!practiceName && app?.practice) {
+      practiceName = app.practice as string;
+    }
+    if (app?.email) {
+      suggestedEmail = (app.email as string).trim().toLowerCase();
     }
   }
 
-  return "";
+  const payoutEmail = (profile?.payout_email as string | null)?.trim().toLowerCase() ?? "";
+
+  return { practiceName, payoutEmail, suggestedEmail };
+}
+
+export async function getPartnerDashboardProfile(
+  supabase: SupabaseClient,
+  userId: string,
+  signInEmail?: string | null,
+): Promise<PartnerDashboardProfile> {
+  const row = await getPartnerProfileRow(supabase, userId);
+  const signIn = signInEmail?.trim().toLowerCase() ?? "";
+
+  return {
+    practiceName: row.practiceName,
+    payoutEmail: row.payoutEmail,
+    payoutEmailSuggested: row.suggestedEmail || signIn,
+  };
+}
+
+function validatePayoutEmail(email: string): string | null {
+  const normalized = email.trim().toLowerCase();
+  if (!normalized) return "Payout email is required for referral bonuses.";
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalized)) {
+    return "Enter a valid email address for e-Transfer.";
+  }
+  return null;
 }
 
 export async function updatePartnerPracticeProfile(
   supabase: SupabaseClient,
   userId: string,
-  input: { practiceName: string; slug: string },
+  input: { practiceName: string; slug: string; payoutEmail: string },
 ): Promise<{ success: true; slug: string } | { error: string }> {
   const practiceName = input.practiceName.trim();
   if (!practiceName) {
     return { error: "Company name is required." };
   }
+
+  const payoutEmail = input.payoutEmail.trim().toLowerCase();
+  const payoutError = validatePayoutEmail(payoutEmail);
+  if (payoutError) return { error: payoutError };
 
   let slug = slugifyReferralSource(input.slug);
   if (!slug || slug.length < 3) {
@@ -122,6 +166,7 @@ export async function updatePartnerPracticeProfile(
       practice_name: practiceName,
       referral_slug: slug,
       referral_code: slug,
+      payout_email: payoutEmail,
     })
     .eq("id", userId);
 

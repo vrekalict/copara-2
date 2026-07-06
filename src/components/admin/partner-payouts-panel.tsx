@@ -37,6 +37,10 @@ function partnerLabel(payout: AdminReferralPayout) {
   return payout.partnerPracticeName ?? payout.partnerReferralSlug ?? payout.professionalId.slice(0, 8);
 }
 
+function partnerPayoutEmail(payout: AdminReferralPayout) {
+  return payout.partnerPayoutEmail ?? payout.partnerPayoutEmailFallback;
+}
+
 function PayoutRow({
   payout,
   pending,
@@ -114,6 +118,30 @@ function PayoutRow({
           {payout.partnerReferralSlug && (
             <p className="mt-1 text-xs text-muted-foreground">/r/{payout.partnerReferralSlug}</p>
           )}
+          <p className="mt-2 text-sm">
+            <span className="font-medium text-[var(--marketing-slate)]">E-transfer: </span>
+            {partnerPayoutEmail(payout) ? (
+              <a
+                href={`mailto:${partnerPayoutEmail(payout)}`}
+                className="text-[var(--marketing-teal)] hover:underline"
+              >
+                {partnerPayoutEmail(payout)}
+              </a>
+            ) : (
+              <span className="font-medium text-amber-800">Not set — partner must add in dashboard</span>
+            )}
+            {payout.partnerPayoutEmail && payout.partnerPayoutEmailFallback &&
+              payout.partnerPayoutEmail !== payout.partnerPayoutEmailFallback && (
+              <span className="mt-1 block text-xs text-muted-foreground">
+                Application email: {payout.partnerPayoutEmailFallback}
+              </span>
+            )}
+            {!payout.partnerPayoutEmail && payout.partnerPayoutEmailFallback && (
+              <span className="mt-1 block text-xs text-muted-foreground">
+                Using application email until partner saves a payout address
+              </span>
+            )}
+          </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <span

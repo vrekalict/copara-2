@@ -23,11 +23,15 @@ function slugMatchesCompany(slug: string, company: string) {
 
 export function ProPartnerProfileCard({
   practiceName: initialPracticeName,
+  payoutEmail: initialPayoutEmail,
+  payoutEmailSuggested,
   referralSlug: initialSlug,
   referralUrl: initialReferralUrl,
   labels,
 }: {
   practiceName: string;
+  payoutEmail: string;
+  payoutEmailSuggested: string;
   referralSlug: string;
   referralUrl: string;
   labels: {
@@ -36,6 +40,9 @@ export function ProPartnerProfileCard({
     companyLabel: string;
     companyPlaceholder: string;
     companyHint: string;
+    payoutEmailLabel: string;
+    payoutEmailPlaceholder: string;
+    payoutEmailHint: string;
     slugLabel: string;
     slugHint: string;
     previewLabel: string;
@@ -51,6 +58,9 @@ export function ProPartnerProfileCard({
 }) {
   const router = useRouter();
   const [company, setCompany] = useState(initialPracticeName);
+  const [payoutEmail, setPayoutEmail] = useState(
+    initialPayoutEmail || payoutEmailSuggested || "",
+  );
   const [slug, setSlug] = useState(initialSlug);
   const [slugTouched, setSlugTouched] = useState(
     Boolean(initialSlug) && !slugMatchesCompany(initialSlug, initialPracticeName),
@@ -75,10 +85,11 @@ export function ProPartnerProfileCard({
 
   useEffect(() => {
     setCompany(initialPracticeName);
+    setPayoutEmail(initialPayoutEmail || payoutEmailSuggested || "");
     setSlug(initialSlug);
     initialSlugRef.current = initialSlug;
     setSlugTouched(Boolean(initialSlug) && !slugMatchesCompany(initialSlug, initialPracticeName));
-  }, [initialPracticeName, initialSlug]);
+  }, [initialPracticeName, initialPayoutEmail, payoutEmailSuggested, initialSlug]);
 
   useEffect(() => {
     if (saveState?.success) {
@@ -117,11 +128,15 @@ export function ProPartnerProfileCard({
   }, [normalizedSlug, labels.available, labels.unavailable]);
 
   const companyChanged = company.trim() !== initialPracticeName.trim();
+  const payoutEmailChanged =
+    payoutEmail.trim().toLowerCase() !==
+    (initialPayoutEmail || payoutEmailSuggested || "").trim().toLowerCase();
   const slugChanged = normalizedSlug !== initialSlugRef.current;
   const canSave =
     company.trim().length > 0 &&
+    payoutEmail.trim().length > 0 &&
     Boolean(normalizedSlug) &&
-    (companyChanged || slugChanged) &&
+    (companyChanged || payoutEmailChanged || slugChanged) &&
     availability !== "unavailable";
 
   async function copyLink() {
@@ -148,6 +163,21 @@ export function ProPartnerProfileCard({
             required
           />
           <p className="text-xs text-muted-foreground">{labels.companyHint}</p>
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="partner-payout-email">{labels.payoutEmailLabel}</Label>
+          <Input
+            id="partner-payout-email"
+            name="payoutEmail"
+            type="email"
+            value={payoutEmail}
+            onChange={(e) => setPayoutEmail(e.target.value)}
+            placeholder={labels.payoutEmailPlaceholder}
+            autoComplete="email"
+            required
+          />
+          <p className="text-xs text-muted-foreground">{labels.payoutEmailHint}</p>
         </div>
 
         <div className="flex flex-col gap-1.5">

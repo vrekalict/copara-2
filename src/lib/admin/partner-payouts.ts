@@ -8,6 +8,8 @@ export type AdminReferralPayout = {
   professionalId: string;
   partnerPracticeName: string | null;
   partnerReferralSlug: string | null;
+  partnerPayoutEmail: string | null;
+  partnerPayoutEmailFallback: string | null;
   referredEmail: string;
   referredName: string | null;
   referralStatus: string;
@@ -41,22 +43,51 @@ type ReferralRow = {
     | {
         practice_name: string | null;
         referral_slug: string | null;
+        payout_email: string | null;
+        professional_partner_applications:
+          | { email: string | null }
+          | { email: string | null }[]
+          | null;
       }
     | {
         practice_name: string | null;
         referral_slug: string | null;
+        payout_email: string | null;
+        professional_partner_applications:
+          | { email: string | null }
+          | { email: string | null }[]
+          | null;
       }[]
     | null;
 };
 
+function partnerEmailsFromProfile(
+  profile: ReferralRow["profiles"],
+): { payoutEmail: string | null; fallbackEmail: string | null } {
+  const row = Array.isArray(profile) ? profile[0] : profile;
+  if (!row) return { payoutEmail: null, fallbackEmail: null };
+
+  const app = Array.isArray(row.professional_partner_applications)
+    ? row.professional_partner_applications[0]
+    : row.professional_partner_applications;
+
+  return {
+    payoutEmail: (row.payout_email as string | null)?.trim().toLowerCase() || null,
+    fallbackEmail: (app?.email as string | null)?.trim().toLowerCase() || null,
+  };
+}
+
 function mapRow(row: ReferralRow): AdminReferralPayout {
   const profile = Array.isArray(row.profiles) ? row.profiles[0] : row.profiles;
+  const emails = partnerEmailsFromProfile(row.profiles);
 
   return {
     id: row.id as string,
     professionalId: row.professional_id as string,
     partnerPracticeName: (profile?.practice_name as string | null) ?? null,
     partnerReferralSlug: (profile?.referral_slug as string | null) ?? null,
+    partnerPayoutEmail: emails.payoutEmail,
+    partnerPayoutEmailFallback: emails.fallbackEmail,
     referredEmail: row.referred_email as string,
     referredName: (row.referred_name as string | null) ?? null,
     referralStatus: row.status as string,
@@ -96,7 +127,11 @@ export async function listAdminReferralPayouts(
       bonus_paid_at,
       profiles (
         practice_name,
-        referral_slug
+        referral_slug,
+        payout_email,
+        professional_partner_applications (
+          email
+        )
       )
     `,
     )
