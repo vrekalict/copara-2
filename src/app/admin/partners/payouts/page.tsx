@@ -26,18 +26,7 @@ export default async function AdminPartnerPayoutsPage({
 }: {
   searchParams: Promise<{ filter?: string }>;
 }) {
-  const auth = await requireAdmin("/partners/payouts");
-
-  if (!auth.ok) {
-    return (
-      <AdminShell title="Access denied" maxWidth="lg">
-        <AdminInfoBox title="Admin access required">
-          Your account is not configured as a Copara admin. Add your email to{" "}
-          <code className="text-xs">COPARA_ADMIN_EMAILS</code>.
-        </AdminInfoBox>
-      </AdminShell>
-    );
-  }
+  const auth = await requireAdmin();
 
   const params = await searchParams;
   const filter = parseFilter(params.filter);

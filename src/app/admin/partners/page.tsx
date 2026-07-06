@@ -9,18 +9,7 @@ import {
 import { PartnerApplicationsPanel } from "@/components/pro/partner-applications-panel";
 
 export default async function AdminPartnersPage() {
-  const auth = await requireAdmin("/partners");
-
-  if (!auth.ok) {
-    return (
-      <AdminShell title="Access denied" maxWidth="lg">
-        <AdminInfoBox title="Admin access required">
-          Your account is not configured as a Copara admin. Add your email to{" "}
-          <code className="text-xs">COPARA_ADMIN_EMAILS</code>.
-        </AdminInfoBox>
-      </AdminShell>
-    );
-  }
+  const auth = await requireAdmin();
 
   const applications = await listPartnerApplications();
   const pendingCount = applications.filter((a) => a.status === "pending").length;

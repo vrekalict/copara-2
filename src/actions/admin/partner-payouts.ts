@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import {
@@ -9,12 +10,11 @@ import {
   type AdminReferralPayoutFilter,
 } from "@/lib/admin/partner-payouts";
 import { isAdminEmail } from "@/lib/pro/partner";
-import { getStaffBasePath, staffPath } from "@/lib/admin/staff-path";
-import { redirect } from "next/navigation";
+import { getStaffBasePath } from "@/lib/admin/staff-path";
 
 async function requireAdminActor() {
   if (!getStaffBasePath()) {
-    redirect("/");
+    notFound();
   }
 
   const supabase = await createClient();
@@ -23,7 +23,7 @@ async function requireAdminActor() {
   } = await supabase.auth.getUser();
 
   if (!user || !isAdminEmail(user.email)) {
-    redirect(`/sign-in?next=${encodeURIComponent(staffPath("/partners/payouts"))}`);
+    notFound();
   }
 
   return { user, service: createServiceClient() };

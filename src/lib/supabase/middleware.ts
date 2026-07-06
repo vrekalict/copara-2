@@ -1,13 +1,13 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import {
-  buildStaffPath,
   getStaffBasePath,
   isInternalStaffPath,
   isStaffRequestPath,
   staffPathToInternal,
 } from "@/lib/admin/staff-path";
 import { pathRequiresLegalAcceptance, userHasLegalAcceptance } from "@/lib/auth/legal-gate";
+import { isAdminEmail } from "@/lib/pro/partner";
 import { safeRedirectPath } from "@/lib/auth/redirect";
 import { localeCookieName } from "@/i18n/request";
 
@@ -72,6 +72,21 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  if (staffRoute) {
+    if (!getStaffBasePath() || !user || !isAdminEmail(user.email)) {
+      return new NextResponse(null, { status: 404 });
+    }
+
+    const rewriteUrl = request.nextUrl.clone();
+    rewriteUrl.pathname = internalPath;
+    const rewriteResponse = NextResponse.rewrite(rewriteUrl);
+    rewriteResponse.headers.set("X-Robots-Tag", "noindex, nofollow");
+    for (const cookie of response.cookies.getAll()) {
+      rewriteResponse.cookies.set(cookie);
+    }
+    return rewriteResponse;
+  }
+
   const requiresAuth =
     internalPath.startsWith("/app") ||
     internalPath.startsWith("/onboarding") ||
@@ -102,16 +117,6 @@ export async function updateSession(request: NextRequest) {
       completeUrl.searchParams.set("next", `${pathname}${request.nextUrl.search}`);
       return NextResponse.redirect(completeUrl);
     }
-  }
-
-  if (staffRoute && getStaffBasePath()) {
-    const rewriteUrl = request.nextUrl.clone();
-    rewriteUrl.pathname = internalPath;
-    const rewriteResponse = NextResponse.rewrite(rewriteUrl);
-    for (const cookie of response.cookies.getAll()) {
-      rewriteResponse.cookies.set(cookie);
-    }
-    return rewriteResponse;
   }
 
   if (pathname === "/fr" || pathname.startsWith("/fr/")) {

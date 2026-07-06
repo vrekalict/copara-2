@@ -19,20 +19,8 @@ export default async function AdminBlogPage({
 }: {
   searchParams: Promise<{ saved?: string; deleted?: string; created?: string }>;
 }) {
-  const auth = await requireAdmin("/blog");
+  const auth = await requireAdmin();
   const params = await searchParams;
-
-  if (!auth.ok) {
-    return (
-      <AdminShell title="Access denied" maxWidth="lg">
-        <AdminInfoBox title="Admin access required">
-          Your account is not configured as a Copara admin. Add your email to{" "}
-          <code className="text-xs">COPARA_ADMIN_EMAILS</code> in your environment (
-          {auth.user.email ?? "unknown"}).
-        </AdminInfoBox>
-      </AdminShell>
-    );
-  }
 
   if (!isServiceClientConfigured()) {
     return (

@@ -67,8 +67,7 @@ export async function saveBlogPost(
   formData: FormData,
 ): Promise<{ error?: string; redirectTo?: string } | null> {
   try {
-    const auth = await requireAdmin("/blog");
-    if (!auth.ok) return { error: "Access denied." };
+    const auth = await requireAdmin();
 
     const id = String(formData.get("id") ?? "").trim() || undefined;
     const parsed = parseBlogInput(formData);
@@ -132,8 +131,7 @@ export async function saveBlogPost(
 }
 
 export async function deleteBlogPost(formData: FormData): Promise<void> {
-  const auth = await requireAdmin("/blog");
-  if (!auth.ok) return;
+  await requireAdmin();
 
   const id = String(formData.get("id") ?? "").trim();
   if (!id) return;
@@ -147,8 +145,7 @@ export async function deleteBlogPost(formData: FormData): Promise<void> {
 }
 
 export async function importLegacyBlogPosts() {
-  const auth = await requireAdmin("/blog");
-  if (!auth.ok) return { error: "Access denied." };
+  const auth = await requireAdmin();
 
   const result = await importStaticPostsToDb(auth.user.id, getStaticPostsForImport());
 
@@ -162,8 +159,7 @@ export type BlogJsonImportResult =
   | { ok: false; error: string };
 
 export async function importBlogPostsFromJson(json: string): Promise<BlogJsonImportResult> {
-  const auth = await requireAdmin("/blog");
-  if (!auth.ok) return { ok: false, error: "Access denied." };
+  const auth = await requireAdmin();
 
   const trimmed = json.trim();
   if (!trimmed) return { ok: false, error: "Paste JSON or upload a .json file." };

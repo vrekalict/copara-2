@@ -11,11 +11,10 @@ export default function AdminError({
 
   return (
     <main className="mx-auto flex min-h-[50vh] max-w-lg flex-col justify-center gap-4 p-6">
-      <h1 className="text-xl font-semibold">Staff tools error</h1>
+      <h1 className="text-xl font-semibold">Something went wrong</h1>
       <p className="text-sm text-muted-foreground">
-        The admin page could not load. If you were uploading a cover image, try a file under 5 MB.
-        Otherwise confirm <code className="text-xs">COPARA_STAFF_PATH</code>,{" "}
-        <code className="text-xs">COPARA_ADMIN_EMAILS</code>, and{" "}
+        The page could not load. If you were uploading a cover image, try a file under 5 MB.
+        Otherwise confirm <code className="text-xs">COPARA_ADMIN_EMAILS</code> and{" "}
         <code className="text-xs">SUPABASE_SERVICE_ROLE_KEY</code> are set on Vercel, then redeploy.
       </p>
       {isDev && error.message && (

@@ -2,14 +2,14 @@
 
 import { randomBytes } from "crypto";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { Resend } from "resend";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/service";
 import { brandEmailFrom } from "@/lib/brand";
 import { SITE } from "@/lib/marketing/site";
 import { isAdminEmail } from "@/lib/pro/partner";
-import { getStaffBasePath, staffPath } from "@/lib/admin/staff-path";
+import { getStaffBasePath } from "@/lib/admin/staff-path";
 import { getReferralSlugForUser } from "@/lib/pro/referrals";
 
 export type PartnerApplication = {
@@ -30,7 +30,7 @@ export type PartnerApplication = {
 
 async function requireAdminUser() {
   if (!getStaffBasePath()) {
-    redirect("/");
+    notFound();
   }
 
   const supabase = await createClient();
@@ -39,7 +39,7 @@ async function requireAdminUser() {
   } = await supabase.auth.getUser();
 
   if (!user || !isAdminEmail(user.email)) {
-    redirect(`/sign-in?next=${encodeURIComponent(staffPath("/partners"))}`);
+    notFound();
   }
 
   return { supabase, user };

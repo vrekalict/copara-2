@@ -8,16 +8,7 @@ import { BlogPostForm } from "@/components/admin/blog-post-form";
 import { requireAdmin } from "@/lib/admin/require-admin";
 
 export default async function AdminBlogNewPage() {
-  const auth = await requireAdmin("/blog/new");
-  if (!auth.ok) {
-    return (
-      <AdminShell title="Access denied" maxWidth="lg">
-        <AdminInfoBox title="Admin access required">
-          Sign in with an email listed in <code className="text-xs">COPARA_ADMIN_EMAILS</code>.
-        </AdminInfoBox>
-      </AdminShell>
-    );
-  }
+  await requireAdmin();
 
   const paths = getStaffBlogPaths();
 

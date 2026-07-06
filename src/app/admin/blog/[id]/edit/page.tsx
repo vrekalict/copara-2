@@ -17,16 +17,7 @@ export default async function AdminBlogEditPage({
   params: Promise<{ id: string }>;
   searchParams: Promise<{ created?: string }>;
 }) {
-  const auth = await requireAdmin("/blog");
-  if (!auth.ok) {
-    return (
-      <AdminShell title="Access denied" maxWidth="lg">
-        <AdminInfoBox title="Admin access required">
-          Sign in with an email listed in <code className="text-xs">COPARA_ADMIN_EMAILS</code>.
-        </AdminInfoBox>
-      </AdminShell>
-    );
-  }
+  await requireAdmin();
 
   const { id } = await params;
   const query = await searchParams;
