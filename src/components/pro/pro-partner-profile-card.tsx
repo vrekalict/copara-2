@@ -15,12 +15,6 @@ import { Label } from "@/components/ui/label";
 
 type SaveState = { error?: string; success?: boolean } | null;
 
-function slugMatchesCompany(slug: string, company: string) {
-  const normalizedSlug = slugifyReferralSource(slug);
-  const normalizedCompany = slugifyReferralSource(company);
-  return Boolean(normalizedSlug && normalizedSlug === normalizedCompany);
-}
-
 export function ProPartnerProfileCard({
   practiceName: initialPracticeName,
   payoutEmail: initialPayoutEmail,
@@ -62,9 +56,7 @@ export function ProPartnerProfileCard({
     initialPayoutEmail || payoutEmailSuggested || "",
   );
   const [slug, setSlug] = useState(initialSlug);
-  const [slugTouched, setSlugTouched] = useState(
-    Boolean(initialSlug) && !slugMatchesCompany(initialSlug, initialPracticeName),
-  );
+  const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
   const [copied, setCopied] = useState(false);
   const [availability, setAvailability] = useState<"idle" | "checking" | "available" | "unavailable">(
     "idle",
@@ -76,6 +68,7 @@ export function ProPartnerProfileCard({
     null,
   );
   const initialSlugRef = useRef(initialSlug);
+  const prevCompanyRef = useRef(initialPracticeName);
 
   const normalizedSlug = slugifyReferralSource(slug);
   const previewBase = SITE.url.replace(/\/$/, "");
@@ -88,7 +81,8 @@ export function ProPartnerProfileCard({
     setPayoutEmail(initialPayoutEmail || payoutEmailSuggested || "");
     setSlug(initialSlug);
     initialSlugRef.current = initialSlug;
-    setSlugTouched(Boolean(initialSlug) && !slugMatchesCompany(initialSlug, initialPracticeName));
+    setSlugManuallyEdited(false);
+    prevCompanyRef.current = initialPracticeName;
   }, [initialPracticeName, initialPayoutEmail, payoutEmailSuggested, initialSlug]);
 
   useEffect(() => {
@@ -98,10 +92,12 @@ export function ProPartnerProfileCard({
   }, [saveState?.success, router]);
 
   useEffect(() => {
-    if (slugTouched) return;
+    if (slugManuallyEdited) return;
+    if (company === prevCompanyRef.current) return;
+    prevCompanyRef.current = company;
     const suggested = slugifyReferralSource(company);
     if (suggested) setSlug(suggested);
-  }, [company, slugTouched]);
+  }, [company, slugManuallyEdited]);
 
   useEffect(() => {
     if (!normalizedSlug || normalizedSlug === initialSlugRef.current) {
@@ -189,7 +185,7 @@ export function ProPartnerProfileCard({
               name="slug"
               value={slug}
               onChange={(e) => {
-                setSlugTouched(true);
+                setSlugManuallyEdited(true);
                 setSlug(e.target.value);
               }}
               className="border-0 bg-transparent shadow-none focus-visible:ring-0"
